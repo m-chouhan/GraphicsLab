@@ -1,7 +1,5 @@
 /*
- * Following program reads input from cube.obj file
- * and then scales and rotates the cube according to input
- * and generates .svg file
+ * Graphics Library for my projects :P
  * Author: Mahendra Chouhan (14CS60R12)
  * */
 #include <iostream>
@@ -13,8 +11,6 @@ double Rad(float Deg)
 {
 	return (3.14*Deg/180);
 }
-
-using namespace std;
 
 typedef struct Point3D Vector;
 
@@ -47,6 +43,14 @@ struct Point3D
 		return Point3D(x-P.x,y-P.y,z-P.z);
 	}
 
+    float angleX()
+    {
+        return atan2f(y,x);
+    }
+    float angleY()
+    {
+        return atan2f(x,y);
+    }
 };
 
 Point3D Point3D::X(Point3D p)
@@ -67,7 +71,14 @@ Point3D * Point3D::Multiply(float  Matrix[][4])
     return this;
 }
 
-void writeLine(Point3D p1,Point3D p2,ofstream &out)
+typedef struct Point2D Vector2D;
+struct Point2D:Point3D
+{
+        Point2D(int X,int Y)
+        {  x = X;y = Y; z = 0;}
+};
+
+void writeLine(Point3D p1,Point3D p2,std::ofstream &out)
 {	
 	out<<"\n\t<line x1 = \""<<p1.x
 	<<"\" y1 = \""<<p1.y 
@@ -75,6 +86,7 @@ void writeLine(Point3D p1,Point3D p2,ofstream &out)
 	<<"\" y2 = \""<<p2.y
 	<<"\" style=\"stroke:rgb(255,0,0);stroke-width:2\" />\n";
 }
+
 
 struct Rect
 {
@@ -84,9 +96,9 @@ struct Rect
     Rect(){}
     Rect(Point3D origin,Point3D p0,Point3D p1,Point3D p2,Point3D p3)
     {
-	this->origin = origin;
-        Points[0] = p0;Points[1] = p1;
-	Points[2] = p2;Points[3] = p3;
+        this->origin = origin;
+            Points[0] = p0;Points[1] = p1;
+        Points[2] = p2;Points[3] = p3;
     }
     //~ not implemented
     //~ Rect(Point3D origin,int orientation,int length,int breadth)
@@ -95,7 +107,7 @@ struct Rect
 	//~ this->origin = origin;
         //~ 
     //~ }
-    void write(Point3D origin,ofstream &out)
+    void write(Point3D origin,std::ofstream &out)
     {
         for(int i = 0;i<3;++i)
                 writeLine(Points[i]+origin,Points[i+1]+origin,out);
@@ -181,11 +193,11 @@ struct Cube
 	}
 	Cube(const char *objfile)
     {
-        ifstream in(objfile);
+        std::ifstream in(objfile);
         int x=0,y=0,z=0;
         int l=0,b=0,h=0;
         in>>l>>b>>h>>x>>y>>z;
-        cout<<"\nCube{"<<l<<b<<h<<x<<y<<z<<"}\n";
+        std::cout<<"\nCube{"<<l<<b<<h<<x<<y<<z<<"}\n";
         
         *this = Cube(Point3D(x,y,z),l,b,h);
         in.close();	
@@ -253,21 +265,11 @@ void Cube::Rotate(int Degx,int Degy,int Degz)
 
 void Cube::writeHidden(const char *svgFile)
 {
-	ofstream out(svgFile);
+	std::ofstream out(svgFile);
     
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
 
-	//~ for(int i = 0;i<7;++i)
-	//~ {
-		//~ writeLine(Points[i].add(origin),Points[i+1].add(origin),out);
-	//~ }
-    //~ writeLine(Points[0].add(origin),Points[3].add(origin),out);    
-    //~ writeLine(Points[0].add(origin),Points[5].add(origin),out);    
-    //~ writeLine(Points[7].add(origin),Points[2].add(origin),out);    
-    //~ writeLine(Points[4].add(origin),Points[7].add(origin),out);    
-    //~ writeLine(Points[1].add(origin),Points[6].add(origin),out);    
-
-    for(int i = 0;i<5;++i)
+    for(int i = 0;i<6;++i)
     {
         Faces[i].write(origin,out);
     }
@@ -279,7 +281,7 @@ void Cube::writeHidden(const char *svgFile)
 void Cube::write(const char *svgFile)
 {
 
-	ofstream out(svgFile);
+	std::ofstream out(svgFile);
     
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
 
@@ -303,27 +305,5 @@ void Cube::write(const char *svgFile)
     out<<"</svg>\n";
     
 	out.close();
-}
-
-int  main(int argc,char *argv[])
-{ 
-    Cube c("cube.obj");
-    
-	if(argc != 5)
-        { 
-            c.Rotate(20,30,30);
-            c.Scale(1.5);
-        }
-    else
-    {
-            float S = atof(argv[1]);
-            float degx = atoi(argv[2]);
-            float degy = atoi(argv[3]);
-            float degz = atoi(argv[4]);
-            c.Rotate(degx,degy,degz);
-            c.Scale(S);
-    }        
-	c.write("svgfile.svg");	
-	return 0;
 }
 
