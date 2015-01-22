@@ -26,32 +26,30 @@ struct Point3D
 	Point3D() { x = y = z = 0; }
 	Point3D(int X,int Y,int Z) { x = X;y = Y;z = Z;}
 	Point3D * Multiply(float Matrix[][4]);
-	Point3D  Cross(Point3D p1);
-	Point3D add(Point3D p1,Point3D p2)
-	{
-		return Point3D(p1.x+p2.x,p1.y+p2.y,p1.z+p2.z);
-	}
-	Point3D add(Point3D p1)
+	Point3D  X(Point3D p1);
+	Point3D operator +(const Point3D &p1)
 	{
 		return Point3D(p1.x+x,p1.y+y,p1.z+z);
 	}
-    	Point3D add(int X,int Y,int Z)
-    	{
-        	return Point3D(x+X,y+Y,z+Z);
-    	}
-    	Point3D& addse(int X,int Y,int Z)
-    	{
-       	 	x+=X;y+=Y;z+=Z;
-        	return *this;
-    	}
-	Point3D sub(Point3D p)
+    Point3D add(int X,int Y,int Z)
+    {
+        x+=X,y+=Y,z+=Z;
+        return *this;
+    }
+    
+    //~ dot product
+    float operator *(const Point3D &P2) {
+            return x*P2.x + y*P2.y + z*P2.z;
+    }
+
+	Point3D operator -(const Point3D &P)
 	{
-		return Point3D(x-p.x,y-p.y,z-p.z);
+		return Point3D(x-P.x,y-P.y,z-P.z);
 	}
 
 };
 
-Point3D Point3D::Cross(Point3D p)
+Point3D Point3D::X(Point3D p)
 {
 	float X = y*p.z - p.y*z,
 	      Y = -x*p.z + p.x*z,
@@ -100,8 +98,8 @@ struct Rect
     void write(Point3D origin,ofstream &out)
     {
         for(int i = 0;i<3;++i)
-                writeLine(Points[i].add(origin),Points[i+1].add(origin),out);
-	   writeLine(Points[0].add(origin),Points[3].add(origin),out); 
+                writeLine(Points[i]+origin,Points[i+1]+origin,out);
+	   writeLine(Points[0]+ origin,Points[3]+origin,out); 
     }
     bool isAbove(Rect &R2)
     {
@@ -122,21 +120,21 @@ struct Rect
     }
     bool check_inside(Point3D q)
     {
-	Vector prev;
-	for(int i = 0;i<4;++i)
-	{
-		Vector V = Points[(i+1)%4].sub(Points[i]),
-		       Q = q.sub(Points[i]);
-		Vector R = V.Cross(Q);
-		
-		if( i == 0) prev = R;
-		
-		if( (prev.z > 0 && R.z > 0) or
-		    (prev.z < 0 && R.z < 0) or (!prev.z ^ !R.z)) 
-			prev = R;
-		else return false;
-	}	
-	return true;
+        Vector prev;
+        for(int i = 0;i<4;++i)
+        {
+            Vector V = Points[(i+1)%4] - Points[i],
+                   Q = q - Points[i];
+            Vector R = V.X(Q);//cross product
+            
+            if( i == 0) prev = R;
+            
+            if( (prev.z > 0 && R.z > 0) or
+                (prev.z < 0 && R.z < 0) or (!prev.z ^ !R.z)) 
+                prev = R;
+            else return false;
+        }	
+        return true;
     }
 };
 

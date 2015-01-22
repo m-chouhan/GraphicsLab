@@ -1,4 +1,9 @@
-
+/*
+ * Following program reads input from cube.obj file
+ * and then scales and rotates the cube according to input
+ * and generates .svg file
+ * Author: Mahendra Chouhan (14CS60R12)
+ * */
 #include <iostream>
 #include <math.h>
 #include <fstream>
@@ -9,30 +14,9 @@ double Rad(float Deg)
 	return (3.14*Deg/180);
 }
 
-//~ 
-//~ void GenerateMat(int Deg,float MatX[4][4],float MatY[4][4],float MatZ[4][4])
-//~ {
-    //~ float rad = Rad(Deg);
-	//~ 
-    //~ float MatZ[4][4] = { cosf(rad), -sinf(rad), 0,  0,
-                         //~ sinf(rad), cosf(rad),  0,  0,
-                         //~ 0       ,  0      ,    1,  0,
-                         //~ 0       ,  0      ,    0,  1 };
-                         //~ 
-    //~ float MatY[4][4] = { cosf(rad), 0,    sinf(rad),0,
-                         //~ 0       , 1,       0    ,0,
-                         //~ -sinf(rad), 0,   cosf(rad),0,
-                         //~ 0       ,  0      ,  0  ,1 };
-                         //~ 
-	//~ float MatX[4][4] = { 1       ,  0      ,  0     ,0,
-                         //~ 0,     cosf(rad), -sinf(rad) ,0,
-                         //~ 0,     sinf(rad), cosf(rad)  ,0,
-                         //~ 0,         0   ,       0   ,1 };
-//~ 
-//~ }
-
 using namespace std;
 
+typedef struct Point3D Vector;
 
 struct Point3D
 {
@@ -42,19 +26,36 @@ struct Point3D
 	Point3D() { x = y = z = 0; }
 	Point3D(int X,int Y,int Z) { x = X;y = Y;z = Z;}
 	Point3D * Multiply(float Matrix[][4]);
-	Point3D add(Point3D p1,Point3D p2)
-	{
-		return Point3D(p1.x+p2.x,p1.y+p2.y,p1.z+p2.z);
-	}
-	Point3D add(Point3D p1)
+	Point3D  X(Point3D p1);
+	Point3D operator +(const Point3D &p1)
 	{
 		return Point3D(p1.x+x,p1.y+y,p1.z+z);
 	}
+    Point3D add(int X,int Y,int Z)
+    {
+        x+=X,y+=Y,z+=Z;
+        return *this;
+    }
+    
     //~ dot product
     float operator *(const Point3D &P2) {
             return x*P2.x + y*P2.y + z*P2.z;
-        } 
+    }
+
+	Point3D operator -(const Point3D &P)
+	{
+		return Point3D(x-P.x,y-P.y,z-P.z);
+	}
+
 };
+
+Point3D Point3D::X(Point3D p)
+{
+	float X = y*p.z - p.y*z,
+	      Y = -x*p.z + p.x*z,
+	      Z = x*p.y - p.x*y;
+	return Point3D(X,Y,Z);
+}
 
 Point3D * Point3D::Multiply(float  Matrix[][4])
 {
@@ -79,41 +80,62 @@ struct Rect
 {
     Point3D Points[4];
     Point3D origin;
-    int orientation;
+    //int orientation;
     Rect(){}
     Rect(Point3D origin,Point3D p0,Point3D p1,Point3D p2,Point3D p3)
     {
 	this->origin = origin;
         Points[0] = p0;Points[1] = p1;
 	Points[2] = p2;Points[3] = p3;
-	//for(int i = 0;i<4;++i) this->Points[i] = Points[i];
     }
-    //not implemented
-    Rect(Point3D origin,int orientation,int length,int breadth)
-    {
-	float deg = Rad(orientation);
-	this->origin = origin;
-        
-    }
-    //Not implemented	
-    bool checkCollision(Rect &R2)
-    {
-        
-        return false;
-    }
-	
-    void write(ofstream &out)
+    //~ not implemented
+    //~ Rect(Point3D origin,int orientation,int length,int breadth)
+    //~ {
+	//~ float deg = Rad(orientation);
+	//~ this->origin = origin;
+        //~ 
+    //~ }
+    void write(Point3D origin,ofstream &out)
     {
         for(int i = 0;i<3;++i)
-                writeLine(Points[i].add(origin),Points[i+1].add(origin),out);
-	   writeLine(Points[0].add(origin),Points[3].add(origin),out); 
+                writeLine(Points[i]+origin,Points[i+1]+origin,out);
+	   writeLine(Points[0]+ origin,Points[3]+origin,out); 
+    }
+    bool isAbove(Rect &R2)
+    {
+        return (R2.origin.z < origin.z);
     }
     //Not implemented
-    void Rotate(int Deg)
-    {
-
+    void Rotate(int Degx,int Degy,int Degz);
+    void Scale(int S);
+    bool CheckCollision(Rect &R2)
+    {   
+	bool flag = false;
+        for(int i = 0;i<4;++i)
+	{
+		flag = check_inside(R2.Points[i]) or 
+			R2.check_inside(Points[i]) or flag;
+	}
+        return flag;
     }
-
+    bool check_inside(Point3D q)
+    {
+        Vector prev;
+        for(int i = 0;i<4;++i)
+        {
+            Vector V = Points[(i+1)%4] - Points[i],
+                   Q = q - Points[i];
+            Vector R = V.X(Q);//cross product
+            
+            if( i == 0) prev = R;
+            
+            if( (prev.z > 0 && R.z > 0) or
+                (prev.z < 0 && R.z < 0) or (!prev.z ^ !R.z)) 
+                prev = R;
+            else return false;
+        }	
+        return true;
+    }
 };
 
 struct Cube
@@ -139,37 +161,40 @@ struct Cube
 		temp.y += breadth;Points[7] =temp;
 		
 		temp = Point3D(0,0,depth/2);
-		Faces[0] = Rect(origin.add(origin,temp),
+		Faces[0] = Rect(temp,
 				Points[0],Points[1],Points[2],Points[3]);                
 		temp = Point3D(0,0,-depth/2);
-		Faces[1] = Rect(origin.add(origin,temp),
+		Faces[1] = Rect(temp,
 				Points[4],Points[5],Points[6],Points[7]);
-		temp = Point3D(0,breadth/2,0);
-		Faces[2] = Rect(origin.add(origin,temp),
+		temp = Point3D(0,breadth/4,0);
+		Faces[2] = Rect(temp,
 				Points[2],Points[3],Points[4],Points[7]);
-		temp = Point3D(0,-breadth/2,0);
-		Faces[3] = Rect(origin.add(origin,temp),
+		temp = Point3D(0,-breadth/4,0);
+		Faces[3] = Rect(temp,
 				Points[0],Points[1],Points[6],Points[5]);
-		temp = Point3D(length/2,0,0);
-		Faces[4] = Rect(origin.add(origin,temp),
+		temp = Point3D(length/4,0,0);
+		Faces[4] = Rect(temp,
 				Points[1],Points[2],Points[7],Points[6]);
-		temp = Point3D(-length/2,0,0);
-		Faces[5] = Rect(origin.add(origin,temp),
+		temp = Point3D(-length/4,0,0);
+		Faces[5] = Rect(temp,
 				Points[0],Points[3],Points[4],Points[5]);		
 	}
 	Cube(const char *objfile)
     {
-        ifstream in("cube.obj");
+        ifstream in(objfile);
         int x=0,y=0,z=0;
         int l=0,b=0,h=0;
         in>>l>>b>>h>>x>>y>>z;
-        cout<<l<<b<<h<<x<<y<<z;
-        Cube c(Point3D(x,y,z),l,b,h);
+        cout<<"\nCube{"<<l<<b<<h<<x<<y<<z<<"}\n";
+        
+        *this = Cube(Point3D(x,y,z),l,b,h);
         in.close();	
     }
 	void Scale(float S);
 	void Rotate(int Degx,int Degy,int Degz);
 	void write(const char *svgFile);
+	//projects hidden faces
+	void writeHidden(const char*svgFile);
 };
 
 void Cube::Scale(float S)
@@ -183,7 +208,10 @@ void Cube::Scale(float S)
 	for(int i = 0;i<6;++i)
     {
             for(int j = 0;j<4;++j)
-            Faces[i].Points[j].Multiply(MatS);
+            {
+                Faces[i].Points[j].Multiply(MatS);
+                Faces[i].origin.Multiply(MatS);
+            }
     }
     
 }
@@ -211,36 +239,66 @@ void Cube::Rotate(int Degx,int Degy,int Degz)
 
 	for(int i = 0;i<8;++i)
 		Points[i].Multiply(MatX)->Multiply(MatY)->Multiply(MatZ);
-    //~ for(int i = 0;i<8;++i)
-		//~ Points[i].Multiply(MatY);	
 	for(int i = 0;i<6;++i)
     {
             for(int j = 0;j<4;++j)
             Faces[i].Points[j].Multiply(MatX)->
                                Multiply(MatY)->
                                Multiply(MatZ);
+            Faces[i].origin.Multiply(MatX)->
+                            Multiply(MatY)->
+                            Multiply(MatZ);                   
     }
 }
 
-void Cube::write(const char *svgFile)
+void Cube::writeHidden(const char *svgFile)
 {
 	ofstream out(svgFile);
     
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
 
-	for(int i = 0;i<7;++i)
-	{
-		writeLine(Points[i].add(origin),Points[i+1].add(origin),out);
-	}
-    writeLine(Points[0].add(origin),Points[3].add(origin),out);    
-    writeLine(Points[0].add(origin),Points[5].add(origin),out);    
-    writeLine(Points[7].add(origin),Points[2].add(origin),out);    
-    writeLine(Points[4].add(origin),Points[7].add(origin),out);    
-    writeLine(Points[1].add(origin),Points[6].add(origin),out);    
+	//~ for(int i = 0;i<7;++i)
+	//~ {
+		//~ writeLine(Points[i].add(origin),Points[i+1].add(origin),out);
+	//~ }
+    //~ writeLine(Points[0].add(origin),Points[3].add(origin),out);    
+    //~ writeLine(Points[0].add(origin),Points[5].add(origin),out);    
+    //~ writeLine(Points[7].add(origin),Points[2].add(origin),out);    
+    //~ writeLine(Points[4].add(origin),Points[7].add(origin),out);    
+    //~ writeLine(Points[1].add(origin),Points[6].add(origin),out);    
 
-    for(int i = 0;i<4;++i)
+    for(int i = 0;i<5;++i)
     {
-        //~ Faces[i].write(out);
+        Faces[i].write(origin,out);
+    }
+    out<<"</svg>\n";
+    
+	out.close();
+}
+
+void Cube::write(const char *svgFile)
+{
+
+	ofstream out(svgFile);
+    
+	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
+
+    for(int i = 0;i<6;++i)
+    {
+	bool collision = false;
+        for(int j = 0;j<6;++j)
+	{
+		if(Faces[i].CheckCollision(Faces[j]))
+		{
+			collision = true;
+			if(Faces[i].isAbove(Faces[j]))
+				Faces[i].write(origin,out);
+			break;
+		}
+    
+	}
+	if(!collision)
+		Faces[i].write(origin,out);
     }
     out<<"</svg>\n";
     
@@ -249,18 +307,11 @@ void Cube::write(const char *svgFile)
 
 int  main(int argc,char *argv[])
 { 
-    ifstream in("cube.obj");
-    int x=0,y=0,z=0;
-    int l=0,b=0,h=0;
-    in>>l>>b>>h>>x>>y>>z;
-    cout<<l<<b<<h<<x<<y<<z;
-
-	Cube c(Point3D(x,y,z),l,b,h);
+    Cube c("cube.obj");
     
-    in.close();
 	if(argc != 5)
         { 
-            c.Rotate(30,30,0);
+            c.Rotate(20,30,30);
             c.Scale(1.5);
         }
     else
