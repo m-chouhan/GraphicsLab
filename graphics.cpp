@@ -6,6 +6,7 @@
 #include <math.h>
 #include <fstream>
 #include <stdlib.h>
+#include <vector>
 
 double Rad(float Deg) 
 {
@@ -84,15 +85,34 @@ struct Point2D:Point3D
         {  x = X;y = Y; z = 0;}
         Point2D(const Point3D &P)
         { x = P.x;y = P.y;z = 0;}
+        
+        float mod()
+        {
+                return sqrt( x*x + y*y);
+        }
+        
+        float operator ^(Point2D &P)
+        {
+            Point2D p = *this;
+            return acosf( p*P/(p.mod() * P.mod()) ); 
+        }
+        
 };
 
-void writeLine(Point3D p1,Point3D p2,std::ofstream &out)
+void writeLine(Point2D p1,Point2D p2,std::ofstream &out)
 {	
 	out<<"\n\t<line x1 = \""<<p1.x
 	<<"\" y1 = \""<<p1.y 
 	<<"\" x2 = \""<<p2.x
 	<<"\" y2 = \""<<p2.y
 	<<"\" style=\"stroke:rgb(255,0,0);stroke-width:2\" />\n";
+}
+
+void writeLines(std::vector<Point2D> &P,std::ofstream &out)
+{
+        for(std::vector<Point2D>::iterator it = P.begin();it != (P.end()-1);++it)
+            writeLine(*it,*(it+1),out);
+        //~ writeLine(P.front(),P.back(),out);            
 }
 
 void writePoint(Point2D P,std::ofstream &out)
