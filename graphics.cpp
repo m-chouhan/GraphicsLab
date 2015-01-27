@@ -43,6 +43,11 @@ struct Point3D
 		return Point3D(x-P.x,y-P.y,z-P.z);
 	}
 
+    bool operator <(const Point3D &P) const
+    {
+            return ( x < P.x);
+    }
+
     float angleX()
     {
         return atan2f(y,x);
@@ -51,6 +56,7 @@ struct Point3D
     {
         return atan2f(x,y);
     }
+    
 };
 
 Point3D Point3D::X(Point3D p)
@@ -74,8 +80,10 @@ Point3D * Point3D::Multiply(float  Matrix[][4])
 typedef struct Point2D Vector2D;
 struct Point2D:Point3D
 {
-        Point2D(int X,int Y)
+        Point2D(int X = 0,int Y=0)
         {  x = X;y = Y; z = 0;}
+        Point2D(const Point3D &P)
+        { x = P.x;y = P.y;z = 0;}
 };
 
 void writeLine(Point3D p1,Point3D p2,std::ofstream &out)
@@ -87,6 +95,19 @@ void writeLine(Point3D p1,Point3D p2,std::ofstream &out)
 	<<"\" style=\"stroke:rgb(255,0,0);stroke-width:2\" />\n";
 }
 
+void writePoint(Point2D P,std::ofstream &out)
+{
+	out<<"\n\t<circle cx = \""<<P.x
+	<<"\" cy = \""<<P.y 
+	<<"\" r = \""<<2
+	<<"\" stroke = \"black\" stroke-width = \"2\" />\n";
+}
+
+void writePoints(std::vector<Point2D> &P,std::ofstream &out)
+{
+        for(std::vector<Point2D>::iterator it = P.begin();it != P.end();++it)
+            writePoint(*it,out);
+}
 
 struct Rect
 {
