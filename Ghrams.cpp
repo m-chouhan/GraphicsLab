@@ -104,10 +104,57 @@ void Ghrahm(vector<Point2D> &array,vector<Point2D> &convexHull,ofstream &out)
       convexHull = upperHull;  
 }
 
-void JarvisMarch()
+void JarvisMarch(vector<Point2D> Hulls[10])
 {
-
+        Point2D lowest(1000,1000),infi(-1000,-1000);
+        vector<Point2D>::iterator P;
+        vector<Point2D> FinalHull;
         
+        int I=0;
+    //~ Get the lowest point of all hulls
+        for(int i = 0;i<3;++i)
+        {
+            for(vector<Point2D>::iterator it = Hulls[i].begin();
+                    it != Hulls[i].end();++it)
+            {
+                if( lowest.x > (*it).x ) 
+                {    
+                    lowest = *it;
+                    I = i;P = it;
+                }
+            }        
+        }
+        
+        infi.x = lowest.x;
+        Vector2D v = lowest - infi;
+        Hulls[I].erase(P);
+        //~ erase the lowest point and create vector from infinite y;
+        float maxAngle = 0;
+        //~ get maximum angle and remove the point 
+        for(int j = 0;j<15;++j) // we are assuming 15 hull points
+        {
+            for(int i = 0;i<3;++i)
+            {
+                for(vector<Point2D>::iterator it = Hulls[i].begin();
+                        it != Hulls[i].end();++it)
+                {
+                    Vector2D v2 = (*it) - lowest;
+                    if ( (v^v2) < maxAngle ) //calculate angle between vectors
+                    {
+                        maxAngle = (v^v2);
+                        P = it;
+                        I = i;
+                    }
+                }
+                        
+            }
+            FinalHull.push_back(*P);
+            v = *P - lowest;
+            lowest = *P;
+            Hulls[I].erase(P);
+            maxAngle = 0;
+        }
+                
 }
 
 int main()
@@ -120,7 +167,7 @@ int main()
     vector<Point2D> lowerHull,upperHull;
     vector<Point2D> Arrays[10],ConvexHulls[10];
 
-    for(int j = 0;j<5;++j)
+    for(int j = 0;j<3;++j)
     {
         for(int i = 0;i<5;++i)
                 Arrays[j].push_back(Point2D(rand() % 300,rand() % 300));
