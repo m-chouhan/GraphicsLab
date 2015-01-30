@@ -163,14 +163,20 @@ struct Rect
     void Scale(int S);
     bool CheckCollision(Rect &R2)
     {   
-	bool flag = false;
+        bool flag = false;
         for(int i = 0;i<4;++i)
-	{
+        {
 		flag = check_inside(R2.Points[i]) or 
 			R2.check_inside(Points[i]) or flag;
-	}
+        }
         return flag;
     }
+    
+    void Translate(Point3D &P)
+    {
+        for(int i = 0;i<4;++i) Points[i] = Points[i] + P;
+    }
+    
     bool check_inside(Point3D q)
     {
         Vector prev;
@@ -196,6 +202,7 @@ struct Cube
 	Point3D Points[8];
     Rect Faces[6];
 	Point3D origin;
+    //int length,breadth,depth;
 	//length - along x axis
 	//bredth - along y axis , depth - along z axis
 	Cube(Point3D orig,int length,int breadth,int depth)
@@ -243,11 +250,35 @@ struct Cube
         *this = Cube(Point3D(x,y,z),l,b,h);
         in.close();	
     }
+	Cube(int l)
+    {
+        *this = Cube(Point3D(),l,l,l);
+    }
+
 	void Scale(float S);
 	void Rotate(int Degx,int Degy,int Degz);
 	void write(const char *svgFile);
 	//projects hidden faces
 	void writeHidden(const char*svgFile);
+    
+    //~ A relative movement
+    void Translate(Point3D &P)
+    {
+        for(int i = 0;i<6;++i)
+            Faces[i].Translate(P);
+        for(int i = 0;i<8;++i)
+            Points[i] = Points[i]+P;
+    }
+    //~ Absolute movement
+    void Move(Point3D &P)
+    {
+        Point3D movement = P - origin;
+        for(int i = 0;i<6;++i)
+            Faces[i].Translate(movement);
+        for(int i = 0;i<8;++i)
+            Points[i] = Points[i]+movement;            
+    }
+    void write(std::ofstream &out);
 };
 
 void Cube::Scale(float S)
@@ -319,30 +350,35 @@ void Cube::writeHidden(const char *svgFile)
 	out.close();
 }
 
+void Cube::write(std::ofstream &out)
+{
+    for(int i = 0;i<6;++i)
+    {
+        bool collision = false;
+        for(int j = 0;j<6;++j)
+        {
+            if(Faces[i].CheckCollision(Faces[j]))
+            {
+                collision = true;
+                if(Faces[i].isAbove(Faces[j]))
+                    Faces[i].write(origin,out);
+                break;
+            }
+        
+        }
+        if(!collision)
+            Faces[i].write(origin,out);
+    }
+        
+}
+
 void Cube::write(const char *svgFile)
 {
 
 	std::ofstream out(svgFile);
     
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
-
-    for(int i = 0;i<6;++i)
-    {
-	bool collision = false;
-        for(int j = 0;j<6;++j)
-	{
-		if(Faces[i].CheckCollision(Faces[j]))
-		{
-			collision = true;
-			if(Faces[i].isAbove(Faces[j]))
-				Faces[i].write(origin,out);
-			break;
-		}
-    
-	}
-	if(!collision)
-		Faces[i].write(origin,out);
-    }
+    write(out);
     out<<"</svg>\n";
     
 	out.close();
