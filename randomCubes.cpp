@@ -3,7 +3,7 @@
 #include <fstream>
 #include <stdlib.h>
 
-#include "graphics.cpp"
+#include "Shape.cpp"
 
 using namespace std;
 
@@ -26,7 +26,7 @@ Point3D getGaussianDistri(float sigX,float sigY,float sigZ)
         Point3D P;
         srand(time(NULL));
         P.x = rand() % 200;P.y = rand() % 200;
-        //~ Generate gaussian distrubution
+        //~ TODO: Generate gaussian distrubution
         return P;
 }
 
