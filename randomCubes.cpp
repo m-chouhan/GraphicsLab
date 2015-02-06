@@ -30,7 +30,7 @@ int main()
     vector<Cube> Cubes;
     
     ofstream out("randomCubes.svg");
-    out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
+    out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1000\">\n";
     //write(out);
 
     ifstream in("specs.txt");
@@ -50,10 +50,12 @@ int main()
                 Point3D P = getGaussianDistri(S.sigX,S.sigY,0);
                 P.z = S.length/2;    
                 (*it).Move(P);
-                
+                //@(*it).Rotate(0,0,45);
                 while( CheckCollision(World,*it ) ) 
                 {
                     P = getGaussianDistri(S.sigX,S.sigY,0);
+                    P.z = S.length/2;
+                    //@(*it).Rotate(0,0,45);
                     (*it).Move(P);
                 }
                 World.push_back(*it);
@@ -61,7 +63,7 @@ int main()
                 out<<fflush;
                 cout<<"writing:("<<P.x<<","<<P.y<<")"<<CheckCollision(World,*it)<<endl;
             }
-            Cubes.empty();    
+            Cubes.clear();    
     }
     
     out<<"</svg>\n";

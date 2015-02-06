@@ -43,7 +43,7 @@ class Rect
             Points[0] = p0;Points[1] = p1;
         Points[2] = p2;Points[3] = p3;
     }
-    //~ not implemented
+    //@not implemented
     //~ Rect(Point3D origin,int orientation,int length,int breadth)
     //~ {
 	//~ float deg = Rad(orientation);
@@ -54,7 +54,8 @@ class Rect
     {
         for(int i = 0;i<3;++i)
                 writeLine(Points[i]+origin,Points[i+1]+origin,out);
-	   writeLine(Points[0]+ origin,Points[3]+origin,out); 
+	   writeLine(Points[0]+ origin,Points[3]+origin,out);
+         writePoint(this->origin+origin,out); 
     }
     bool isAbove(Rect &R2)
     {
@@ -71,6 +72,8 @@ class Rect
 		flag = check_inside(R2.Points[i]) or 
 			R2.check_inside(Points[i]) or flag;
         }
+        //@flag = check_inside(R2.origin) or 
+                  //@flag;
         return flag;
     }
     
@@ -184,20 +187,11 @@ class Cube
       void Translate(Point3D &P)
       {
             origin = origin + P;
-        //@for(int i = 0;i<6;++i)
-            //@Faces[i].Translate(P);
-        //@for(int i = 0;i<8;++i)
-            //@Points[i] = Points[i]+P;
       }
       //~ Absolute movement of cube to that point
       void Move(Point3D &P)
       {
-        //@Point3D movement = P - origin;
-        //@for(int i = 0;i<6;++i)
-            //@Faces[i].Translate(movement);
-        //@for(int i = 0;i<8;++i)
-            //@Points[i] = Points[i]+movement;            
-        origin = P;    
+            origin = P;    
       }
       //@doesnot projects hidden space
       void write(std::ofstream &out);

@@ -9,7 +9,7 @@
 Point3D getGaussianDistri(float sigX,float sigY,float sigZ)
 {
         Point3D P;
-        P.x = rand() % 200;P.y = rand() % 200;
+        P.x = rand() % 900+50;P.y = rand() % 900+50;
         //~ TODO: Generate gaussian distrubution
         return P;
 }

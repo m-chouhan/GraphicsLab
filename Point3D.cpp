@@ -121,7 +121,7 @@ void writePoint(Point2D P,std::ofstream &out)
 	out<<"\n\t<circle cx = \""<<P.x
 	<<"\" cy = \""<<P.y 
 	<<"\" r = \""<<2
-	<<"\" stroke = \"black\" stroke-width = \"2\" />\n";
+	<<"\" stroke = \"black\" stroke-width = \"3\" />\n";
 }
 
 void writePoints(std::vector<Point2D> &P,std::ofstream &out)
