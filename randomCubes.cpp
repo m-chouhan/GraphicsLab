@@ -50,12 +50,12 @@ int main()
                 Point3D P = getGaussianDistri(S.sigX,S.sigY,0);
                 P.z = S.length/2;    
                 (*it).Move(P);
-                //@(*it).Rotate(0,0,45);
+                (*it).Rotate(0,0,45);
                 while( CheckCollision(World,*it ) ) 
                 {
                     P = getGaussianDistri(S.sigX,S.sigY,0);
                     P.z = S.length/2;
-                    //@(*it).Rotate(0,0,45);
+                    (*it).Rotate(0,0,45);
                     (*it).Move(P);
                 }
                 World.push_back(*it);

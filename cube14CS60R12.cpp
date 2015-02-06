@@ -21,7 +21,7 @@ int  main(int argc,char *argv[])
 	if(argc != 5)
       { 
         c.Rotate(20,30,30);
-        c.Scale(1.5);
+        c.Scale(1.2);
       }
       else
       {

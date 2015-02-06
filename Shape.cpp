@@ -50,12 +50,13 @@ class Rect
 	//~ this->origin = origin;
         //~ 
     //~ }
-    void write(Point3D origin,std::ofstream &out)
+    void write(std::ofstream &out)
     {
+        //@Add origin to all points
         for(int i = 0;i<3;++i)
-                writeLine(Points[i]+origin,Points[i+1]+origin,out);
-	   writeLine(Points[0]+ origin,Points[3]+origin,out);
-         writePoint(this->origin+origin,out); 
+                writeLine(Points[i],Points[i+1],out);
+	   writeLine(Points[0],Points[3],out);
+         writePoint(origin,out); 
     }
     bool isAbove(Rect &R2)
     {
@@ -66,20 +67,21 @@ class Rect
     void Scale(int S);
     bool CheckCollision(Rect &R2)
     {   
+        //@Assuming absolute values
         bool flag = false;
         for(int i = 0;i<4;++i)
         {
 		flag = check_inside(R2.Points[i]) or 
 			R2.check_inside(Points[i]) or flag;
         }
-        //@flag = check_inside(R2.origin) or 
-                  //@flag;
+        flag = check_inside(R2.origin) or flag;
         return flag;
     }
     
-    void Translate(Point3D &P)
+    void Translate(Point3D P)
     {
         for(int i = 0;i<4;++i) Points[i] = Points[i] + P;
+        origin = origin + P;
     }
     
     bool check_inside(Point3D q)
@@ -105,9 +107,10 @@ class Rect
 class Cube
 {
 	Point3D origin;
-      Rect Faces[6];
 
       public:
+      Rect Faces[6];
+
       friend bool CheckCollision(std::vector<Cube> world,Cube c);
       //int length,breadth,depth;
 	//length - along x axis
@@ -210,8 +213,10 @@ void Cube::Scale(float S)
             for(int j = 0;j<4;++j)
             {
                 Faces[i].Points[j].Multiply(MatS);
-                Faces[i].origin.Multiply(MatS);
             }
+            
+            Faces[i].origin.Multiply(MatS);
+
       }    
 }
 
@@ -226,7 +231,7 @@ void Cube::Rotate(int Degx,int Degy,int Degz)
                          0       ,  0      ,    1,  0,
                          0       ,  0      ,    0,  1 };
                          
-    float MatY[4][4] = { cosf(rady), 0,    sinf(rady),0,
+      float MatY[4][4] = { cosf(rady), 0,    sinf(rady),0,
                          0       , 1,       0    ,0,
                          -sinf(rady), 0,   cosf(rady),0,
                          0       ,  0      ,  0  ,1 };
@@ -252,13 +257,16 @@ void Cube::Rotate(int Degx,int Degy,int Degz)
 
 void Cube::writeHidden(const char *svgFile)
 {
+      Cube C;
+      getAbsolutes(C);
 	std::ofstream out(svgFile);
     
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
 
       for(int i = 0;i<6;++i)
       {
-        Faces[i].write(origin,out);
+        //Faces[i].Translate(Point3D(100,100,0));    
+        C.Faces[i].write(out);
       }
       out<<"</svg>\n";
     
@@ -267,22 +275,25 @@ void Cube::writeHidden(const char *svgFile)
 
 void Cube::write(std::ofstream &out)
 {
+    Cube C;
+    getAbsolutes(C);
+      
     for(int i = 0;i<6;++i)
     {
         bool collision = false;
         for(int j = 0;j<6;++j)
         {
-            if(Faces[i].CheckCollision(Faces[j]))
+            if(C.Faces[i].CheckCollision(C.Faces[j]))
             {
                 collision = true;
-                if(Faces[i].isAbove(Faces[j]))
-                    Faces[i].write(origin,out);
+                if(C.Faces[i].isAbove(C.Faces[j]))
+                    C.Faces[i].write(out);
                 break;
             }
         
         }
         if(!collision)
-            Faces[i].write(origin,out);
+            C.Faces[i].write(out);
     }
         
 }
