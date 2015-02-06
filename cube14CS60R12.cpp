@@ -16,22 +16,22 @@ using namespace std;
 
 int  main(int argc,char *argv[])
 { 
-    Cube c("cube.obj");
+      Cube c("cube.obj");
     
 	if(argc != 5)
-    { 
+      { 
         c.Rotate(20,30,30);
         c.Scale(1.5);
-    }
-    else
-    {
+      }
+      else
+      {
             float S = atof(argv[1]);
             float degx = atoi(argv[2]);
             float degy = atoi(argv[3]);
             float degz = atoi(argv[4]);
             c.Rotate(degx,degy,degz);
             c.Scale(S);
-    }        
+      }        
 	c.write("svgfile.svg");	
 	return 0;
 }

@@ -29,35 +29,35 @@ struct Point3D
 	{
 		return Point3D(p1.x+x,p1.y+y,p1.z+z);
 	}
-    Point3D add(int X,int Y,int Z)
-    {
+      Point3D add(int X,int Y,int Z)
+      {
         x+=X,y+=Y,z+=Z;
         return *this;
-    }
-    
-    //~ dot product
-    float operator *(const Point3D &P2) {
+      }
+
+      //~ dot product
+      float operator *(const Point3D &P2) {
             return x*P2.x + y*P2.y + z*P2.z;
-    }
+      }
 
-	Point3D operator -(const Point3D &P)
-	{
-		return Point3D(x-P.x,y-P.y,z-P.z);
-	}
+      Point3D operator -(const Point3D &P)
+      {
+            return Point3D(x-P.x,y-P.y,z-P.z);
+      }
 
-    bool operator <(const Point3D &P) const
-    {
+      bool operator <(const Point3D &P) const
+      {
             return ( x < P.x);
-    }
+      }
 
-    float angleX()
-    {
+      float angleX()
+      {
         return atan2f(y,x);
-    }
-    float angleY()
-    {
+      }
+      float angleY()
+      {
         return atan2f(x,y);
-    }
+      }
     
 };
 

@@ -3,7 +3,7 @@
 #include <fstream>
 #include <stdlib.h>
 
-#include "Shape.cpp"
+#include "graphics.cpp"
 
 using namespace std;
 
@@ -21,27 +21,11 @@ Specs getSpecs(ifstream &in)
       return s;  
 }    
 
-Point3D getGaussianDistri(float sigX,float sigY,float sigZ)
-{
-        Point3D P;
-        srand(time(NULL));
-        P.x = rand() % 200;P.y = rand() % 200;
-        //~ TODO: Generate gaussian distrubution
-        return P;
-}
-
-bool CheckCollision(vector<Cube> world,Cube c)
-{
-        //~ for now the cubes are laying on floor so compare bottom faces i.e face[1] only
-        for(vector<Cube>::iterator it =  world.begin();it != world.end();++it)
-        {
-                if( (*it).Faces[1].CheckCollision(c.Faces[1]) == true ) return true;
-        }
-        return false;
-}
 
 int main()
 {
+    srand(time(NULL));
+  
     vector<Cube> World;
     vector<Cube> Cubes;
     
@@ -53,19 +37,18 @@ int main()
     int size = 0;
     in>>size;
     
-    
     //~ for all different cube specs
     for(int i = 0;i<size;++i)
     {
             Specs S = getSpecs(in); //Get Specs
             for(int j = 0;j<S.m;++j)
                 Cubes.push_back(Cube(S.length));
-                //~ Generate Cubes
+            //~ Generate Cubes
             //~ Check for collision and push the cubes in world 
             for(vector<Cube>::iterator it = Cubes.begin();it != Cubes.end();++it)
             {
                 Point3D P = getGaussianDistri(S.sigX,S.sigY,0);
-                    
+                P.z = S.length/2;    
                 (*it).Move(P);
                 
                 while( CheckCollision(World,*it ) ) 
@@ -76,6 +59,7 @@ int main()
                 World.push_back(*it);
                 (*it).write(out);
                 out<<fflush;
+                cout<<"writing:("<<P.x<<","<<P.y<<")"<<CheckCollision(World,*it)<<endl;
             }
             Cubes.empty();    
     }

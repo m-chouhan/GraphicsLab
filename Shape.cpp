@@ -10,11 +10,32 @@
 #include <vector>
 #include "Point3D.cpp"
 
-struct Rect
+/*Parent Shape class for all shapes
+ * any new shape must inherit this
+ * Note: All movement must be relative to origin
+ * if absolute values are needed than compute using getAbs()
+ * */
+class Shape
 {
-    Point3D Points[4];
+      Point3D origin;
+      int degX,degY,degZ;
+      public:
+      //generate absolute values of shape (if required)  
+      virtual Shape& getAbsolutes(Shape &) = 0;
+      virtual void Rotate(int,int,int)= 0;
+      virtual void Scale(float)= 0;
+      virtual void Move(Point3D &)= 0;
+      virtual bool Collision(Shape &)= 0;
+};
+
+class Rect
+{
     Point3D origin;
+  
+    Point3D Points[4];
     //int orientation;
+    public:
+    friend class Cube;
     Rect(){}
     Rect(Point3D origin,Point3D p0,Point3D p1,Point3D p2,Point3D p3)
     {
@@ -78,17 +99,21 @@ struct Rect
     }
 };
 
-struct Cube
+class Cube
 {
-	Point3D Points[8];
-      Rect Faces[6];
 	Point3D origin;
+      Rect Faces[6];
+
+      public:
+      friend bool CheckCollision(std::vector<Cube> world,Cube c);
       //int length,breadth,depth;
 	//length - along x axis
 	//bredth - along y axis , depth - along z axis
 	Cube(Point3D orig,int length,int breadth,int depth)
 	{	
-		Point3D temp;	
+		Point3D temp;
+            Point3D Points[8];
+	
 		origin = orig;
 		temp.y -= breadth/2;temp.x -= length/2;temp.z += depth/2;
 		
@@ -107,44 +132,58 @@ struct Cube
 		temp = Point3D(0,0,-depth/2);
 		Faces[1] = Rect(temp,
 				Points[4],Points[5],Points[6],Points[7]);
-		temp = Point3D(0,breadth/4,0);
+		temp = Point3D(0,breadth/2,0);
 		Faces[2] = Rect(temp,
 				Points[2],Points[3],Points[4],Points[7]);
-		temp = Point3D(0,-breadth/4,0);
+		temp = Point3D(0,-breadth/2,0);
 		Faces[3] = Rect(temp,
 				Points[0],Points[1],Points[6],Points[5]);
-		temp = Point3D(length/4,0,0);
+		temp = Point3D(length/2,0,0);
 		Faces[4] = Rect(temp,
 				Points[1],Points[2],Points[7],Points[6]);
-		temp = Point3D(-length/4,0,0);
+		temp = Point3D(-length/2,0,0);
 		Faces[5] = Rect(temp,
 				Points[0],Points[3],Points[4],Points[5]);		
 	}
 	Cube(const char *objfile)
       {
-        std::ifstream in(objfile);
-        int x=0,y=0,z=0;
-        int l=0,b=0,h=0;
-        in>>l>>b>>h>>x>>y>>z;
-        std::cout<<"\nCube{"<<l<<b<<h<<x<<y<<z<<"}\n";
-        
-        *this = Cube(Point3D(x,y,z),l,b,h);
-        in.close();	
+            std::ifstream in(objfile);
+            int x=0,y=0,z=0;
+            int l=0,b=0,h=0;
+            in>>l>>b>>h>>x>>y>>z;
+            std::cout<<"\nCube{"<<l<<b<<h<<x<<y<<z<<"}\n";
+
+            *this = Cube(Point3D(x,y,z),l,b,h);
+            in.close();	
       }
 	Cube(int l)
       {
-        *this = Cube(Point3D(),l,l,l);
+            *this = Cube(Point3D(),l,l,l);
       }
-
+      Cube()
+      {
+            *this = Cube(Point3D(),0,0,0);
+      }
 	void Scale(float S);
 	void Rotate(int Degx,int Degy,int Degz);
 	void write(const char *svgFile);
 	//projects hidden faces
 	void writeHidden(const char*svgFile);
-    
+      void getAbsolutes(Cube &c)
+      {
+            c.origin = origin;
+            for(int i = 0;i<6;++i)
+                  for(int j = 0;j<4;++j)
+                  {
+                        c.Faces[i].Points[j] = 
+                        Faces[i].Points[j] + origin;
+                        c.Faces[i].origin = Faces[i].origin+origin;
+                  }      
+      }
       //~ A relative movement
       void Translate(Point3D &P)
       {
+            origin = origin + P;
         //@for(int i = 0;i<6;++i)
             //@Faces[i].Translate(P);
         //@for(int i = 0;i<8;++i)
@@ -160,26 +199,26 @@ struct Cube
             //@Points[i] = Points[i]+movement;            
         origin = P;    
       }
+      //@doesnot projects hidden space
       void write(std::ofstream &out);
 };
 
 void Cube::Scale(float S)
 {
-    float MatS[4][4] = { S, 0, 0,  0,
+      float MatS[4][4] = { S, 0, 0,  0,
                          0, S, 0,  0,
                          0, 0, S,  0,
                          0, 0, 0,  1 };
-	for(int i = 0;i<8;++i)
-		Points[i].Multiply(MatS);
+	//@for(int i = 0;i<8;++i)
+		//@Points[i].Multiply(MatS);
 	for(int i = 0;i<6;++i)
-    {
+      {
             for(int j = 0;j<4;++j)
             {
                 Faces[i].Points[j].Multiply(MatS);
                 Faces[i].origin.Multiply(MatS);
             }
-    }
-    
+      }    
 }
 
 void Cube::Rotate(int Degx,int Degy,int Degz)
@@ -203,10 +242,10 @@ void Cube::Rotate(int Degx,int Degy,int Degz)
                          0,     sinf(radx), cosf(radx)  ,0,
                          0,         0   ,       0   ,1 };
 
-	for(int i = 0;i<8;++i)
-		Points[i].Multiply(MatX)->Multiply(MatY)->Multiply(MatZ);
+	//@for(int i = 0;i<8;++i)
+		//@Points[i].Multiply(MatX)->Multiply(MatY)->Multiply(MatZ);
 	for(int i = 0;i<6;++i)
-    {
+      {
             for(int j = 0;j<4;++j)
             Faces[i].Points[j].Multiply(MatX)->
                                Multiply(MatY)->
@@ -214,7 +253,7 @@ void Cube::Rotate(int Degx,int Degy,int Degz)
             Faces[i].origin.Multiply(MatX)->
                             Multiply(MatY)->
                             Multiply(MatZ);                   
-    }
+      }
 }
 
 void Cube::writeHidden(const char *svgFile)
@@ -223,11 +262,11 @@ void Cube::writeHidden(const char *svgFile)
     
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
 
-    for(int i = 0;i<6;++i)
-    {
+      for(int i = 0;i<6;++i)
+      {
         Faces[i].write(origin,out);
-    }
-    out<<"</svg>\n";
+      }
+      out<<"</svg>\n";
     
 	out.close();
 }
@@ -256,13 +295,10 @@ void Cube::write(std::ofstream &out)
 
 void Cube::write(const char *svgFile)
 {
-
-	std::ofstream out(svgFile);
-    
+	std::ofstream out(svgFile);    
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
-    write(out);
-    out<<"</svg>\n";
-    
-	out.close();
+      write(out);
+      out<<"</svg>\n";
+    	out.close();
 }
 
