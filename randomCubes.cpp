@@ -24,22 +24,22 @@ Specs getSpecs(ifstream &in)
 
 int main()
 {
-    srand(time(NULL));
-  
-    vector<Cube> World;
-    vector<Cube> Cubes;
-    vector<Cube> conflicts;
-    ofstream out("randomCubes.svg");
-    out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1000\">\n";
-    //write(out);
+      srand(time(NULL));
 
-    ifstream in("specs.txt");
-    int size = 0;
-    in>>size;
+      vector<Cube> World;
+      vector<Cube> Cubes;
+      vector<Cube> conflicts;
+      ofstream out("randomCubes.svg");
+      out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1000\">\n";
+      //write(out);
+
+      ifstream in("specs.txt");
+      int size = 0;
+      in>>size;
     
     //~ for all different cube specs
-    for(int i = 0;i<size;++i)
-    {
+      for(int i = 0;i<size;++i)
+      {
             Specs S = getSpecs(in); //Get Specs
             for(int j = 0;j<S.m;++j)
                 Cubes.push_back(Cube(S.length));
@@ -79,10 +79,19 @@ int main()
                   cout<<"written:("<<P.x<<","<<P.y<<")"<<endl;
             }
             Cubes.clear();    
-    }
+      }
     
-    out<<"</svg>\n";
-    out.close();
-    in.close();            
-    return 0;
+      out<<"</svg>\n";
+      out.close();
+      in.close();            
+      
+      int ID = 1;
+      out.open("randomCubes.obj");
+      for(vector<Cube>::iterator it = World.begin();it != World.end();++it)
+      {
+          (*it).writeObj(out,ID);
+          ID += 8;
+      }
+      out.close();
+      return 0;
 }
