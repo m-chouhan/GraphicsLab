@@ -28,7 +28,7 @@ int main()
   
     vector<Cube> World;
     vector<Cube> Cubes;
-    
+    vector<Cube> conflicts;
     ofstream out("randomCubes.svg");
     out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1000\">\n";
     //write(out);
@@ -47,26 +47,36 @@ int main()
             //~ Check for collision and push the cubes in world 
             for(vector<Cube>::iterator it = Cubes.begin();it != Cubes.end();++it)
             {
-                Point3D P = getGaussianDistri(S.sigX,S.sigY,Point2D(250,250));
-                P.z = S.length/2;    
-                (*it).Move(P);
-                (*it).Rotate(0,0,rand()%180);
-                cout<<"writing:("<<P.x<<","<<P.y<<")"<<endl;
-
-                while( CheckCollision(World,*it ) ) 
-                {
-                    P = getGaussianDistri(S.sigX,S.sigY,Point2D(250,250));
-                    P.z = S.length/2;
-                    (*it).Rotate(0,0,rand()%180);
-                    (*it).Move(P);
-                    cout<<"!!Collision Detected!!\tRelocating("<<P.x<<","
+                  Point3D P = getGaussianDistri(S.sigX,S.sigY,Point2D(250,250));
+                  P.z = S.length/2;    
+                  (*it).Move(P);
+                  (*it).Rotate(0,0,rand()%180);
+                  cout<<"writing:("<<P.x<<","<<P.y<<")"<<endl;
+                  int counter = 0;
+                  while( CheckCollision(World,*it,conflicts ) ) 
+                  {
+                        P = HandleCollision(World,*it,conflicts);  
+                        P.z = S.length/2;
+                        (*it).Rotate(0,0,rand()%180);
+                        (*it).Move(P);
+                        cout<<"!!Collision Detected!!["<<conflicts.size()<<"]\tRelocating Using Handler("<<P.x<<","
                         <<P.y<<")"<<endl;
+                        if(counter++ > 5) break;
+                  }
+                  while( CheckCollision(World,*it,conflicts ) )
+                  {
+                        P = getGaussianDistri(S.sigX,S.sigY,Point2D(250,250));
+                        P.z = S.length/2;
+                        (*it).Rotate(0,0,rand()%180);
+                        (*it).Move(P);
+                        cout<<"!!Collision Detected!!["<<conflicts.size()<<"]\tRelocating Using Gaussian("<<P.x<<","
+                        <<P.y<<")"<<endl;
+                  }
 
-                }
-                World.push_back(*it);
-                (*it).write(out);
-                out<<fflush;
-                cout<<"written:("<<P.x<<","<<P.y<<")"<<endl;
+                  World.push_back(*it);
+                  (*it).write(out);
+                  out<<fflush;
+                  cout<<"written:("<<P.x<<","<<P.y<<")"<<endl;
             }
             Cubes.clear();    
     }

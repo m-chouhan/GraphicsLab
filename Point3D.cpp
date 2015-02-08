@@ -44,7 +44,10 @@ struct Point3D
       {
             return Point3D(x-P.x,y-P.y,z-P.z);
       }
-
+      Point3D operator *(const float mul)
+      {     
+            return Point3D(x*mul,y*mul,z*mul);
+      }
       bool operator <(const Point3D &P) const
       {
             return ( x < P.x);
@@ -93,11 +96,12 @@ struct Point2D:Point3D
         Point2D(const Point3D &P)
         { x = P.x;y = P.y;z = 0;}
         
+        //@returns magnitude of vector
         float mod()
         {
             return sqrt( x*x + y*y);
         }
-        
+        //Returns angle between two vectors    
         float operator ^(Point2D &P)
         {
             Point2D p = *this;

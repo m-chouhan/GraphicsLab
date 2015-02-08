@@ -36,6 +36,9 @@ class Rect
     //int orientation;
     public:
     friend class Cube;
+    friend bool CheckCollision(std::vector<class Cube> world,class Cube c);
+    friend Point2D HandleCollision(std::vector<class Cube> &world,class Cube C,std::vector<class Cube> &conflicts);
+
     Rect(){}
     Rect(Point3D origin,Point3D p0,Point3D p1,Point3D p2,Point3D p3)
     {
@@ -43,6 +46,9 @@ class Rect
             Points[0] = p0;Points[1] = p1;
         Points[2] = p2;Points[3] = p3;
     }
+    Point3D getOrigin() { return origin;}
+    void setOrigin(Point3D P) { origin = P; }
+    Point3D * getPoints() { return Points;}
     //@not implemented
     //~ Rect(Point3D origin,int orientation,int length,int breadth)
     //~ {
@@ -111,6 +117,8 @@ class Cube
       Rect Faces[6];
 
       friend bool CheckCollision(std::vector<Cube> world,Cube c);
+      friend Point2D HandleCollision(std::vector<Cube> &world,Cube C,std::vector<Cube> &conflicts);
+
       //int length,breadth,depth;
 	//length - along x axis
 	//bredth - along y axis , depth - along z axis
