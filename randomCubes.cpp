@@ -47,21 +47,26 @@ int main()
             //~ Check for collision and push the cubes in world 
             for(vector<Cube>::iterator it = Cubes.begin();it != Cubes.end();++it)
             {
-                Point3D P = getGaussianDistri(S.sigX,S.sigY,0);
+                Point3D P = getGaussianDistri(S.sigX,S.sigY,Point2D(250,250));
                 P.z = S.length/2;    
                 (*it).Move(P);
-                (*it).Rotate(0,0,45);
+                (*it).Rotate(0,0,rand()%180);
+                cout<<"writing:("<<P.x<<","<<P.y<<")"<<endl;
+
                 while( CheckCollision(World,*it ) ) 
                 {
-                    P = getGaussianDistri(S.sigX,S.sigY,0);
+                    P = getGaussianDistri(S.sigX,S.sigY,Point2D(250,250));
                     P.z = S.length/2;
-                    (*it).Rotate(0,0,45);
+                    (*it).Rotate(0,0,rand()%180);
                     (*it).Move(P);
+                    cout<<"!!Collision Detected!!\tRelocating("<<P.x<<","
+                        <<P.y<<")"<<endl;
+
                 }
                 World.push_back(*it);
                 (*it).write(out);
                 out<<fflush;
-                cout<<"writing:("<<P.x<<","<<P.y<<")"<<CheckCollision(World,*it)<<endl;
+                cout<<"written:("<<P.x<<","<<P.y<<")"<<endl;
             }
             Cubes.clear();    
     }

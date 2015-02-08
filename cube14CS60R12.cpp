@@ -20,7 +20,7 @@ int  main(int argc,char *argv[])
     
 	if(argc != 5)
       { 
-        c.Rotate(20,30,30);
+        c.Rotate(210,30,30);
         c.Scale(1.2);
       }
       else
@@ -33,6 +33,8 @@ int  main(int argc,char *argv[])
             c.Scale(S);
       }        
 	c.write("svgfile.svg");	
+      ofstream out("single_cube.obj");
+      c.writeObj(out,1);
 	return 0;
 }
 

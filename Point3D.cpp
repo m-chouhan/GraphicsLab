@@ -50,6 +50,12 @@ struct Point3D
             return ( x < P.x);
       }
 
+      friend std::ofstream & operator <<(std::ofstream &out,const Point3D &P)
+      {
+            out<<P.x<<" "<<P.y<<" "<<P.z;
+            return out;
+      }
+
       float angleX()
       {
         return atan2f(y,x);
@@ -89,7 +95,7 @@ struct Point2D:Point3D
         
         float mod()
         {
-                return sqrt( x*x + y*y);
+            return sqrt( x*x + y*y);
         }
         
         float operator ^(Point2D &P)

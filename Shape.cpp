@@ -107,7 +107,6 @@ class Rect
 class Cube
 {
 	Point3D origin;
-
       public:
       Rect Faces[6];
 
@@ -198,6 +197,8 @@ class Cube
       }
       //@doesnot projects hidden space
       void write(std::ofstream &out);
+      //@Writes to ofstream and uses the id to determine vertex position
+      void writeObj(std::ofstream &out,int ID);
 };
 
 void Cube::Scale(float S)
@@ -264,10 +265,7 @@ void Cube::writeHidden(const char *svgFile)
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
 
       for(int i = 0;i<6;++i)
-      {
-        //Faces[i].Translate(Point3D(100,100,0));    
-        C.Faces[i].write(out);
-      }
+            C.Faces[i].write(out);
       out<<"</svg>\n";
     
 	out.close();
@@ -283,6 +281,7 @@ void Cube::write(std::ofstream &out)
         bool collision = false;
         for(int j = 0;j<6;++j)
         {
+            if( i == j) continue;  
             if(C.Faces[i].CheckCollision(C.Faces[j]))
             {
                 collision = true;
@@ -307,3 +306,23 @@ void Cube::write(const char *svgFile)
     	out.close();
 }
 
+void Cube::writeObj(std::ofstream &out,int ID)
+{
+      Cube C;
+      getAbsolutes(C);
+      
+      for(int i = 0;i<2;++i)
+            for(int j = 0;j<4;++j)
+            {
+                  out<<"v ";
+                  out<<C.Faces[i].Points[j]<<std::endl;
+            }
+            
+      out<<"f "<<ID+0<<" "<<ID+1<<" "<<ID+2<<" "<<ID+3<<std::endl;            
+      out<<"f "<<ID+4<<" "<<ID+5<<" "<<ID+6<<" "<<ID+7<<std::endl;            
+      out<<"f "<<ID+2<<" "<<ID+3<<" "<<ID+4<<" "<<ID+7<<std::endl;            
+      out<<"f "<<ID+0<<" "<<ID+1<<" "<<ID+6<<" "<<ID+5<<std::endl;            
+      out<<"f "<<ID+1<<" "<<ID+2<<" "<<ID+7<<" "<<ID+6<<std::endl;            
+      out<<"f "<<ID+0<<" "<<ID+3<<" "<<ID+4<<" "<<ID+5<<std::endl;            
+      out<<std::endl;
+}
