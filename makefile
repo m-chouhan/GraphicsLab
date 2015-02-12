@@ -10,5 +10,7 @@ src/Point3D.o : src/Point3D.cpp src/Point3D.h
 	${CC} ${CFLAGS} -c src/Point3D.cpp
 cube14 :
 	${CC} ${CFLAGS} cube14.cpp src/graphics.o src/Shape.o src/Point3D.o -o cube14
-#all:
-#	g++ randomCubes.cpp -o exec/randomCubes
+all:
+	${CC} ${CFLAGS} -c src/graphics.cpp src/Shape.cpp src/Point3D.cpp
+clear:
+	rm src/*.o
