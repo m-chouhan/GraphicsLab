@@ -1,9 +1,20 @@
+/*
+ * Compile and run this file to generate random cubes
+ * input: from text file specs.txt
+ *        format: #no of entries \n
+ *                length1 m1 sigmaX1 sigmaY1\n
+ *                .
+ *                .
+ * output:randomcubes.svg - contains 2d floor map of cubes
+ *        randomcubes.obj - obj file created using the floor map
+ * Author:Mahendra Chouhan(14CS60R12)
+ * */
 
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
 
-#include "graphics.cpp"
+#include "src/graphics.cpp"
 
 using namespace std;
 
@@ -13,7 +24,7 @@ struct Specs{
         float sigX;
         float sigY;
     };
-    
+/*extracts cube specification from input stream*/     
 Specs getSpecs(ifstream &in)
 {
       Specs s;
@@ -25,13 +36,15 @@ Specs getSpecs(ifstream &in)
 int main()
 {
       srand(time(NULL));
-
-      vector<Cube> World;
+      
+      
+      vector<Cube> World;//Cubes are added to world after placment :P
       vector<Cube> Cubes;
-      vector<Cube> conflicts;
+      vector<Cube> conflicts;//stores the current conflicts i.e collisions
+      
+      Point2D Mean(250,250);
       ofstream out("randomCubes.svg");
       out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1000\">\n";
-      //write(out);
 
       ifstream in("specs.txt");
       int size = 0;
@@ -44,10 +57,10 @@ int main()
             for(int j = 0;j<S.m;++j)
                 Cubes.push_back(Cube(S.length));
             //~ Generate Cubes
-            //~ Check for collision and push the cubes in world 
+            //~ Check for collision and push the cubes in world :D
             for(vector<Cube>::iterator it = Cubes.begin();it != Cubes.end();++it)
             {
-                  Point3D P = getGaussianDistri(S.sigX,S.sigY,Point2D(250,250));
+                  Point3D P = getGaussianDistri(S.sigX,S.sigY,Mean);
                   P.z = S.length/2;    
                   (*it).Move(P);
                   (*it).Rotate(0,0,rand()%180);
