@@ -178,21 +178,8 @@ class Cube
       }
 	void Scale(float S);
 	void Rotate(int Degx,int Degy,int Degz);
-	void write(const char *svgFile);
-	//projects hidden faces
-	void writeHidden(const char*svgFile);
       //@Inline so that can be executed faster
-      void getAbsolutes(Cube &c)
-      {
-            c.origin = origin;
-            for(int i = 0;i<6;++i)
-                  for(int j = 0;j<4;++j)
-                  {
-                        c.Faces[i].Points[j] = 
-                        Faces[i].Points[j] + origin;
-                        c.Faces[i].origin = Faces[i].origin+origin;
-                  }      
-      }
+      void getAbsolutes(Cube &c);      
       //~ A relative movement
       void Translate(Point3D &P)
       {
@@ -203,16 +190,16 @@ class Cube
       {
             origin = P;    
       }
+      
+      void write(const char *svgFile);
+	//projects hidden faces
+	void writeHidden(const char*svgFile);
+
       //@doesnot projects hidden space
       void write(std::ofstream &out);
       //@Writes to ofstream and uses the id to determine vertex position
       void writeObj(std::ofstream &out,int ID);
 };
-
-void Cube::writeHidden(const char *svgFile);
-void Cube::write(std::ofstream &out);
-void Cube::write(const char *svgFile);
-void Cube::writeObj(std::ofstream &out,int ID);
 
 #endif
 

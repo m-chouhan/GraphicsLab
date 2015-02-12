@@ -2,12 +2,8 @@
  * Graphics Library for my projects :P
  * Author: Mahendra Chouhan (14CS60R12)
  * */
-#include <stdlib.h>
-#include <time.h> 
-#include <math.h>
-#include "Shape.cpp"
+#include "graphics.h"
 
-//~ TODO: Generate gaussian distrubution
 Point3D getGaussianDistri(float sigX,float sigY,Point2D mean)
 {
         Point3D P;
