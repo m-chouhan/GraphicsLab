@@ -15,6 +15,7 @@
  * Note: All movement must be relative to origin
  * if absolute values are needed than compute using getAbs()
  * */
+/*
 class Shape
 {
       Point3D origin;
@@ -208,7 +209,7 @@ class Cube
       //@Writes to ofstream and uses the id to determine vertex position
       void writeObj(std::ofstream &out,int ID);
 };
-
+*/
 void Cube::Scale(float S)
 {
       float MatS[4][4] = { S, 0, 0,  0,
