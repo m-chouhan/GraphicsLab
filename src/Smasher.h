@@ -7,7 +7,6 @@ class Rect;
 
 class Smasher
 {
-      bool Smash(Cube c1,Cube c2);
-      bool Smash(Rect r1,Rect r2);      
+      static bool Smash(Cube c1,Rect r1);
 };
 #endif

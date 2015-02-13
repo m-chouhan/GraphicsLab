@@ -37,7 +37,7 @@ bool Rect::check_inside(Point3D q)
       return true;
 }
 
-void Rect::write(std::ofstream &out)
+void Rect::Write(std::ofstream &out)
 {
       //@Add origin to all points
       for(int i = 0;i<3;++i)
@@ -153,13 +153,13 @@ void Cube::writeHidden(const char *svgFile)
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
 
       for(int i = 0;i<6;++i)
-            C.Faces[i].write(out);
+            C.Faces[i].Write(out);
       out<<"</svg>\n";
     
 	out.close();
 }
 
-void Cube::write(std::ofstream &out)
+void Cube::Write(std::ofstream &out)
 {
     Cube C;
     getAbsolutes(C);
@@ -174,13 +174,13 @@ void Cube::write(std::ofstream &out)
             {
                 collision = true;
                 if(C.Faces[i].isAbove(C.Faces[j]))
-                    C.Faces[i].write(out);
+                    C.Faces[i].Write(out);
                 break;
             }
         
         }
         if(!collision)
-            C.Faces[i].write(out);
+            C.Faces[i].Write(out);
     }
         
 }
@@ -189,7 +189,7 @@ void Cube::write(const char *svgFile)
 {
 	std::ofstream out(svgFile);    
 	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
-      write(out);
+      Write(out);
       out<<"</svg>\n";
     	out.close();
 }

@@ -87,7 +87,7 @@ int main()
                   }
 
                   World.push_back(*it);
-                  (*it).write(out);
+                  (*it).Write(out);
                   out<<fflush;
                   cout<<"written:("<<P.x<<","<<P.y<<")"<<endl;
             }

@@ -21,29 +21,31 @@
  * */
 class Shape
 {
+      public:
       Point3D origin;
       int degX,degY,degZ;
-      public:
       //generate absolute values of shape (if required)  
       //virtual Shape& getAbsolutes(Shape &) = 0;
       virtual void Rotate(int,int,int)= 0;
       virtual void Scale(float)= 0;
       virtual void Move(Point3D &)= 0;
       virtual bool Collision(Shape &)= 0;
+      virtual void Write(std::ofstream &out) = 0;
 };
 
-class Rect:public Shape
+class Rect:private Shape
 {
-      Point3D origin;
+      //Point3D origin;
 
       Point3D Points[4];
-      //int orientation;
+
       public:
       friend class Cube;
-      friend bool CheckCollision(std::vector<class Cube> world,class Cube c);
-      friend Point2D HandleCollision(std::vector<class Cube> &world,class Cube C,std::vector<class Cube> &conflicts);
+      friend class Smasher;
+      friend bool CheckCollision(std::vector<class Cube> &,class Cube ,std::vector<class Cube> &);
+      friend Point2D HandleCollision(std::vector<class Cube> &,class Cube ,std::vector<class Cube> &);
 
-      Rect():origin() {}
+      Rect() {}
       Rect(Point3D origin,Point3D p0,Point3D p1,Point3D p2,Point3D p3)
       {
         this->origin = origin;
@@ -55,7 +57,9 @@ class Rect:public Shape
       Point3D * getPoints() { return Points;}
       //@not implemented
       //~ Rect(Point3D origin,int orientation,int length,int breadth)
-      void write(std::ofstream &out);    
+      /*use the file extension in write to call different write functions*/
+      //void Write(char *file) {}
+      void Write(std::ofstream &out);    
       bool isAbove(Rect &R2)
       {
         return (R2.origin.z < origin.z);
@@ -79,14 +83,16 @@ class Rect:public Shape
       bool check_inside(Point3D q);
 };
 
-class Cube
+class Cube:private Shape
 {
-	Point3D origin;
-      public:
+	//@Point3D origin;
       Rect Faces[6];
 
-      friend bool CheckCollision(std::vector<Cube> world,Cube c);
-      friend Point2D HandleCollision(std::vector<Cube> &world,Cube C,std::vector<Cube> &conflicts);
+      public:
+     
+      friend class Smasher;
+      friend bool CheckCollision(std::vector<Cube>&, Cube, std::vector<Cube> &);
+      friend Point2D HandleCollision(std::vector<Cube> &,Cube ,std::vector<Cube> &);
 
       //int length,breadth,depth;
 	//length - along x axis
@@ -113,6 +119,7 @@ class Cube
       }
 	void Scale(float S);
 	void Rotate(int Degx,int Degy,int Degz);
+      
       //@Inline so that can be executed faster
       void getAbsolutes(Cube &c);      
       //~ A relative movement
@@ -126,12 +133,15 @@ class Cube
             origin = P;    
       }
       
+      bool Collision(Shape &S){ return false;}
+      //@doesnot projects hidden space
+      //@standard write function inherited from shape class
+      void Write(std::ofstream &out);
+
       void write(const char *svgFile);
 	//projects hidden faces
 	void writeHidden(const char*svgFile);
 
-      //@doesnot projects hidden space
-      void write(std::ofstream &out);
       //@Writes to ofstream and uses the id to determine vertex position
       void writeObj(std::ofstream &out,int ID);
 };
