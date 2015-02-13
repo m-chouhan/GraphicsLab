@@ -28,7 +28,7 @@ Point3D * Point3D::Multiply(float  Matrix[][4])
     return this;
 }
 
-void writeLine(Point2D p1,Point2D p2,std::ofstream &out,char *color)
+void writeLine(Point2D p1,Point2D p2,std::ofstream &out,const char *color)
 {	
       if( color == NULL) color = RED;
       
@@ -39,14 +39,14 @@ void writeLine(Point2D p1,Point2D p2,std::ofstream &out,char *color)
 	<<"\" style=\"stroke:"<<color<<";stroke-width:2\" />\n";
 }
 
-void writeLines(std::vector<Point2D> &P,std::ofstream &out,char *color)
+void writeLines(std::vector<Point2D> &P,std::ofstream &out,const char *color)
 {
         for(std::vector<Point2D>::iterator it = P.begin();it != (P.end()-1);++it)
             writeLine(*it,*(it+1),out);
         //~ writeLine(P.front(),P.back(),out);            
 }
 
-void writePoint(Point2D P,std::ofstream &out,char *color)
+void writePoint(Point2D P,std::ofstream &out,const char *color)
 {
 	out<<"\n\t<circle cx = \""<<P.x
 	<<"\" cy = \""<<P.y 
@@ -54,7 +54,7 @@ void writePoint(Point2D P,std::ofstream &out,char *color)
 	<<"\" stroke = \"black\" stroke-width = \"3\" />\n";
 }
 
-void writePoints(std::vector<Point2D> &P,std::ofstream &out,char *color)
+void writePoints(std::vector<Point2D> &P,std::ofstream &out,const char *color)
 {
         for(std::vector<Point2D>::iterator it = P.begin();it != P.end();++it)
             writePoint(*it,out);

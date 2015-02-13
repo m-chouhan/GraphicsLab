@@ -5,7 +5,7 @@
  
 #include "Shape.h"
 
-bool Rect::CheckCollision(Rect &R2)    
+bool Rect::CollisionSelf(Rect &R2)    
 {   
       //@Assuming absolute values
       bool flag = false;
@@ -170,7 +170,7 @@ void Cube::write(std::ofstream &out)
         for(int j = 0;j<6;++j)
         {
             if( i == j) continue;  
-            if(C.Faces[i].CheckCollision(C.Faces[j]))
+            if(C.Faces[i].CollisionSelf(C.Faces[j]))
             {
                 collision = true;
                 if(C.Faces[i].isAbove(C.Faces[j]))

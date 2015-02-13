@@ -3,14 +3,54 @@
 #include <fstream>
 #include <stdlib.h>
 
-#include "graphics.cpp"
+//@#include "graphics.h"
 
 using namespace std;
+
+
+class A {
+      public:
+      virtual void Print(A *obj) = 0;
+};
+
+//@class B;
+//@class C;
+
+class B:public A {
+
+      public:      
+      void Print(A *obj);      
+};
+
+class C:public A {
+      
+      public:
+      void Print(A *obj)
+      {
+            if ( dynamic_cast<B*>(obj) != NULL )
+                  cout<<"Print called(B,C)"<<endl;
+            else if ( dynamic_cast<C*>(obj) != NULL )
+                  cout<<"Print called(C,C)"<<endl;
+      }
+};
+
+void B::Print(A *obj)
+      {
+            if ( dynamic_cast<B*>(obj) != NULL )
+                  cout<<"Print called(B,B)"<<endl;
+            else if ( dynamic_cast<class C*>(obj) != NULL )
+                  cout<<"Print called(B,C)"<<endl;
+      }
+
 
 int main()
 {
     srand(time(NULL));
-  
+    B objb;
+    C objc;
+    A *b = &objb,*c = &objc;
+    c->Print(c);
+    /*
     vector<Cube> World;
     vector<Cube> Cubes;
     Cube C1( Point3D(500,500,0),200,200,200 ),
@@ -41,5 +81,6 @@ int main()
 
     cout<<CheckCollision(World,C2)<<endl;
     out.close();
+    */
     return 0;
 }

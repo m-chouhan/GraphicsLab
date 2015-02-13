@@ -34,7 +34,7 @@ bool CheckCollision(std::vector<Cube> &world,Cube C,std::vector<Cube> &conflicts
       for(std::vector<Cube>::iterator it =  world.begin();it != world.end();++it)
       {
             (*it).getAbsolutes(c2);
-            if( c1.Faces[1].CheckCollision(c2.Faces[1])) 
+            if( c1.Faces[1].CollisionSelf(c2.Faces[1])) 
             {
                   flag = true;
                   conflicts.push_back(c2);
