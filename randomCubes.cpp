@@ -14,7 +14,7 @@
 #include <fstream>
 #include <stdlib.h>
 
-#include "src/graphics.cpp"
+#include "src/graphics.h"
 
 using namespace std;
 

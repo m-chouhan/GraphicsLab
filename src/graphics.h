@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <time.h> 
 #include <math.h>
+#include <vector>
+
 #include "Shape.h"
 
 Point3D getGaussianDistri(float sigX,float sigY,Point2D mean);

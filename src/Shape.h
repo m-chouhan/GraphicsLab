@@ -55,14 +55,7 @@ class Rect
     Point3D * getPoints() { return Points;}
     //@not implemented
     //~ Rect(Point3D origin,int orientation,int length,int breadth)
-    void write(std::ofstream &out)
-    {
-        //@Add origin to all points
-        for(int i = 0;i<3;++i)
-                writeLine(Points[i],Points[i+1],out);
-	   writeLine(Points[0],Points[3],out);
-         writePoint(origin,out); 
-    }
+    void write(std::ofstream &out);    
     bool isAbove(Rect &R2)
     {
         return (R2.origin.z < origin.z);
@@ -70,43 +63,14 @@ class Rect
     //Not implemented
     void Rotate(int Degx,int Degy,int Degz);
     void Scale(int S);
-    bool CheckCollision(Rect &R2)
-    {   
-        //@Assuming absolute values
-        bool flag = false;
-        for(int i = 0;i<4;++i)
-        {
-		flag = check_inside(R2.Points[i]) or 
-			R2.check_inside(Points[i]) or flag;
-        }
-        flag = check_inside(R2.origin) or flag;
-        return flag;
-    }
-    
+    bool CheckCollision(Rect &R2);    
     void Translate(Point3D P)
     {
         for(int i = 0;i<4;++i) Points[i] = Points[i] + P;
         origin = origin + P;
     }
     
-    bool check_inside(Point3D q)
-    {
-        Vector prev;
-        for(int i = 0;i<4;++i)
-        {
-            Vector V = Points[(i+1)%4] - Points[i],
-                   Q = q - Points[i];
-            Vector R = V.X(Q);//cross product
-            
-            if( i == 0) prev = R;
-            
-            if( (prev.z > 0 && R.z > 0) or
-                (prev.z < 0 && R.z < 0) or (!prev.z ^ !R.z)) 
-                prev = R;
-            else return false;
-        }	
-        return true;
-    }
+    bool check_inside(Point3D q);
 };
 
 class Cube
@@ -121,42 +85,7 @@ class Cube
       //int length,breadth,depth;
 	//length - along x axis
 	//bredth - along y axis , depth - along z axis
-	Cube(Point3D orig,int length,int breadth,int depth)
-	{	
-		Point3D temp;
-            Point3D Points[8];
-	
-		origin = orig;
-		temp.y -= breadth/2;temp.x -= length/2;temp.z += depth/2;
-		
-		Points[0] = temp;
-		temp.x += length;Points[1] = temp;
-		temp.y += breadth;Points[2] = temp;
-		temp.x -= length;Points[3] = temp;
-		temp.z -= depth;Points[4] = temp;
-		temp.y -= breadth;Points[5] = temp;
-		temp.x += length;Points[6] = temp;
-		temp.y += breadth;Points[7] =temp;
-		
-		temp = Point3D(0,0,depth/2);
-		Faces[0] = Rect(temp,
-				Points[0],Points[1],Points[2],Points[3]);                
-		temp = Point3D(0,0,-depth/2);
-		Faces[1] = Rect(temp,
-				Points[4],Points[5],Points[6],Points[7]);
-		temp = Point3D(0,breadth/2,0);
-		Faces[2] = Rect(temp,
-				Points[2],Points[3],Points[4],Points[7]);
-		temp = Point3D(0,-breadth/2,0);
-		Faces[3] = Rect(temp,
-				Points[0],Points[1],Points[6],Points[5]);
-		temp = Point3D(length/2,0,0);
-		Faces[4] = Rect(temp,
-				Points[1],Points[2],Points[7],Points[6]);
-		temp = Point3D(-length/2,0,0);
-		Faces[5] = Rect(temp,
-				Points[0],Points[3],Points[4],Points[5]);		
-	}
+	Cube(Point3D orig,int length,int breadth,int depth);
 	Cube(const char *objfile)
       {
             std::ifstream in(objfile);
