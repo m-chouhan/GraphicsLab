@@ -84,8 +84,9 @@ Cube::Cube(Point3D orig,int length,int breadth,int depth)
 }
 
  
-inline void Cube::getAbsolutes(Cube &c)
+inline void Cube::getAbsolutes(Shape &S)
 {
+      Cube c = dynamic_cast<Cube &>(S);
       c.origin = origin;
       for(int i = 0;i<6;++i)
             for(int j = 0;j<4;++j)

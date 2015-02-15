@@ -25,7 +25,7 @@ class Shape
       Point3D origin;
       int degX,degY,degZ;
       //generate absolute values of shape (if required)  
-      //virtual Shape& getAbsolutes(Shape &) = 0;
+      virtual void getAbsolutes(Shape &) = 0;
       virtual void Rotate(int,int,int)= 0;
       virtual void Scale(float)= 0;
       virtual void Move(Point3D &)= 0;
@@ -59,6 +59,7 @@ class Rect:private Shape
       //~ Rect(Point3D origin,int orientation,int length,int breadth)
       /*use the file extension in write to call different write functions*/
       //void Write(char *file) {}
+      void getAbsolutes(Shape &S) {}
       void Write(std::ofstream &out);    
       bool isAbove(Rect &R2)
       {
@@ -71,6 +72,7 @@ class Rect:private Shape
       
       bool Collision(Shape &S)
       {
+            //@if( dynamic_case<Cube
             return false;
       }
       bool CollisionSelf(Rect &R2);    
@@ -94,7 +96,6 @@ class Cube:private Shape
       friend bool CheckCollision(std::vector<Cube>&, Cube, std::vector<Cube> &);
       friend Point2D HandleCollision(std::vector<Cube> &,Cube ,std::vector<Cube> &);
 
-      //int length,breadth,depth;
 	//length - along x axis
 	//bredth - along y axis , depth - along z axis
 	Cube(Point3D orig,int length,int breadth,int depth);
@@ -121,7 +122,7 @@ class Cube:private Shape
 	void Rotate(int Degx,int Degy,int Degz);
       
       //@Inline so that can be executed faster
-      void getAbsolutes(Cube &c);      
+      void getAbsolutes(Shape &S);      
       //~ A relative movement
       void Translate(Point3D &P)
       {

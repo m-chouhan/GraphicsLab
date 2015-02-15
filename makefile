@@ -17,3 +17,4 @@ rcube :
 #	${CC} ${CFLAGS} -c src/graphics.cpp src/Shape.cpp src/Point3D.cpp
 clear:
 	rm src/*.o
+	rm exec/*
