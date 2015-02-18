@@ -12,6 +12,8 @@ cube14 :
 	${CC} ${CFLAGS} cube14.cpp src/graphics.o src/Shape.o src/Point3D.o -o exec/cube14
 rcube :
 	${CC} ${CFLAGS} randomCubes.cpp src/graphics.o src/Shape.o src/Point3D.o -o exec/rcube
+polygon:
+	${CC} ${CFLAGS} polygon.cpp src/graphics.o src/Shape.o src/Point3D.o -o exec/polygon
 #all:
 #	make src/makefile all
 #	${CC} ${CFLAGS} -c src/graphics.cpp src/Shape.cpp src/Point3D.cpp

@@ -85,11 +85,11 @@ class Rect:private Shape
       bool check_inside(Point3D q);
 };
 
-class Cube:private Shape
+class Cube:public Shape
 {
 	//@Point3D origin;
       Rect Faces[6];
-
+      Shape::origin;
       public:
      
       friend class Smasher;

@@ -16,10 +16,17 @@
 #define RED "rgb(255,0,0)"
 #define GREEN "rgb(0,255,0)"
 #define BLUE "rgb(0,0,255)"
+#define PI 3.14159
 
 double Rad(float Deg); 
+float Deg(float Rad);
+
+double normR(double val);
+double normD(double val);
 
 typedef struct Point3D Vector;
+
+typedef std::vector<Point3D> PointList;
 
 struct Point3D
 {
@@ -64,6 +71,18 @@ struct Point3D
             return out;
       }
 
+      friend std::ifstream & operator >>(std::ifstream &in,Point3D &P)
+      {
+            in>>P.x>>P.y>>P.z;
+            return in;
+      }
+      
+      friend std::ostream & operator <<(std::ostream &out,const Point3D &P)
+      {
+            out<<P.x<<" "<<P.y<<" "<<P.z;
+            return out;
+      }
+      
       float angleX()
       {
             return atan2f(y,x);

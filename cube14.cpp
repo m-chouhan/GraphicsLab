@@ -16,8 +16,9 @@ using namespace std;
 
 int  main(int argc,char *argv[])
 { 
-      Cube c("cube.obj");
-    
+      Cube c("cube.txt");
+      Cube c2;
+      c.getAbsolutes(c2);
 	if(argc != 5)
       { 
         c.Rotate(210,30,30);

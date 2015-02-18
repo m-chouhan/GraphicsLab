@@ -9,6 +9,21 @@ double Rad(float Deg)
 {
 	return (3.14*Deg/180);
 }
+float Deg(float Rad)
+{
+      return (Rad*180/3.14);
+}
+
+double normR(double val)
+{
+      if(val < 0) return 2*PI + val;
+      return val;
+}
+double normD(double val)
+{
+      if (val < 0) return 360 + val;
+      else return val;
+}
 
 Point3D Point3D::X(Point3D p)
 {
