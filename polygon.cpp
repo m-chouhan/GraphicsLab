@@ -1,4 +1,10 @@
 
+/* Polygon :
+ *    Takes input points from inpoints.txt ( clokwise direction ) 
+ *    and calculates if the points form a polygon or not
+ *    Author:Mahendra Chouhan(14CS60R12)
+ * */
+
 #include <iostream>
 #include "src/Point3D.h"
 #include "src/graphics.h"
@@ -7,12 +13,16 @@ using namespace std;
 
 int main(int argc,char *argv[])
 {
-      PointList list;
+      PointList2D list;
       ifstream in("inpoints.txt");
-      Point2D P(100,0);
+      ofstream out("polygon.svg");    
+	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1500\">\n";
+      
+      Point3D P(100,0,0),orig(500,500,0);
       
       while(in>>P)
       {
+            P = P + orig;
             list.push_back(P);
             cout<<P<<endl;
       } 
@@ -27,29 +37,42 @@ int main(int argc,char *argv[])
             Vector2D front = list[three] - list[two];
             Vector2D back = list[two] - list[i];
             Vector2D backrev = back*-1;
+            
+            float f = Deg(front.angleX());
+            float b = Deg(back.angleX());
+
             float turn =  front.angleX() - back.angleX();//normR(v2.angleX()) - normR(v1.angleX());
                         
             float angle = front^(backrev);
             if (angle == 0) angle = PI;
             if(turn > 0 ) 
             {
-                  float f = Deg(front.angleX());
-                  float b = Deg(back.angleX());
-                  if(  f>= 90 &&  b<= -90) ;     
+                  if(  f>= 0 &&  b<= -90) ;     
                   else angle = 2*PI - angle;//take larger angle
             }      
-                  
-            
+            if(turn < 0)
+            {
+                  //@float f = Deg(front.angleX());
+                  //@float b = Deg(back.angleX());
+                  if(  b>= 90 &&  f<= -90) angle = 2*PI - angle;     
+
+            }                  
             sumR += angle;
             sum = Deg(sumR);
                   
-            cout<<"["<<two<<","<<Deg(front^back)<<","<<Deg(angle)<<"]\t";
+            cout<<"["<<two<<","<<Deg(angle)<<"]\t";
       }
       
-      //cout<<endl<<target<<":"<<sz<<":"<<sumR<<":"<<Rad(target)<<endl;
+      cout<<endl<<"target:"<<target<<":"<<sz<<":sum="<<sum<<":"<<endl;
       if( (sum < target+2) && (sum > target-2) ) 
-            cout<<"\tSimple Polygon Found\n";
+            cout<<"\nSimple Polygon Found\n";
             
-      cout<<endl<<sum<<endl;
+      //cout<<endl<<sum<<endl;
+      
+      writePoly(list,out,BLUE); 
+      writePoints(list,out);     
+      out<<"</svg>\n";
+    	out.close();
+
       return 0;
 }

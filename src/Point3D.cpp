@@ -54,7 +54,7 @@ void writeLine(Point2D p1,Point2D p2,std::ofstream &out,const char *color)
 	<<"\" style=\"stroke:"<<color<<";stroke-width:2\" />\n";
 }
 
-void writeLines(std::vector<Point2D> &P,std::ofstream &out,const char *color)
+void writeLines(PointList2D &P,std::ofstream &out,const char *color)
 {
         for(std::vector<Point2D>::iterator it = P.begin();it != (P.end()-1);++it)
             writeLine(*it,*(it+1),out);
@@ -69,8 +69,15 @@ void writePoint(Point2D P,std::ofstream &out,const char *color)
 	<<"\" stroke = \"black\" stroke-width = \"3\" />\n";
 }
 
-void writePoints(std::vector<Point2D> &P,std::ofstream &out,const char *color)
+void writePoints(PointList2D &P,std::ofstream &out,const char *color)
 {
         for(std::vector<Point2D>::iterator it = P.begin();it != P.end();++it)
             writePoint(*it,out);
 }
+void writePoly(PointList2D &P,std::ofstream &out,const char *color)
+{
+      for(PointList2D::iterator it = P.begin();it != (P.end()-1);++it)
+            writeLine(*it,*(it+1),out,color);      
+      writeLine(P.front(),P.back(),out,color);            
+}
+

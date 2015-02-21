@@ -1,8 +1,10 @@
 
+//TODO: define Screen Size in graphics.h
+
 /* Contains defination of Abstract Shape class and corresponding Rect and cube classes
  * Author:Mahendra Chouhan(14CS60R12)
  */ 
- 
+#include "graphics.h" 
 #include "Shape.h"
 
 bool Rect::CollisionSelf(Rect &R2)    
@@ -147,11 +149,11 @@ void Cube::Rotate(int Degx,int Degy,int Degz)
 
 void Cube::writeHidden(const char *svgFile)
 {
-      Cube C;
-      getAbsolutes(C);
+	Cube C;
+	getAbsolutes(C);
 	std::ofstream out(svgFile);
     
-	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
+	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\""<<HEIGHT<<"\" width=\""<<WIDTH<<"\">\n";
 
       for(int i = 0;i<6;++i)
             C.Faces[i].Write(out);
@@ -159,6 +161,41 @@ void Cube::writeHidden(const char *svgFile)
     
 	out.close();
 }
+
+void Cube::ProjectHidden(const char *svgFile,Point3D viewPoint)
+{
+	Cube C;
+	getAbsolutes(C);
+      
+	Point3D r;
+      
+      for(int i = 0;i<6;++i)
+      {
+            Point3D temp;
+            
+            for(int j = 0;j<4;++j)
+            {
+                  temp = C.Faces[i].Points[j];
+                  r = viewPoint - temp;
+                  C.Faces[i].Points[j] = r*(-temp.z/r.z) + temp;
+            }
+            
+            temp = C.Faces[i].origin;
+            r = viewPoint - temp;
+            C.Faces[i].origin = r*(-temp.z/r.z) + temp;
+      }
+    
+	std::ofstream out(svgFile);
+    
+	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\""<<HEIGHT<<"\" width=\""<<WIDTH<<"\">\n";
+
+      for(int i = 0;i<6;++i)
+            C.Faces[i].Write(out);
+      out<<"</svg>\n";
+    
+	out.close();
+}
+
 
 void Cube::Write(std::ofstream &out)
 {
@@ -189,7 +226,7 @@ void Cube::Write(std::ofstream &out)
 void Cube::write(const char *svgFile)
 {
 	std::ofstream out(svgFile);    
-	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"310\" width=\"500\">\n";
+	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\""<<HEIGHT<<"\" width=\""<<WIDTH<<"\">\n";
       Write(out);
       out<<"</svg>\n";
     	out.close();

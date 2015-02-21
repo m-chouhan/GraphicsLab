@@ -1,3 +1,5 @@
+//TODO: define Screen Size in graphics.h
+
 /*
  * Graphics Library for my projects :P
  * Author: Mahendra Chouhan (14CS60R12)
@@ -9,6 +11,10 @@
 #include <time.h> 
 #include <math.h>
 #include <vector>
+
+//ScreenSize
+#define WIDTH 1500
+#define HEIGHT 1200
 
 #include "Shape.h"
 

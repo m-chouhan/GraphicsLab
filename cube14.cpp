@@ -14,28 +14,40 @@
 
 using namespace std;
 
+
+
 int  main(int argc,char *argv[])
 { 
       Cube c("cube.txt");
-      Cube c2;
-      c.getAbsolutes(c2);
-	if(argc != 5)
+	if(argc < 6)
       { 
-        c.Rotate(210,30,30);
-        c.Scale(1.2);
+            //c.Rotate(210,30,30);
+            c.Scale(3.2);
+            c.ProjectHidden("projectHidden.svg",Point3D(600,600,300));	
       }
+      
       else
       {
-            float S = atof(argv[1]);
-            float degx = atoi(argv[2]);
-            float degy = atoi(argv[3]);
-            float degz = atoi(argv[4]);
+            //float S = atof(argv[1]);
+            Point3D orig(atof(argv[1]),atof(argv[2]),atof(argv[3]));
+            
+            float degx = atoi(argv[4]);
+            float degy = atoi(argv[5]);
+            float degz = atoi(argv[6]);
+            
             c.Rotate(degx,degy,degz);
-            c.Scale(S);
+            c.Move(orig);
+            //c.Scale();
+            c.ProjectHidden("projectHidden.svg",Point3D(600,600,100));	
       }        
-	c.write("svgfile.svg");	
-      ofstream out("single_cube.obj");
-      c.writeObj(out,1);
-	return 0;
+      
+      //c.write("cube.svg");
+      //ofstream out("single_cube.obj");
+
+      //~ if( fork() == 0)
+            //~ system("eog cube.svg");
+      //system("eog projectHidden.svg");
+            
+      return 0;
 }
 

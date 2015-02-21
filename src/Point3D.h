@@ -25,8 +25,10 @@ double normR(double val);
 double normD(double val);
 
 typedef struct Point3D Vector;
+typedef struct Point2D Vector2D;
 
-typedef std::vector<Point3D> PointList;
+typedef std::vector<Point3D> PointList3D;
+typedef std::vector<Point2D> PointList2D;
 
 struct Point3D
 {
@@ -95,8 +97,6 @@ struct Point3D
 };
 
 
-typedef struct Point2D Vector2D;
-
 struct Point2D:Point3D
 {
         Point2D(int X = 0,int Y=0)
@@ -119,8 +119,9 @@ struct Point2D:Point3D
 };
 
 void writeLine(Point2D p1,Point2D p2,std::ofstream &out,const char *color = NULL);
-void writeLines(std::vector<Point2D> &P,std::ofstream &out,const char *color = NULL);
+void writeLines(PointList2D &P,std::ofstream &out,const char *color = NULL);
 void writePoint(Point2D P,std::ofstream &out,const char *color = NULL);
-void writePoints(std::vector<Point2D> &P,std::ofstream &out,const char *color = NULL);
+void writePoints(PointList2D &P,std::ofstream &out,const char *color = NULL);
+void writePoly(PointList2D &P,std::ofstream &out,const char *color = NULL);
 
 #endif

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1200" width="1500">
+
+	<line x1 = "440" y1 = "440" x2 = "760" y2 = "440" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "760" y1 = "440" x2 = "760" y2 = "760" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "760" y1 = "760" x2 = "440" y2 = "760" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "440" y1 = "440" x2 = "440" y2 = "760" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<circle cx = "600" cy = "600" r = "2" stroke = "black" stroke-width = "3" />
+</svg>
