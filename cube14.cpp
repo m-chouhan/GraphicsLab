@@ -23,7 +23,8 @@ int  main(int argc,char *argv[])
       { 
             //c.Rotate(210,30,30);
             c.Scale(3.2);
-            c.ProjectHidden("projectHidden.svg",Point3D(600,600,300));	
+            c = c.Project(Point3D(600,600,100));
+            c.writeHidden("projectHidden.svg");	
       }
       
       else
@@ -38,7 +39,12 @@ int  main(int argc,char *argv[])
             c.Rotate(degx,degy,degz);
             c.Move(orig);
             //c.Scale();
-            c.ProjectHidden("projectHidden.svg",Point3D(600,600,100));	
+            //c.ProjectHidden("projectHidden.svg",Point3D(600,600,100));
+            c = c.Project(Point3D(600,600,100));
+            c.Scale(4);
+            c.writeHidden("projectHidden.svg");
+            
+            c.write("project.svg");
       }        
       
       //c.write("cube.svg");

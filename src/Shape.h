@@ -139,15 +139,12 @@ class Cube:public Shape
 	//@doesnot projects hidden space
 	//@standard write function inherited from shape class
 	void Write(std::ofstream &out);
-      
-      //~Bear with this for a while 
-      static void WRITE(Cube c);
-	
+      	
       void write(const char *svgFile);
 	//projects hidden faces
 	void writeHidden(const char*svgFile);
-	//projects at z = 0 then writes them into a file
-	void ProjectHidden(const char *svgFile,Point3D viewPoint);
+	//~ returns projection at z = 0,
+      //~ *stores initial z ordering of cube 
       Cube Project(Point3D viewPoint);
 	//@Writes to ofstream and uses the id to determine vertex position
 	void writeObj(std::ofstream &out,int ID);

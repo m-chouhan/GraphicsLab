@@ -53,7 +53,7 @@ struct Point3D
       float operator *(const Point3D &P2) {
             return x*P2.x + y*P2.y + z*P2.z;
       }
-
+      
       Point3D operator -(const Point3D &P)
       {
             return Point3D(x-P.x,y-P.y,z-P.z);
@@ -61,6 +61,10 @@ struct Point3D
       Point3D operator *(const float mul)
       {     
             return Point3D(x*mul,y*mul,z*mul);
+      }
+      Point3D operator /(const float div)
+      {
+            return Point3D(x/div,y/div,z/div);
       }
       bool operator <(const Point3D &P) const
       {
@@ -92,6 +96,10 @@ struct Point3D
       float angleY()
       {
             return atan2f(x,y);
+      }
+      float mod()
+      {
+            return sqrt( x*x + y*y + z*z);
       }
     
 };

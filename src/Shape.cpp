@@ -162,38 +162,32 @@ void Cube::writeHidden(const char *svgFile)
 	out.close();
 }
 
-void Cube::ProjectHidden(const char *svgFile,Point3D viewPoint)
+Cube Cube::Project(Point3D viewPoint)
 {
 	Cube C;
 	getAbsolutes(C);
       
-	Point3D r;
+	Point3D r,p;
       
       for(int i = 0;i<6;++i)
       {
-            Point3D temp;
             
             for(int j = 0;j<4;++j)
             {
-                  temp = C.Faces[i].Points[j];
-                  r = viewPoint - temp;
-                  C.Faces[i].Points[j] = r*(-temp.z/r.z) + temp;
+                  p = C.Faces[i].Points[j];
+                  r = p - viewPoint;
+                  //r = r/r.mod(); //unit vector^ in our points direction
+                  C.Faces[i].Points[j] = viewPoint + r*(-viewPoint.z/r.z) - C.origin;
+                  //reduce c.origin because all movements are relative to origin 
+                  C.Faces[i].Points[j].z = p.z;
             }
             
-            temp = C.Faces[i].origin;
-            r = viewPoint - temp;
-            C.Faces[i].origin = r*(-temp.z/r.z) + temp;
+            p = C.Faces[i].origin;
+            r = p - viewPoint;
+            C.Faces[i].origin = viewPoint + r*(-viewPoint.z/r.z) - C.origin;
+            C.Faces[i].origin.z = p.z;
       }
-    
-	std::ofstream out(svgFile);
-    
-	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\""<<HEIGHT<<"\" width=\""<<WIDTH<<"\">\n";
-
-      for(int i = 0;i<6;++i)
-            C.Faces[i].Write(out);
-      out<<"</svg>\n";
-    
-	out.close();
+      return C;
 }
 
 

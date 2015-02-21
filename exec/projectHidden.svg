@@ -1,62 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1200" width="1500">
 
-	<line x1 = "539" y1 = "424" x2 = "782" y2 = "628" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "236" y1 = "236" x2 = "632" y2 = "236" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "782" y1 = "628" x2 = "593" y2 = "768" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "632" y1 = "236" x2 = "632" y2 = "632" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "593" y1 = "768" x2 = "435" y2 = "635" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "632" y1 = "632" x2 = "236" y2 = "632" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "539" y1 = "424" x2 = "435" y2 = "635" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "236" y1 = "236" x2 = "236" y2 = "632" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<circle cx = "572" cy = "633" r = "2" stroke = "black" stroke-width = "3" />
+	<circle cx = "432" cy = "432" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "539" y1 = "590" x2 = "604" y2 = "495" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "268" y1 = "464" x2 = "268" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "604" y1 = "495" x2 = "702" y2 = "578" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "268" y1 = "268" x2 = "464" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "702" y1 = "578" x2 = "620" y2 = "658" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "464" y1 = "268" x2 = "464" y2 = "464" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "539" y1 = "590" x2 = "620" y2 = "658" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "268" y1 = "464" x2 = "464" y2 = "464" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<circle cx = "613" cy = "584" r = "2" stroke = "black" stroke-width = "3" />
+	<circle cx = "364" cy = "364" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "593" y1 = "768" x2 = "435" y2 = "635" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "632" y1 = "632" x2 = "236" y2 = "632" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "435" y1 = "635" x2 = "539" y2 = "590" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "236" y1 = "632" x2 = "268" y2 = "464" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "539" y1 = "590" x2 = "620" y2 = "658" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "268" y1 = "464" x2 = "464" y2 = "464" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "593" y1 = "768" x2 = "620" y2 = "658" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "632" y1 = "632" x2 = "464" y2 = "464" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<circle cx = "557" cy = "651" r = "2" stroke = "black" stroke-width = "3" />
+	<circle cx = "388" cy = "520" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "539" y1 = "424" x2 = "782" y2 = "628" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "236" y1 = "236" x2 = "632" y2 = "236" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "782" y1 = "628" x2 = "702" y2 = "578" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "632" y1 = "236" x2 = "464" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "702" y1 = "578" x2 = "604" y2 = "495" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "464" y1 = "268" x2 = "268" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "539" y1 = "424" x2 = "604" y2 = "495" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "236" y1 = "236" x2 = "268" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<circle cx = "655" cy = "533" r = "2" stroke = "black" stroke-width = "3" />
+	<circle cx = "388" cy = "256" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "782" y1 = "628" x2 = "593" y2 = "768" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "632" y1 = "236" x2 = "632" y2 = "632" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "593" y1 = "768" x2 = "620" y2 = "658" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "632" y1 = "632" x2 = "464" y2 = "464" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "620" y1 = "658" x2 = "702" y2 = "578" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "464" y1 = "464" x2 = "464" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "782" y1 = "628" x2 = "702" y2 = "578" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "632" y1 = "236" x2 = "464" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<circle cx = "660" cy = "651" r = "2" stroke = "black" stroke-width = "3" />
+	<circle cx = "520" cy = "388" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "539" y1 = "424" x2 = "435" y2 = "635" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "236" y1 = "236" x2 = "236" y2 = "632" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "435" y1 = "635" x2 = "539" y2 = "590" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "236" y1 = "632" x2 = "268" y2 = "464" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "539" y1 = "590" x2 = "604" y2 = "495" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "268" y1 = "464" x2 = "268" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "539" y1 = "424" x2 = "604" y2 = "495" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "236" y1 = "236" x2 = "268" y2 = "268" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<circle cx = "539" cy = "548" r = "2" stroke = "black" stroke-width = "3" />
+	<circle cx = "256" cy = "388" r = "2" stroke = "black" stroke-width = "3" />
 </svg>
