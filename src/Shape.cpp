@@ -169,6 +169,13 @@ Cube Cube::Project(Point3D viewPoint)
       
 	Point3D r,p;
       
+      p = C.origin;
+      r = p - viewPoint;
+      //r = r/r.mod(); //unit vector^ in our points direction
+      C.origin = viewPoint + r*(-viewPoint.z/r.z);
+      //reduce c.origin because all movements are relative to origin 
+      //C.Faces[i].Points[j].z = p.z;
+      
       for(int i = 0;i<6;++i)
       {
             

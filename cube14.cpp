@@ -41,7 +41,7 @@ int  main(int argc,char *argv[])
             //c.Scale();
             //c.ProjectHidden("projectHidden.svg",Point3D(600,600,100));
             c = c.Project(Point3D(600,600,100));
-            c.Scale(4);
+            c.Scale(2);
             c.writeHidden("projectHidden.svg");
             
             c.write("project.svg");
