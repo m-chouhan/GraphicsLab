@@ -3,7 +3,8 @@
 #include <fstream>
 #include <stdlib.h>
 
-//@#include "graphics.h"
+#include "src/Shape.h"
+#include "src/graphics.h"
 
 using namespace std;
 
@@ -43,44 +44,52 @@ void B::Print(A *obj)
       }
 
 
-int main()
+int main(int argc,char *argv[])
 {
-    srand(time(NULL));
-    B objb;
-    C objc;
-    A *b = &objb,*c = &objc;
-    c->Print(c);
-    /*
-    vector<Cube> World;
-    vector<Cube> Cubes;
-    Cube C1( Point3D(500,500,0),200,200,200 ),
+      /*
+      srand(time(NULL));
+      B objb;
+      C objc;
+      A *b = &objb,*c = &objc;
+      c->Print(c);*/
+      
+      /*
+      vector<Cube> World;
+      vector<Cube> Cubes;
+      Cube C1( Point3D(500,500,0),200,200,200 ),
          C2( Point3D(500,720,0),200,200,200 );
-    World.push_back(C1);
-    C2.Rotate(0,0,7);
-    //@Cube c1,c2;
-    //@C1.getAbsolutes(c1);C2.getAbsolutes(c2);
+      World.push_back(C1);
+      C2.Rotate(0,0,7);
+      Cube c1,c2;
+      C1.getAbsolutes(c1);C2.getAbsolutes(c2);
+      */
+      Rect R1( Point3D(500,300,0),Point3D(400,200,0),Point3D(400,600,0),
+      Point3D(600,600,0),Point3D(600,200,0));
+      //~ Rect R2( Point3D(500,500,0),Point3D(500,350,0),Point3D(650,500,0),
+      //~ Point3D(500,650,0),Point3D(350,500,0));
 
-    Rect R1( Point3D(500,500,0),Point3D(400,400,0),Point3D(400,600,0),
-             Point3D(600,600,0),Point3D(600,400,0));
-    Rect R2( Point3D(500,500,0),Point3D(500,350,0),Point3D(650,500,0),
-             Point3D(500,650,0),Point3D(350,500,0));
-    
-    R2.Translate(Point3D(-100,-100,110));
-                 
-    ofstream out("randomCubes.svg");
-    out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1000\">\n";
-    //@R1.write(out);
-    //@R2.write(out);  
-    //@c1.Faces[1].write(out);
-    //@c2.Faces[1].write(out);
-    C1.write(out);
-    C2.write(out);
-    out<<"</svg>\n";
-    //@cout<<endl<<R1.check_inside(Point3D(401,401,10))<<endl;
-    //@cout<<endl<<R1.CheckCollision(R2)<<endl;
 
-    cout<<CheckCollision(World,C2)<<endl;
-    out.close();
-    */
-    return 0;
+      ofstream out("test.svg");
+      out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1000\">\n";
+
+      Point3D orig(atof(argv[1]),atof(argv[2]),atof(argv[3]));
+      
+      float degx = atoi(argv[4]);
+      float degy = atoi(argv[5]);
+      float degz = atoi(argv[6]);
+
+      R1.Translate(orig);
+      R1.Project(Point3D(400,200,100));      
+      R1.Write(out);
+      /*
+      R2.write(out);  
+      c1.Faces[1].write(out);
+      c2.Faces[1].write(out);
+      C1.write(out);
+      C2.write(out);*/
+
+      out<<"</svg>\n";
+      out.close();
+      
+      return 0;
 }

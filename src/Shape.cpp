@@ -7,6 +7,28 @@
 #include "graphics.h" 
 #include "Shape.h"
 
+
+Rect Rect::Project(Point3D viewPoint)
+{      
+	Point3D r,p;
+      
+      p = origin;
+      r = p - viewPoint;
+      //r = r/r.mod(); //unit vector^ in our points direction
+      origin = viewPoint + r*(-viewPoint.z/r.z);
+      //C.origin.z = p.z;            
+      for(int j = 0;j<4;++j)
+      {
+            p = Points[j];
+            r = p - viewPoint;
+            //r = r/r.mod(); //unit vector^ in our points direction
+            Points[j] = viewPoint + r*(-viewPoint.z/r.z) ;
+      }
+      
+      return *this;
+}
+
+
 bool Rect::CollisionSelf(Rect &R2)    
 {   
       //@Assuming absolute values
@@ -164,10 +186,24 @@ void Cube::writeHidden(const char *svgFile)
 
 Cube Cube::Project(Point3D viewPoint)
 {
+      Cube tc = *this;
 	Cube C;
-	getAbsolutes(C);
+      getAbsolutes(C);
       
 	Point3D r,p;
+      
+      p = C.origin;
+      r = p - viewPoint;
+      
+      //~ float xDeg = atan2(r.y,r.z);
+      //~ float yDeg = atan2(r.x,r.z);
+      //~ tc.Rotate(Deg(xDeg)/2,0,0);
+      //~ tc.Rotate(0,yDeg,0);
+	//~ tc.getAbsolutes(C);
+      //r = r/r.mod(); //unit vector^ in our points direction
+      
+      C.origin = viewPoint + r*(-viewPoint.z/r.z);
+      C.origin.z = p.z;
       
       for(int i = 0;i<6;++i)
       {
@@ -184,6 +220,7 @@ Cube Cube::Project(Point3D viewPoint)
             
             p = C.Faces[i].origin;
             r = p - viewPoint;
+            //r = r/r.mod(); //unit vector^ in our points direction
             C.Faces[i].origin = viewPoint + r*(-viewPoint.z/r.z) - C.origin;
             C.Faces[i].origin.z = p.z;
       }

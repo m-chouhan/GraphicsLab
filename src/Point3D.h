@@ -97,6 +97,10 @@ struct Point3D
       {
             return atan2f(x,y);
       }
+      float angleZ()
+      {
+            return 0;
+      }
       float mod()
       {
             return sqrt( x*x + y*y + z*z);

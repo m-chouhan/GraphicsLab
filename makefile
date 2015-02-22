@@ -10,6 +10,8 @@ src/Point3D.o : src/Point3D.cpp src/Point3D.h
 	${CC} ${CFLAGS} -c src/Point3D.cpp
 cube14 :
 	${CC} ${CFLAGS} cube14.cpp src/graphics.o src/Shape.o src/Point3D.o -o exec/cube14
+test :
+	${CC} ${CFLAGS} testCollision.cpp src/graphics.o src/Shape.o src/Point3D.o -o exec/test
 rcube :
 	${CC} ${CFLAGS} randomCubes.cpp src/graphics.o src/Shape.o src/Point3D.o -o exec/rcube
 polygon:

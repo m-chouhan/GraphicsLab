@@ -70,7 +70,8 @@ class Rect:private Shape
       void Rotate(int Degx,int Degy,int Degz) {}
       void Scale(float S){}
       void Move(Point3D &P){}
-      
+
+      Rect Project(Point3D viewPoint);      
       bool Collision(Shape &S)
       {
             //@if( dynamic_case<Cube

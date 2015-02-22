@@ -39,11 +39,11 @@ int  main(int argc,char *argv[])
             c.Rotate(degx,degy,degz);
             c.Move(orig);
             //c.Scale();
-            //c.ProjectHidden("projectHidden.svg",Point3D(600,600,100));
+            c.writeHidden("realCubeH.svg");
+            c.write("realCube.svg");
             c = c.Project(Point3D(600,600,100));
-            c.Scale(4);
-            c.writeHidden("projectHidden.svg");
             
+            c.writeHidden("projectHidden.svg");
             c.write("project.svg");
       }        
       
