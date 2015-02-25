@@ -11,21 +11,8 @@
 
 using namespace std;
 
-int main(int argc,char *argv[])
+bool CheckPolygon(PointList2D &list)
 {
-      PointList2D list;
-      ifstream in("inpoints.txt");
-      ofstream out("polygon.svg");    
-	out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1500\">\n";
-      
-      Point3D P(100,0,0),orig(500,500,0);
-      
-      while(in>>P)
-      {
-            P = P + orig;
-            list.push_back(P);
-            cout<<P<<endl;
-      } 
       
       int sz = list.size();
       float sum = 0,sumR = 0,target = (sz-2)*180;
@@ -67,10 +54,44 @@ int main(int argc,char *argv[])
       if( (sum < target+2) && (sum > target-2) ) 
             cout<<"\nSimple Polygon Found\n";
             
-      //cout<<endl<<sum<<endl;
+}
+
+void Traingulate(PointList2D &list)
+{
+      Point2D *min = &list[0],*max = &list[0];
       
-      writePoly(list,out,BLUE); 
-      writePoints(list,out);     
+      for(int i = 1;i<list.size();++i)
+      {
+            if( min.x < list[i].x ) min = &list[i];
+            if( max.x > list[i].x ) max = &list[i];            
+      }
+            
+      
+}
+
+int main(int argc,char *argv[])
+{
+      PointList2D list;
+      ifstream in("inpoints.txt");
+      ofstream out("polygon.svg");    
+      out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1500\">\n";
+
+      Point3D P(100,0,0),orig(500,500,0);
+
+      while(in>>P)
+      {
+            P = P + orig;
+            list.push_back(P);
+            cout<<P<<endl;
+      } 
+
+      if( CheckPolygon(list) )
+      {
+            //~ vector<PointList2D> bgraph =  GenVertexCover(list);
+            //~ SelectMinCover(bgraph);
+            Traingulate(list);;
+      }      
+      
       out<<"</svg>\n";
     	out.close();
 

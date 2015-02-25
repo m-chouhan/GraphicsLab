@@ -164,8 +164,20 @@ void Cube::writeHidden(const char *svgFile)
 
 Cube Cube::Project(Point3D viewPoint)
 {
-	Cube C;
-	getAbsolutes(C);
+      
+      Point3D vec = origin - viewPoint;
+      
+      float xD = atan2f(vec.y,vec.z);
+      float yD = atan2f(vec.x,vec.z);
+      
+	Cube tC = *this,C;
+      
+      tC.Rotate(Deg(xD),0,0);
+      Point3D m(viewPoint.x,viewPoint.y,origin.z);      
+      tC.Move(m);
+      
+      
+	tC.getAbsolutes(C);
       
 	Point3D r,p;
       
@@ -177,8 +189,7 @@ Cube Cube::Project(Point3D viewPoint)
       //C.Faces[i].Points[j].z = p.z;
       
       for(int i = 0;i<6;++i)
-      {
-            
+      {            
             for(int j = 0;j<4;++j)
             {
                   p = C.Faces[i].Points[j];
@@ -194,6 +205,8 @@ Cube Cube::Project(Point3D viewPoint)
             C.Faces[i].origin = viewPoint + r*(-viewPoint.z/r.z) - C.origin;
             C.Faces[i].origin.z = p.z;
       }
+      
+      C.origin.x = origin.x,C.origin.y = origin.y;
       return C;
 }
 
