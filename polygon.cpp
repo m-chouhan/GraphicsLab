@@ -85,6 +85,7 @@ int main(int argc,char *argv[])
             vlist[i-1]>>vlist[i];
       }
       
+      
       if( CheckPolygon(list) )
       {
             //~ vector<PointList2D> bgraph =  GenVertexCover(list);
