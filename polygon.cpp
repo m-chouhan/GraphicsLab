@@ -8,6 +8,7 @@
 #include <iostream>
 #include "src/Point3D.h"
 #include "src/graphics.h"
+#include "src/Dcel.hpp"
 
 using namespace std;
 
@@ -53,25 +54,18 @@ bool CheckPolygon(PointList2D &list)
       cout<<endl<<"target:"<<target<<":"<<sz<<":sum="<<sum<<":"<<endl;
       if( (sum < target+2) && (sum > target-2) ) 
             cout<<"\nSimple Polygon Found\n";
-            
+      return true;      
 }
 
 void Traingulate(PointList2D &list)
 {
-      Point2D *min = &list[0],*max = &list[0];
-      
-      for(int i = 1;i<list.size();++i)
-      {
-            if( min.x < list[i].x ) min = &list[i];
-            if( max.x > list[i].x ) max = &list[i];            
-      }
-            
-      
+                  
 }
 
 int main(int argc,char *argv[])
 {
       PointList2D list;
+      VerList vlist;
       ifstream in("inpoints.txt");
       ofstream out("polygon.svg");    
       out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1500\">\n";
@@ -82,9 +76,15 @@ int main(int argc,char *argv[])
       {
             P = P + orig;
             list.push_back(P);
-            cout<<P<<endl;
+            vlist.push_back(Vertex(P));
+            //cout<<P<<endl;
       } 
-
+            
+      for(int i = 1;i<vlist.size();++i)
+      {
+            vlist[i-1]>>vlist[i];
+      }
+      
       if( CheckPolygon(list) )
       {
             //~ vector<PointList2D> bgraph =  GenVertexCover(list);
