@@ -57,9 +57,21 @@ bool CheckPolygon(PointList2D &list)
       return true;      
 }
 
-void Traingulate(PointList2D &list)
+void Traingulate(VerList &list)
 {
-                  
+      Vertex *minX,*maxX;
+      minX = maxX = &list.front();
+      //~ Get min and maxX vertices
+      for(int i = 1;i<list.size();++i)
+      {
+            if( list[i].origin.x < minX->origin.x ) minX = &list[i];
+            if( list[i].origin.x > maxX->origin.x ) maxX = &list[i];
+      }
+      
+      
+      
+      //~ Divide into monotone lines
+      
 }
 
 int main(int argc,char *argv[])
@@ -103,7 +115,7 @@ int main(int argc,char *argv[])
       }
       cout<<e->ID<<"("<<e->face->ID<<")\n";
       
-      vlist[1]>>vlist[3];
+      //vlist[3]>>vlist[1];
       
       cout<<"\nAfter new edge\n";
       e = vlist[0].out_edges[1];

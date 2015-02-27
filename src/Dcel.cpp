@@ -137,12 +137,12 @@ Edge::Edge(Vertex *v1,Vertex *v2)
             e2->next->prev = e2->prev->next = e2;
             e1->next->prev = e1->prev->next = e1;
 
-            e2->face = f;                        
+            e1->face = f;                        
             /*Assign new face to dcel elements */
             f = new Face();
-            for( HalfEdge *e = e1->next;e != e1;e = e->next)
+            for( HalfEdge *e = e2->next;e != e2;e = e->next)
                   e->face = f;
-            e1->face = f;
+            e2->face = f;
       }
             
       v1->out_edges.push_back(e1);
