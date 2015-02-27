@@ -80,18 +80,46 @@ int main(int argc,char *argv[])
             //cout<<P<<endl;
       } 
             
-      for(int i = 1;i<vlist.size();++i)
+      for(unsigned int i = 1;i<vlist.size();++i)
       {
             vlist[i-1]>>vlist[i];
       }
+      vlist.back()>>vlist.front();
       
+      HalfEdge *e = vlist[0].out_edges[0];
       
-      if( CheckPolygon(list) )
+      while ( e->next != NULL && e->next != vlist[0].out_edges[0] )
+      {
+            cout<<e->ID<<"("<<e->face->ID<<")"<<"=>";
+            e = e->next;
+      }
+      cout<<e->ID<<"("<<e->face->ID<<")\n";
+      
+      e = e->twin;
+      while ( e->next != NULL && e != vlist[0].out_edges[0]->twin )
+      {
+            cout<<e->ID<<"("<<e->face->ID<<")"<<"=>";
+            e = e->next;
+      }
+      cout<<e->ID<<"("<<e->face->ID<<")\n";
+      
+      vlist[1]>>vlist[3];
+      
+      cout<<"\nAfter new edge\n";
+      e = vlist[0].out_edges[0];
+      while ( e->next != NULL && e->next != vlist[0].out_edges[0] )
+      {
+            cout<<e->ID<<"("<<e->face->ID<<")"<<"=>";
+            e = e->next;
+      }
+      cout<<e->ID<<"("<<e->face->ID<<")\n";
+
+      /*if( CheckPolygon(list) )
       {
             //~ vector<PointList2D> bgraph =  GenVertexCover(list);
             //~ SelectMinCover(bgraph);
             Traingulate(list);;
-      }      
+      } */     
       
       out<<"</svg>\n";
     	out.close();
