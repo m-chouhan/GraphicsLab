@@ -106,8 +106,8 @@ int main(int argc,char *argv[])
       vlist[1]>>vlist[3];
       
       cout<<"\nAfter new edge\n";
-      e = vlist[0].out_edges[0];
-      while ( e->next != NULL && e->next != vlist[0].out_edges[0] )
+      e = vlist[0].out_edges[1];
+      while ( e->next != NULL && e->next != vlist[0].out_edges[1] )
       {
             cout<<e->ID<<"("<<e->face->ID<<")"<<"=>";
             e = e->next;

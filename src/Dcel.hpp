@@ -1,4 +1,8 @@
 
+/* Library for handling DCEL 
+ * Author:Mahendra CHouhan (14CS60R12)
+ */
+
 #ifndef __DCEL__
 #define __DCEL__
 
@@ -142,10 +146,8 @@ class Vertex
             */
             
             if( getType() == ORPH && V2.getType() == TERM )
-            {
                   Edge(&V2,this);
-            }
-            else Edge(this,&V2);
+            else  Edge(this,&V2);
             
             return V2;
       }
