@@ -1,4 +1,5 @@
 
+#include "Point3D.h"
 #include "Dcel.hpp"
 
 int HalfEdge::counter = 0;
@@ -151,3 +152,15 @@ Edge::Edge(Vertex *v1,Vertex *v2)
       HEDGE_LIST.push_back(e1);
       HEDGE_LIST.push_back(e2);
 }      
+
+void writeDcel(VerList &list,std::ofstream &out,const char * color )
+{
+      for(int i = 0;i<list.size();++i)
+      {
+            for(int j = 0; j<list[i].out_edges.size();++j)
+            {
+                  HalfEdge  *e = list[i].out_edges[j];
+                  writeLine(e->origin->origin,e->dest()->origin,out,color);
+            }
+      }
+}

@@ -57,6 +57,12 @@ bool CheckPolygon(PointList2D &list)
       return true;      
 }
 
+bool Connect(Vertex *v1,Vertex *v2)
+{
+      Edge(v1,v2);
+      return true;
+}
+
 void Traingulate(VerList &list)
 {
       Vertex *minX,*maxX;
@@ -68,9 +74,30 @@ void Traingulate(VerList &list)
             if( list[i].origin.x > maxX->origin.x ) maxX = &list[i];
       }
       
+      assert(minX->out_edges.size() == 2);
+      
+      HalfEdge *forward = NULL,*rev = NULL;
+      if( minX->out_edges[0]->face->ID == 0 )
+      {
+            forward = minX->out_edges[0];
+      }
+      else
+      {     forward = minX->out_edges[1];
+            assert(forward->face->ID == 0);            
+      }
+      rev = forward->prev;
       
       
       //~ Divide into monotone lines
+      do{
+            Vertex *Vup = forward->dest(),*Vdown = rev->origin;
+            assert(Vup != Vdown);
+            
+            if( Connect(Vup,Vdown) ) forward = forward->next;
+            else  //Decrement forward also because only one increment should be done per connect() == true
+            { rev = rev->prev; forward = forward->prev; }
+            
+      }while( forward->dest() != rev->origin );
       
 }
 
@@ -86,7 +113,7 @@ int main(int argc,char *argv[])
 
       while(in>>P)
       {
-            P = P + orig;
+            //P = P + orig;
             list.push_back(P);
             vlist.push_back(Vertex(P));
             //cout<<P<<endl;
@@ -97,6 +124,8 @@ int main(int argc,char *argv[])
             vlist[i-1]>>vlist[i];
       }
       vlist.back()>>vlist.front();
+      
+      //writeDcel(vlist,out);
       
       HalfEdge *e = vlist[0].out_edges[0];
       
@@ -114,6 +143,10 @@ int main(int argc,char *argv[])
             e = e->next;
       }
       cout<<e->ID<<"("<<e->face->ID<<")\n";
+      
+      Traingulate(vlist);
+      
+      writeDcel(vlist,out);
       
       //vlist[3]>>vlist[1];
       

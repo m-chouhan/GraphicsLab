@@ -68,4 +68,5 @@ class Vertex
       Vertex & operator >> ( Vertex &V2 );
 };
 
+void writeDcel(VerList &list,std::ofstream &out,const char * color = NULL);
 #endif
