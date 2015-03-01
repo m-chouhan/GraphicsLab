@@ -7,11 +7,11 @@
 
 double Rad(float Deg) 
 {
-	return (3.14*Deg/180);
+	return (PI*Deg/180);
 }
 float Deg(float Rad)
 {
-      return (Rad*180/3.14);
+      return (Rad*180/PI);
 }
 
 double normR(double val)
@@ -41,6 +41,18 @@ Point3D * Point3D::Multiply(float  Matrix[][4])
 	
     x = temp[0];y = temp[1]; z = temp[2];
     return this;
+}
+
+float interiorClockwise(Point2D p1,Point2D p2,Point2D p3)
+{
+      Vector v1 = p2 - p1,v2 = p3 - p2;
+      Point3D cross = v1.X(v2);
+      
+      v1 = v1*(-1);
+      float angle = v1^v2;//smaller angle betw vectors
+
+      if(cross.z < 0 ) return angle;
+      else return 2*PI - angle;
 }
 
 void writeLine(Point2D p1,Point2D p2,std::ofstream &out,const char *color)

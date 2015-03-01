@@ -12,88 +12,55 @@
 #include "src/graphics.h"
 #include "src/Dcel.hpp"
 
+#define SPLIT 0
+#define MERGE 1
+#define HELPER 2
+#define NORMAL 10
+
 using namespace std;
 
-typedef vector<vector<int> > BiparteGraph;
+struct MyCustomList
+{
+      int ID; 
+      vector<int> list; 
+};
+
+typedef vector<MyCustomList> BiparteGraph;
 
 
 /*Brute Force method for checkpolygon*/
 bool CheckPolygon(VerList &list)
 {
+      float total = 0;
+      int size = list.size();
+      
+      for(unsigned int i = 0;i<size;++i)
+      {
+            int two = (i+1) % size,three = (i+2) % size;
+
+            Point3D p1 = list[i].origin,p2 = list[two].origin,p3 = list[three].origin;
+            
+            float angle = interiorClockwise(p1,p2,p3);
+            total+= angle;
+      }
+      cout<<Deg(total);
+      
       HEdgeList &H = Edge::HEDGE_LIST;      
       for(unsigned int i = 0;i<H.size();++i)
       {
             for(unsigned int j = 0;j<i;++j)
                   if(H[i]->intersect(H[j])) return false;
-      }
-      /*
-      int sz = list.size();
-      float sum = 0,sumR = 0,target = (sz-2)*180;
-      
-      for(int i = 0;i<sz;++i)
-      {
-            int two = (i+1) % sz,three = (i+2) % sz;
-            
-            Vector2D front = list[three] - list[two];
-            Vector2D back = list[two] - list[i];
-            Vector2D backrev = back*-1;
-            
-            float f = Deg(front.angleX());
-            float b = Deg(back.angleX());
-
-            float turn =  front.angleX() - back.angleX();//normR(v2.angleX()) - normR(v1.angleX());
-                        
-            float angle = front^(backrev);
-            if (angle == 0) angle = PI;
-            if(turn > 0 ) 
-            {
-                  if(  f>= 0 &&  b<= -90) ;     
-                  else angle = 2*PI - angle;//take larger angle
-            }      
-            if(turn < 0)
-            {
-                  //@float f = Deg(front.angleX());
-                  //@float b = Deg(back.angleX());
-                  if(  b>= 90 &&  f<= -90) angle = 2*PI - angle;     
-
-            }                  
-            sumR += angle;
-            sum = Deg(sumR);
-                  
-            cout<<"["<<two<<","<<Deg(angle)<<"]\t";
-      }
-      
-      cout<<endl<<"target:"<<target<<":"<<sz<<":sum="<<sum<<":"<<endl;
-      if( (sum < target+2) && (sum > target-2) ) 
-            cout<<"\nSimple Polygon Found\n";/**/
+      }      
       return true;      
 }
 
 //~ returns true if its OK to connect vertices v1 &v2 i.e
 //~ no previous edges interescects this new edge
 bool Connect(Vertex *v1,Vertex *v2)
-{
-      //~ check if the line lies inside
-      Face *f = v1->getCommonFace(v2);
-      HalfEdge *e1 = v1->searchEdge(f),*e2 = v2->searchEdge(f);
-      
-      Point2D p1 = e1->prev->origin->origin,
-              p2 = e1->next->origin->origin,
-              p3 = e2->prev->origin->origin,
-              p4 = e2->next->origin->origin;
-      
-      Point2D p = v1->origin;
-      Vector2D v = Point2D(v2->origin) - p ;
-
-      float angle1 = (p1-p)^(p2-p);
-/*            angle2 = v^(p1-p),
-            angle3 = v^(p2-p);
-      if( angle1 == angle2 + angle3 || angle1 == 2*PI -angle3 - angle2);
-      else return false;
-*/                  
+{                  
       Line L(*v1,*v2);
       HEdgeList &H = Edge::HEDGE_LIST;
-      
+      Point3D p;
       for(unsigned int i = 0 ;i<H.size();++i)
       {
             Vertex *v3 = H[i]->dest(),*v4 = H[i]->origin;
@@ -112,22 +79,189 @@ bool Connect(Vertex *v1,Vertex *v2)
 BiparteGraph GenVertexCover(VerList &vlist)
 {
       BiparteGraph biparte;
-      vector<int> list;
+      int size = vlist.size();
       
-      for( unsigned int i = 0;i<vlist.size();++i)
+      MyCustomList ls;
+      
+      for( unsigned int i = 0;i<size;++i)
       {
-            list.clear();      
-            for( unsigned int j = 0;j<vlist.size();++j )
+            ls.list.clear();
+            ls.ID = -1;
+            
+            int two = (i+1) % size,three = (i+2) % size;
+            Point3D p1 = vlist[i].origin,p2 = vlist[two].origin,p3 = vlist[three].origin;
+            float angle1 = interiorClockwise(p1,p2,p3);
+            //we are calculating at point p2
+            
+            ls.ID = two;      
+            ls.list.push_back(vlist[i].ID);
+            ls.list.push_back(vlist[three++].ID);
+            
+            for( unsigned int j = 0;j<size-3;++j,++three )
             {
-                  if( Connect(&vlist[i], &vlist[j]) ) 
-                        list.push_back(vlist[j].ID); 
+                  Vertex &v = vlist[three%size];                   
+                  float angle2 = interiorClockwise(p1,p2,v.origin);
+                  if(angle1 > angle2 )
+                  {      
+                        if( Connect(&vlist[i], &v) ) 
+                              ls.list.push_back(v.ID); 
+                  }
             }
-            biparte.push_back(list);
+            biparte.push_back(ls);
       }
       
       return biparte;
 }
 
+int getType( Vertex *v1,Vertex*v2,Vertex *v3 )
+{
+      float angle = Deg(interiorClockwise(v1->origin,v2->origin,v3->origin));
+      
+      if( angle < 180 )
+      {
+            if( v1->origin.y < v2->origin.y && v3->origin.y < v2->origin.y ) return HELPER;
+            if( v1->origin.y > v2->origin.y && v3->origin.y > v2->origin.y ) return HELPER;
+            return NORMAL;
+      }
+      if( v1->origin.y < v2->origin.y && v3->origin.y < v2->origin.y ) return SPLIT;
+      if( v1->origin.y > v2->origin.y && v3->origin.y > v2->origin.y ) return MERGE;
+      
+      assert(1); 
+      return -100;     
+}
+
+void ResolveStack(vector<pair<int,Vertex*> > &Stack,vector<Vertex*> HelperStack)
+{
+      int size = Stack.size();
+      if( size == 0 ) return;
+      
+      while( !Stack.empty() )
+      {
+            bool flag = true;
+            pair<int,Vertex*> top = Stack.back();
+            Stack.pop_back();
+            for(int i = 0;i<Stack.size();++i)
+            {
+                  if(Connect(top.second,Stack[i].second))
+                  {      
+                        Edge(top.second,Stack[i].second);
+                        Stack.erase( Stack.begin() + i );
+                        flag = false;
+                  }     
+            }
+            if(flag) 
+            {            
+                  Stack.push_back(top);
+                  break;
+            }
+      }
+      
+      if ( !Stack.empty() )
+      {
+            bool flag = true;
+            pair<int,Vertex*> top = Stack.back();
+            Stack.pop_back();
+            /*traverse Helperstack from top to bottom */
+            for(int i = HelperStack.size()-1;i>=0;i--)
+            {
+                  if(Connect(top.second,HelperStack[i]))
+                  {      
+                        Edge(top.second,HelperStack[i]);
+                        //Stack.erase( Stack.begin() + i );
+                        flag = false;
+                  }     
+            }
+            if(flag) 
+                  Stack.push_back(top);            
+      }
+      
+}
+
+void BreakPolygon(VerList &vlist)
+{
+      vector<pair<int,Vertex*> > Stack;
+      vector<Vertex*> HelperStack;
+      
+      Vertex *minX,*maxX;
+      int minId = 0;
+      maxX = &vlist.front();//largest point first
+      /*      
+      for(unsigned int i = 1;i<vlist.size();++i)
+      {
+            if( vlist[i].origin.x < minX->origin.x ) 
+            { 
+                  minX = &list[i];
+                  minId = i;
+            }
+            if( list[i].origin.x > maxX->origin.x ) maxX = &list[i];
+      }
+      */
+      assert(maxX->out_edges.size() == 2);
+      
+      int size = vlist.size();
+      for(unsigned int i = 0;i<size;++i)
+      {
+            int two = (i+1) % size,three = (i+2) % size;
+            int type = getType(&vlist[i],&vlist[two],&vlist[three]);            
+                              
+            switch( type )
+            {
+                  case SPLIT:case MERGE:
+                              //if( Stack.size() == 0 )
+                              Stack.push_back(make_pair(type,&vlist[two]) );
+                              break;
+                              /*else 
+                              {
+                                    Vertex *top = Stack.back().second;
+                                    if( connect(
+                                    //if( Stack.front().first == MERGE )
+                                    {
+                                        Edge(Stack.front().second,&vlist[two]);  
+                                        Stack.clear();
+                                        Stack.push_back(make_pair(SPLIT,&vlist[two]));
+                                    }    
+                              }
+                              break;
+                  /*
+                  case MERGE: 
+                              if( Stack.size() == 0 )
+                                    Stack.push_back(make_pair(MERGE,&vlist[two]) );
+                              else 
+                              {
+                                    //if( Stack.front().first == MERGE )
+                                    {
+                                        Edge(Stack.front().second,&vlist[two]);  
+                                        Stack.clear();
+                                        Stack.push_back(make_pair(MERGE,&vlist[two]));
+                                    }    
+                              }
+                              break;/**/
+                  case HELPER: 
+                              HelperStack.push_back(&vlist[two]);
+                              break;
+                  
+                  case NORMAL:
+                              if( !Stack.empty())
+                              {
+                                    pair<int,Vertex*> top = Stack.back();
+
+                                    if( top.first == MERGE && vlist[two].origin.y < top.second->origin.y)
+                                    {
+                                        Edge(Stack.back().second,&vlist[two]);  
+                                        Stack.pop_back();
+                                        //Stack.clear();
+                                    }
+                                    else if( top.first == SPLIT && vlist[two].origin.y > top.second->origin.y)
+                                    {
+                                        Edge(top.second,&vlist[two]);  
+                                        Stack.pop_back();
+                                    }   
+                              }
+                              break;
+            }
+            ResolveStack(Stack,HelperStack);
+      }
+}
 
 void Traingulate(VerList &list)
 {
@@ -219,28 +353,20 @@ int main(int argc,char *argv[])
       }
       cout<<e->ID<<"("<<e->face->ID<<")\n";
       
-      /*
-      cout<<"\nAfter new edge\n";
-      e = vlist[0].out_edges[1];
-      while ( e->next != NULL && e->next != vlist[0].out_edges[1] )
-      {
-            cout<<e->ID<<"("<<e->face->ID<<")"<<"=>";
-            e = e->next;
-      }
-      cout<<e->ID<<"("<<e->face->ID<<")\n";/**/
-
       if( CheckPolygon(vlist) )
       {
             cout<<"Polygon Found...";
-            BiparteGraph bgraph =  GenVertexCover(vlist);
+            BreakPolygon(vlist);
+            /*BiparteGraph bgraph =  GenVertexCover(vlist);
             for( int i = 0;i<bgraph.size();++i )
             {
-                  cout<<endl<<i<<" [";
-                  for(int j = 0;j<bgraph[i].size();++j)
-                        cout<<bgraph[i][j]<<",";
+                  cout<<endl<<bgraph[i].ID<<" [";
+                  for(int j = 0;j<bgraph[i].list.size();++j)
+                        cout<<bgraph[i].list[j]<<",";
                   cout<<"]"<<endl;
             }
-            //~ SelectMinCover(bgraph);
+            //~ SelectMinCover(bgraph);*/
+            
             //Traingulate(vlist);
       } /**/     
       else cout<<"Not A Polygon"<<endl;

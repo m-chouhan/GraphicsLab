@@ -37,7 +37,7 @@ struct Point3D
 	float y;
 	float z;
 	Point3D() { x = y = z = 0; }
-	Point3D(int X,int Y = 0,int Z = 0) { x = X;y = Y;z = Z;}
+	Point3D(int X,int Y,int Z = 0) { x = X;y = Y;z = Z;}
 	Point3D * Multiply(float Matrix[][4]);
 	Point3D  X(Point3D p1);
 	Point3D operator +(const Point3D p1)
@@ -91,7 +91,7 @@ struct Point3D
             return out;
       }
 
-      friend std::ifstream & operator >>(std::ifstream &in,Point3D P)
+      friend std::ifstream & operator >>(std::ifstream &in,Point3D &P)
       {
             in>>P.x>>P.y>>P.z;
             return in;
@@ -130,6 +130,7 @@ struct Point3D
         }
         
 };*/
+float interiorClockwise(Point2D p1,Point2D p2,Point2D p3);
 
 void writeLine(Point2D p1,Point2D p2,std::ofstream &out,const char *color = NULL);
 void writeLines(PointList2D &P,std::ofstream &out,const char *color = NULL);
