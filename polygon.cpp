@@ -85,12 +85,12 @@ bool Connect(Vertex *v1,Vertex *v2)
       Point2D p = v1->origin;
       Vector2D v = Point2D(v2->origin) - p ;
 
-      float angle1 = (p1-p)^(p2-p),
-            angle2 = v^(p1-p),
+      float angle1 = (p1-p)^(p2-p);
+/*            angle2 = v^(p1-p),
             angle3 = v^(p2-p);
       if( angle1 == angle2 + angle3 || angle1 == 2*PI -angle3 - angle2);
       else return false;
-                  
+*/                  
       Line L(*v1,*v2);
       HEdgeList &H = Edge::HEDGE_LIST;
       

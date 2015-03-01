@@ -25,7 +25,8 @@ double normR(double val);
 double normD(double val);
 
 typedef struct Point3D Vector;
-typedef struct Point2D Vector2D;
+typedef Point3D Point2D;
+typedef Point3D Vector2D;
 
 typedef std::vector<Point3D> PointList3D;
 typedef std::vector<Point2D> PointList2D;
@@ -36,10 +37,10 @@ struct Point3D
 	float y;
 	float z;
 	Point3D() { x = y = z = 0; }
-	Point3D(int X,int Y,int Z) { x = X;y = Y;z = Z;}
+	Point3D(int X,int Y = 0,int Z = 0) { x = X;y = Y;z = Z;}
 	Point3D * Multiply(float Matrix[][4]);
 	Point3D  X(Point3D p1);
-	Point3D operator +(const Point3D &p1)
+	Point3D operator +(const Point3D p1)
 	{
 		return Point3D(p1.x+x,p1.y+y,p1.z+z);
 	}
@@ -50,10 +51,10 @@ struct Point3D
       }
 
       //~ dot product
-      float operator *(const Point3D &P2) {
+      float operator *(const Point3D P2) {
             return x*P2.x + y*P2.y + z*P2.z;
       }      
-      Point3D operator -(const Point3D &P)
+      Point3D operator -(const Point3D P)
       {
             return Point3D(x-P.x,y-P.y,z-P.z);
       }
@@ -61,7 +62,7 @@ struct Point3D
       {     
             return Point3D(x*mul,y*mul,z*mul);
       }
-      float operator ^(Point3D &P)
+      float operator ^(Point3D P)
       {
             Point3D p = *this;
             return acosf( p*P/(p.mod() * P.mod()) ); 
@@ -76,27 +77,27 @@ struct Point3D
       {
             return Point3D(x/div,y/div,z/div);
       }
-      bool operator <(const Point3D &P) const
+      bool operator <(const Point3D P) const
       {
             return ( x < P.x);
       }
-      bool operator ==(const Point3D &P) const
+      bool operator ==(const Point3D P) const
       {
             return ( x == P.x && y == P.y );
       }
-      friend std::ofstream & operator <<(std::ofstream &out,const Point3D &P)
+      friend std::ofstream & operator <<(std::ofstream &out,const Point3D P)
       {
             out<<P.x<<" "<<P.y<<" "<<P.z;
             return out;
       }
 
-      friend std::ifstream & operator >>(std::ifstream &in,Point3D &P)
+      friend std::ifstream & operator >>(std::ifstream &in,Point3D P)
       {
             in>>P.x>>P.y>>P.z;
             return in;
       }
       
-      friend std::ostream & operator <<(std::ostream &out,const Point3D &P)
+      friend std::ostream & operator <<(std::ostream &out,const Point3D P)
       {
             out<<P.x<<" "<<P.y<<" "<<P.z;
             return out;
@@ -113,8 +114,8 @@ struct Point3D
     
 };
 
-
-struct Point2D:Point3D
+//~ insure Z is always 0 ?? not required
+/*struct Point2D:Point3D
 {
         Point2D(int X = 0,int Y=0)
         {  x = X;y = Y; z = 0;}
@@ -126,9 +127,9 @@ struct Point2D:Point3D
         {
             Point2D p = *this;
             return acosf( p*P/(p.mod() * P.mod()) ); 
-        }*/
+        }
         
-};
+};*/
 
 void writeLine(Point2D p1,Point2D p2,std::ofstream &out,const char *color = NULL);
 void writeLines(PointList2D &P,std::ofstream &out,const char *color = NULL);
