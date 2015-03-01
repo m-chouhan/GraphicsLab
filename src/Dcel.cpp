@@ -5,7 +5,9 @@
 
 int HalfEdge::counter = 0;
 int Face::counter = 0;
+FacesList Face::Faces;
 HEdgeList Edge::HEDGE_LIST;
+
 int Vertex::counter = 0;
 
 bool HalfEdge::intersect(HalfEdge *e)
@@ -92,9 +94,9 @@ Edge::Edge(Vertex *v1,Vertex *v2)
       //Assume v2 is a orphan 
       if( v1->out_edges.size() == 0 ) //both are orphans no need to assign pre/next
       {
-            Face *f = new Face();
+            Face *f = new Face(e1);
             e1->face = e2->face = f;
-            f->edge = e1;     
+            //f->edge = e1;     
       }
       else if ( v1->out_edges.size() == 1 && v2->out_edges.size() == 0 )
       {
@@ -128,10 +130,11 @@ Edge::Edge(Vertex *v1,Vertex *v2)
 
             e1->face = f;                        
             /*Assign new face to dcel elements */
-            f = new Face();
+            f = new Face(e2);
             for( HalfEdge *e = e2->next;e != e2;e = e->next)
                   e->face = f;
             e2->face = f;
+            //f->edge = e2;
       }
             
       v1->out_edges.push_back(e1);

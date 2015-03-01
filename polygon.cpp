@@ -253,7 +253,7 @@ void BreakPolygon(VerList &vlist)
                                     if(  (top.first == MERGE && vlist[two].origin.y < top.second->origin.y) ||
                                          (top.first == SPLIT && vlist[two].origin.y > top.second->origin.y)  )
                                     {
-                                          if( Connect((top.second,&vlist[two]) )
+                                          if( Connect(top.second,&vlist[two]) ) 
                                           {
                                                 Edge(top.second,&vlist[two]);  
                                                 Stack.pop_back();
@@ -267,23 +267,23 @@ void BreakPolygon(VerList &vlist)
       }
 }
 
-void Traingulate(VerList &list)
+void Traingulate(Face *face)
 {
       Vertex *minX,*maxX;
-      minX = maxX = &list.front();
+      minX = maxX = face->edge->origin;
       //~ Get min and maxX vertices (not required :/ ??)
-      for(unsigned int i = 1;i<list.size();++i)
+      /*for(unsigned int i = 1;i<list.size();++i)
       {
             if( list[i].origin.x < minX->origin.x ) minX = &list[i];
             if( list[i].origin.x > maxX->origin.x ) maxX = &list[i];
       }
-      minX = &list[0];
-      assert(minX->out_edges.size() == 2);
+      minX = &list[0];*/
+      //assert(minX->out_edges.size() == 2);
       
       //~ Dividing into monotone lines using forward & reverse
       
-      HalfEdge *forward = NULL,*rev = NULL;
-      if( minX->out_edges[0]->face->ID == 0 )
+      HalfEdge *forward = face->edge,*rev = NULL;
+      /*if( minX->out_edges[0]->face->ID == 0 )
       {
             forward = minX->out_edges[0];
       }
@@ -291,7 +291,7 @@ void Traingulate(VerList &list)
       {     
             forward = minX->out_edges[1];
             assert(forward->face->ID == 0);            
-      }
+      }*/
       rev = forward->prev;
             
       do{
@@ -358,9 +358,9 @@ int main(int argc,char *argv[])
       if( CheckPolygon(vlist) )
       {
             cout<<"Polygon Found...";
-            BreakPolygon(vlist);
+            //BreakPolygon(vlist);
             
-            Traingulate(vlist);
+            Traingulate(Face::Faces[0]);
       } /**/     
       else cout<<"Not A Polygon"<<endl;
             

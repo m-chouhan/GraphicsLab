@@ -32,14 +32,16 @@ class HalfEdge
 typedef std::vector<Edge *> EdgeList;
 typedef std::vector<HalfEdge *> HEdgeList;
 typedef std::vector<Vertex> VerList;
+typedef std::vector<Face *> FacesList;
 
 class Face
 {
       static int counter;
       public:
+      static FacesList Faces;
       int ID;
       HalfEdge *edge;
-      Face() { ID = counter++; } 
+      Face(HalfEdge *e) { ID = counter++;Faces.push_back(this);edge = e; } 
 };
 
 class Edge
