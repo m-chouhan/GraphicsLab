@@ -2,6 +2,7 @@
 /* Polygon :
  *    Takes input points from inpoints.txt ( clokwise direction ) 
  *    and calculates if the points form a polygon or not
+ *    Output: Traingulated Dcel structure displayed in polygon.svg file
  *    Author:Mahendra Chouhan(14CS60R12)
  * */
 
@@ -13,6 +14,10 @@
 
 using namespace std;
 
+typedef vector<vector<int> > BiparteGraph;
+
+
+/*Brute Force method for checkpolygon*/
 bool CheckPolygon(VerList &list)
 {
       HEdgeList &H = Edge::HEDGE_LIST;      
@@ -64,16 +69,36 @@ bool CheckPolygon(VerList &list)
       return true;      
 }
 
+//~ returns true if its OK to connect vertices v1 &v2 i.e
+//~ no previous edges interescects this new edge
 bool Connect(Vertex *v1,Vertex *v2)
 {
+      //~ check if the line lies inside
+      Face *f = v1->getCommonFace(v2);
+      HalfEdge *e1 = v1->searchEdge(f),*e2 = v2->searchEdge(f);
+      
+      Point2D p1 = e1->prev->origin->origin,
+              p2 = e1->next->origin->origin,
+              p3 = e2->prev->origin->origin,
+              p4 = e2->next->origin->origin;
+      
+      Point2D p = v1->origin;
+      Vector2D v = Point2D(v2->origin) - p ;
+
+      float angle1 = (p1-p)^(p2-p),
+            angle2 = v^(p1-p),
+            angle3 = v^(p2-p);
+      if( angle1 == angle2 + angle3 || angle1 == 2*PI -angle3 - angle2);
+      else return false;
+                  
       Line L(*v1,*v2);
       HEdgeList &H = Edge::HEDGE_LIST;
-      Point2D p;
       
       for(unsigned int i = 0 ;i<H.size();++i)
       {
             Vertex *v3 = H[i]->dest(),*v4 = H[i]->origin;
             Line l(*v3,*v4);
+            
             if( L.intersect(l,p) ) 
             {
                   if( p == v1->origin || p == v2->origin || p == v3->origin || p == v4->origin )
@@ -83,6 +108,26 @@ bool Connect(Vertex *v1,Vertex *v2)
       }
       return true;
 }
+
+BiparteGraph GenVertexCover(VerList &vlist)
+{
+      BiparteGraph biparte;
+      vector<int> list;
+      
+      for( unsigned int i = 0;i<vlist.size();++i)
+      {
+            list.clear();      
+            for( unsigned int j = 0;j<vlist.size();++j )
+            {
+                  if( Connect(&vlist[i], &vlist[j]) ) 
+                        list.push_back(vlist[j].ID); 
+            }
+            biparte.push_back(list);
+      }
+      
+      return biparte;
+}
+
 
 void Traingulate(VerList &list)
 {
@@ -94,7 +139,7 @@ void Traingulate(VerList &list)
             if( list[i].origin.x < minX->origin.x ) minX = &list[i];
             if( list[i].origin.x > maxX->origin.x ) maxX = &list[i];
       }
-      
+      minX = &list[0];
       assert(minX->out_edges.size() == 2);
       
       //~ Dividing into monotone lines using forward & reverse
@@ -105,7 +150,8 @@ void Traingulate(VerList &list)
             forward = minX->out_edges[0];
       }
       else
-      {     forward = minX->out_edges[1];
+      {     
+            forward = minX->out_edges[1];
             assert(forward->face->ID == 0);            
       }
       rev = forward->prev;
@@ -185,10 +231,17 @@ int main(int argc,char *argv[])
 
       if( CheckPolygon(vlist) )
       {
-            cout<<"Polygon Found..."<<endl;
-            //~ vector<PointList2D> bgraph =  GenVertexCover(list);
+            cout<<"Polygon Found...";
+            BiparteGraph bgraph =  GenVertexCover(vlist);
+            for( int i = 0;i<bgraph.size();++i )
+            {
+                  cout<<endl<<i<<" [";
+                  for(int j = 0;j<bgraph[i].size();++j)
+                        cout<<bgraph[i][j]<<",";
+                  cout<<"]"<<endl;
+            }
             //~ SelectMinCover(bgraph);
-            Traingulate(vlist);;
+            //Traingulate(vlist);
       } /**/     
       else cout<<"Not A Polygon"<<endl;
       

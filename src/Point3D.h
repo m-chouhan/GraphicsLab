@@ -52,8 +52,7 @@ struct Point3D
       //~ dot product
       float operator *(const Point3D &P2) {
             return x*P2.x + y*P2.y + z*P2.z;
-      }
-      
+      }      
       Point3D operator -(const Point3D &P)
       {
             return Point3D(x-P.x,y-P.y,z-P.z);
@@ -62,6 +61,17 @@ struct Point3D
       {     
             return Point3D(x*mul,y*mul,z*mul);
       }
+      float operator ^(Point3D &P)
+      {
+            Point3D p = *this;
+            return acosf( p*P/(p.mod() * P.mod()) ); 
+      }
+      //@returns magnitude of vector
+      float mod()
+      {
+            return sqrt( x*x + y*y + z*z);
+      }
+
       Point3D operator /(const float div)
       {
             return Point3D(x/div,y/div,z/div);
@@ -100,10 +110,6 @@ struct Point3D
       {
             return atan2f(x,y);
       }
-      float mod()
-      {
-            return sqrt( x*x + y*y + z*z);
-      }
     
 };
 
@@ -115,17 +121,12 @@ struct Point2D:Point3D
         Point2D(const Point3D &P)
         { x = P.x;y = P.y;z = 0;}
         
-        //@returns magnitude of vector
-        float mod()
-        {
-            return sqrt( x*x + y*y);
-        }
         //Returns angle between two vectors    
-        float operator ^(Point2D &P)
+        /*float operator ^(Point2D &P)
         {
             Point2D p = *this;
             return acosf( p*P/(p.mod() * P.mod()) ); 
-        }
+        }*/
         
 };
 
