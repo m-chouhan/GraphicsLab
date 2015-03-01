@@ -360,7 +360,7 @@ int main(int argc,char *argv[])
             cout<<"Polygon Found...";
             //BreakPolygon(vlist);
             
-            Traingulate(Face::Faces[0]);
+            Traingulate(Face::Faces[1]);
       } /**/     
       else cout<<"Not A Polygon"<<endl;
             
