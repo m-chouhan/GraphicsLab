@@ -57,7 +57,12 @@ bool CheckPolygon(VerList &list)
 //~ returns true if its OK to connect vertices v1 &v2 i.e
 //~ no previous edges interescects this new edge
 bool Connect(Vertex *v1,Vertex *v2)
-{                  
+{     
+      for(unsigned int i = 0;i<v1->out_edges.size();++i)
+      {
+            if( v2 == v1->out_edges[i]->dest() ) return false;
+      }
+                         
       Line L(*v1,*v2);
       HEdgeList &H = Edge::HEDGE_LIST;
       Point3D p;
@@ -245,17 +250,16 @@ void BreakPolygon(VerList &vlist)
                               {
                                     pair<int,Vertex*> top = Stack.back();
 
-                                    if( top.first == MERGE && vlist[two].origin.y < top.second->origin.y)
+                                    if(  (top.first == MERGE && vlist[two].origin.y < top.second->origin.y) ||
+                                         (top.first == SPLIT && vlist[two].origin.y > top.second->origin.y)  )
                                     {
-                                        Edge(Stack.back().second,&vlist[two]);  
-                                        Stack.pop_back();
-                                        //Stack.clear();
+                                          if( Connect((top.second,&vlist[two]) )
+                                          {
+                                                Edge(top.second,&vlist[two]);  
+                                                Stack.pop_back();
+                                                HelperStack.push_back(&vlist[two]);
+                                          }
                                     }
-                                    else if( top.first == SPLIT && vlist[two].origin.y > top.second->origin.y)
-                                    {
-                                        Edge(top.second,&vlist[two]);  
-                                        Stack.pop_back();
-                                    }   
                               }
                               break;
             }
@@ -333,10 +337,8 @@ int main(int argc,char *argv[])
       assert(Edge::HEDGE_LIST.size() == vlist.size() );
       
       writeDcel(Edge::HEDGE_LIST,out);
-      //writeDcel(vlist,out);
       
       HalfEdge *e = vlist[0].out_edges[0];
-      
       
       while ( e->next != NULL && e->next != vlist[0].out_edges[0] )
       {
@@ -357,21 +359,14 @@ int main(int argc,char *argv[])
       {
             cout<<"Polygon Found...";
             BreakPolygon(vlist);
-            /*BiparteGraph bgraph =  GenVertexCover(vlist);
-            for( int i = 0;i<bgraph.size();++i )
-            {
-                  cout<<endl<<bgraph[i].ID<<" [";
-                  for(int j = 0;j<bgraph[i].list.size();++j)
-                        cout<<bgraph[i].list[j]<<",";
-                  cout<<"]"<<endl;
-            }
-            //~ SelectMinCover(bgraph);*/
             
-            //Traingulate(vlist);
+            Traingulate(vlist);
       } /**/     
       else cout<<"Not A Polygon"<<endl;
-      
+            
       writeDcel(Edge::HEDGE_LIST,out);
+      writeDcel(vlist,out);
+
       out<<"</svg>\n";
     	out.close();
 
