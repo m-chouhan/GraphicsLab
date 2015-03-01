@@ -26,6 +26,7 @@ class HalfEdge
       HalfEdge *next,*prev;
       Face *face;
       Vertex *dest() { return twin->origin; }
+      bool intersect(HalfEdge *e);
 };
 
 typedef std::vector<Edge *> EdgeList;
@@ -43,8 +44,9 @@ class Face
 
 class Edge
 {
-      static HEdgeList HEDGE_LIST;      
-      public:
+      //HalfEdge *left,*right;??
+      public:      
+      static HEdgeList HEDGE_LIST;
       Edge(Vertex *v1,Vertex *v2); 
 };
 
@@ -65,8 +67,13 @@ class Vertex
       
       bool IsLinked(Vertex *v2);
       Vertex(Point3D o):origin(o) { ID = counter++;}
+      bool operator==(const Vertex &v2) const
+      {
+            return ( origin == v2.origin );
+      }
       Vertex & operator >> ( Vertex &V2 );
 };
 
 void writeDcel(VerList &list,std::ofstream &out,const char * color = NULL);
+void writeDcel(HEdgeList &list,std::ofstream &out,const char * color = NULL);
 #endif

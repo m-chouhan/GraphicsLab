@@ -70,7 +70,10 @@ struct Point3D
       {
             return ( x < P.x);
       }
-
+      bool operator ==(const Point3D &P) const
+      {
+            return ( x == P.x && y == P.y );
+      }
       friend std::ofstream & operator <<(std::ofstream &out,const Point3D &P)
       {
             out<<P.x<<" "<<P.y<<" "<<P.z;

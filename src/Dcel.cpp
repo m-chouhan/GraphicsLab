@@ -1,12 +1,28 @@
 
 #include "Point3D.h"
 #include "Dcel.hpp"
+#include "Segments.hpp"
 
 int HalfEdge::counter = 0;
 int Face::counter = 0;
 HEdgeList Edge::HEDGE_LIST;
 int Vertex::counter = 0;
 
+bool HalfEdge::intersect(HalfEdge *e)
+{
+      if( this->twin == e || this == e ) return true;
+      
+      Line L1(*origin,*dest()),L2(*e->origin,*e->dest());
+
+      Point2D p;
+      if( L1.intersect(L2,p))
+      {
+            if( p == (origin->origin) || p == (dest()->origin) || p == e->origin->origin || p == e->dest()->origin  )
+                  return false;                  
+            return true;
+      }
+      return false;
+}
 
 HalfEdge *Vertex::searchEdge(Face *f)
 {
@@ -57,34 +73,6 @@ Vertex & Vertex::operator >> ( Vertex &V2 )
                   return V2;
             }
       }*/
-      /*
-      if( getType() == ORPH && V2.getType() == ORPH )
-      {
-            Edge(this,&V2);
-      }
-      if( getType() == ORPH && V2.getType() == TERM )
-      {
-            Edge(&V2,this);
-      }
-      if( getType() == TERM && V2.getType() == ORPH )
-      {
-            Edge(this,&V2);
-      }
-      if( getType() == TERM && V2.getType() == TERM )
-      {
-            //~ check for loops if true make new face
-            if(IsLinked(&V2))
-            {
-                  Face *f = new Face();
-                  Edge(this,&V2);
-                  Edge *e = out_edges[0]->next;
-                  while( e != out_edges[0]
-            }
-      }
-      
-      if( getType() == LINK && V2.getType() == LINK );
-      */
-      
       if( getType() == ORPH && V2.getType() == TERM )
             Edge(&V2,this);
       else  Edge(this,&V2);
@@ -150,7 +138,7 @@ Edge::Edge(Vertex *v1,Vertex *v2)
       v2->out_edges.push_back(e2);
             
       HEDGE_LIST.push_back(e1);
-      HEDGE_LIST.push_back(e2);
+      //HEDGE_LIST.push_back(e2);
 }      
 
 void writeDcel(VerList &list,std::ofstream &out,const char * color )
@@ -163,4 +151,13 @@ void writeDcel(VerList &list,std::ofstream &out,const char * color )
                   writeLine(e->origin->origin,e->dest()->origin,out,color);
             }
       }
+}
+void writeDcel(HEdgeList &list,std::ofstream &out,const char * color)
+{
+      for(int i = 0;i<list.size();++i)
+      {
+            HalfEdge  *e = list[i];
+            writeLine(e->origin->origin,e->dest()->origin,out,color);
+      }
+
 }

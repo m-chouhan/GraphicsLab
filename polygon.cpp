@@ -7,14 +7,21 @@
 
 #include <iostream>
 #include "src/Point3D.h"
+#include "src/Segments.hpp"
 #include "src/graphics.h"
 #include "src/Dcel.hpp"
 
 using namespace std;
 
-bool CheckPolygon(PointList2D &list)
+bool CheckPolygon(VerList &list)
 {
-      
+      HEdgeList &H = Edge::HEDGE_LIST;      
+      for(unsigned int i = 0;i<H.size();++i)
+      {
+            for(unsigned int j = 0;j<i;++j)
+                  if(H[i]->intersect(H[j])) return false;
+      }
+      /*
       int sz = list.size();
       float sum = 0,sumR = 0,target = (sz-2)*180;
       
@@ -53,13 +60,27 @@ bool CheckPolygon(PointList2D &list)
       
       cout<<endl<<"target:"<<target<<":"<<sz<<":sum="<<sum<<":"<<endl;
       if( (sum < target+2) && (sum > target-2) ) 
-            cout<<"\nSimple Polygon Found\n";
+            cout<<"\nSimple Polygon Found\n";/**/
       return true;      
 }
 
 bool Connect(Vertex *v1,Vertex *v2)
 {
-      Edge(v1,v2);
+      Line L(*v1,*v2);
+      HEdgeList &H = Edge::HEDGE_LIST;
+      Point2D p;
+      
+      for(unsigned int i = 0 ;i<H.size();++i)
+      {
+            Vertex *v3 = H[i]->dest(),*v4 = H[i]->origin;
+            Line l(*v3,*v4);
+            if( L.intersect(l,p) ) 
+            {
+                  if( p == v1->origin || p == v2->origin || p == v3->origin || p == v4->origin )
+                        continue;                  
+                  return false;
+            }
+      }
       return true;
 }
 
@@ -67,14 +88,16 @@ void Traingulate(VerList &list)
 {
       Vertex *minX,*maxX;
       minX = maxX = &list.front();
-      //~ Get min and maxX vertices
-      for(int i = 1;i<list.size();++i)
+      //~ Get min and maxX vertices (not required :/ ??)
+      for(unsigned int i = 1;i<list.size();++i)
       {
             if( list[i].origin.x < minX->origin.x ) minX = &list[i];
             if( list[i].origin.x > maxX->origin.x ) maxX = &list[i];
       }
       
       assert(minX->out_edges.size() == 2);
+      
+      //~ Dividing into monotone lines using forward & reverse
       
       HalfEdge *forward = NULL,*rev = NULL;
       if( minX->out_edges[0]->face->ID == 0 )
@@ -86,18 +109,21 @@ void Traingulate(VerList &list)
             assert(forward->face->ID == 0);            
       }
       rev = forward->prev;
-      
-      
-      //~ Divide into monotone lines
+            
       do{
             Vertex *Vup = forward->dest(),*Vdown = rev->origin;
             assert(Vup != Vdown);
             
-            if( Connect(Vup,Vdown) ) forward = forward->next;
+            if( Connect(Vup,Vdown) ) 
+            {
+                  Edge(Vup,Vdown);
+                  forward = forward->next;
+            }
             else  //Decrement forward also because only one increment should be done per connect() == true
             { rev = rev->prev; forward = forward->prev; }
             
-      }while( forward->dest() != rev->origin );
+      }while( forward->dest() != rev->origin );//while both don't have same destination
+      //~ !! not true for unconnected graph
       
 }
 
@@ -113,7 +139,6 @@ int main(int argc,char *argv[])
 
       while(in>>P)
       {
-            //P = P + orig;
             list.push_back(P);
             vlist.push_back(Vertex(P));
             //cout<<P<<endl;
@@ -125,9 +150,13 @@ int main(int argc,char *argv[])
       }
       vlist.back()>>vlist.front();
       
+      assert(Edge::HEDGE_LIST.size() == vlist.size() );
+      
+      writeDcel(Edge::HEDGE_LIST,out);
       //writeDcel(vlist,out);
       
       HalfEdge *e = vlist[0].out_edges[0];
+      
       
       while ( e->next != NULL && e->next != vlist[0].out_edges[0] )
       {
@@ -144,12 +173,7 @@ int main(int argc,char *argv[])
       }
       cout<<e->ID<<"("<<e->face->ID<<")\n";
       
-      Traingulate(vlist);
-      
-      writeDcel(vlist,out);
-      
-      //vlist[3]>>vlist[1];
-      
+      /*
       cout<<"\nAfter new edge\n";
       e = vlist[0].out_edges[1];
       while ( e->next != NULL && e->next != vlist[0].out_edges[1] )
@@ -157,15 +181,18 @@ int main(int argc,char *argv[])
             cout<<e->ID<<"("<<e->face->ID<<")"<<"=>";
             e = e->next;
       }
-      cout<<e->ID<<"("<<e->face->ID<<")\n";
+      cout<<e->ID<<"("<<e->face->ID<<")\n";/**/
 
-      /*if( CheckPolygon(list) )
+      if( CheckPolygon(vlist) )
       {
+            cout<<"Polygon Found..."<<endl;
             //~ vector<PointList2D> bgraph =  GenVertexCover(list);
             //~ SelectMinCover(bgraph);
-            Traingulate(list);;
-      } */     
+            Traingulate(vlist);;
+      } /**/     
+      else cout<<"Not A Polygon"<<endl;
       
+      writeDcel(Edge::HEDGE_LIST,out);
       out<<"</svg>\n";
     	out.close();
 
