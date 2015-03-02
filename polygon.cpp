@@ -1,5 +1,6 @@
 
 /* Polygon :
+ *    make using "make polygon"
  *    Takes input points from inpoints.txt ( clokwise direction ) 
  *    and calculates if the points form a polygon or not
  *    Output: Traingulated Dcel structure displayed in polygon.svg file
@@ -43,7 +44,8 @@ bool CheckPolygon(VerList &list)
             float angle = interiorClockwise(p1,p2,p3);
             total+= angle;
       }
-      cout<<Deg(total);
+      
+      cout<<"Interior Angle:"<<Deg(total)<<endl;
       
       HEdgeList &H = Edge::HEDGE_LIST;      
       for(unsigned int i = 0;i<H.size();++i)
@@ -79,43 +81,6 @@ bool Connect(Vertex *v1,Vertex *v2)
             }
       }
       return true;
-}
-
-BiparteGraph GenVertexCover(VerList &vlist)
-{
-      BiparteGraph biparte;
-      int size = vlist.size();
-      
-      MyCustomList ls;
-      
-      for( unsigned int i = 0;i<size;++i)
-      {
-            ls.list.clear();
-            ls.ID = -1;
-            
-            int two = (i+1) % size,three = (i+2) % size;
-            Point3D p1 = vlist[i].origin,p2 = vlist[two].origin,p3 = vlist[three].origin;
-            float angle1 = interiorClockwise(p1,p2,p3);
-            //we are calculating at point p2
-            
-            ls.ID = two;      
-            ls.list.push_back(vlist[i].ID);
-            ls.list.push_back(vlist[three++].ID);
-            
-            for( unsigned int j = 0;j<size-3;++j,++three )
-            {
-                  Vertex &v = vlist[three%size];                   
-                  float angle2 = interiorClockwise(p1,p2,v.origin);
-                  if(angle1 > angle2 )
-                  {      
-                        if( Connect(&vlist[i], &v) ) 
-                              ls.list.push_back(v.ID); 
-                  }
-            }
-            biparte.push_back(ls);
-      }
-      
-      return biparte;
 }
 
 int getType( Vertex *v1,Vertex*v2,Vertex *v3 )
@@ -187,27 +152,27 @@ void BreakPolygon(VerList &vlist)
       vector<pair<int,Vertex*> > Stack;
       vector<Vertex*> HelperStack;
       
-      Vertex *minX,*maxX;
-      int minId = 0;
-      maxX = &vlist.front();//largest point first
-      /*      
+      Vertex *minY,*maxY;
+      int maxId = 0;
+      maxY = &vlist.front();//largest point first
+      /**/      
       for(unsigned int i = 1;i<vlist.size();++i)
       {
-            if( vlist[i].origin.x < minX->origin.x ) 
-            { 
-                  minX = &list[i];
-                  minId = i;
+            if( vlist[i].origin.y > maxY->origin.y ) 
+            {
+                  maxY = &vlist[i];
+                  maxId = i;
             }
-            if( list[i].origin.x > maxX->origin.x ) maxX = &list[i];
       }
-      */
-      assert(maxX->out_edges.size() == 2);
-      
+      /**/
+      if(maxId>0) maxId--;
+      assert(maxY->out_edges.size() == 2);
+      maxId = 0;      
       int size = vlist.size();
       for(unsigned int i = 0;i<size;++i)
       {
-            int two = (i+1) % size,three = (i+2) % size;
-            int type = getType(&vlist[i],&vlist[two],&vlist[three]);            
+            int one = (i+maxId)%size,two = (i+1+maxId) % size,three = (i+2+maxId) % size;
+            int type = getType(&vlist[one],&vlist[two],&vlist[three]);            
                               
             switch( type )
             {
@@ -293,9 +258,11 @@ void Traingulate(Face *face)
             assert(forward->face->ID == 0);            
       }*/
       rev = forward->prev;
-            
+      
+      forward = forward->next;rev = rev->prev;            
+      
       do{
-            Vertex *Vup = forward->dest(),*Vdown = rev->origin;
+            Vertex *Vup = forward->origin,*Vdown = rev->dest();
             assert(Vup != Vdown);
             
             if( Connect(Vup,Vdown) ) 
@@ -315,7 +282,7 @@ int main(int argc,char *argv[])
 {
       PointList2D list;
       VerList vlist;
-      ifstream in("inpoints.txt");
+      ifstream in("i.txt");
       ofstream out("polygon.svg");    
       out<<"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" height=\"1000\" width=\"1500\">\n";
 
@@ -325,7 +292,7 @@ int main(int argc,char *argv[])
       {
             list.push_back(P);
             vlist.push_back(Vertex(P));
-            //cout<<P<<endl;
+            cout<<P<<endl;
       } 
             
       for(unsigned int i = 1;i<vlist.size();++i)
@@ -357,12 +324,15 @@ int main(int argc,char *argv[])
       
       if( CheckPolygon(vlist) )
       {
-            cout<<"Polygon Found...";
-            //BreakPolygon(vlist);
+            cout<<"\n{Polygon Found}\nEnter t to traingulate and b to break the polygon";
+            char c;
+            cin >> c;
+            if(c == 'b') BreakPolygon(vlist);
             
-            Traingulate(Face::Faces[1]);
+            if(c == 't') Traingulate(Face::Faces[1]);
+            //Traingulate(Face::Faces[0]);
       } /**/     
-      else cout<<"Not A Polygon"<<endl;
+      else cout<<"{Not A Polygon}"<<endl;
             
       writeDcel(Edge::HEDGE_LIST,out);
       writeDcel(vlist,out);

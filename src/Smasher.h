@@ -2,11 +2,11 @@
 #ifndef __SMASHER__
 #define __SMASHER__
 
-class Cube;
-class Rect;
+#include "Shape.h"
+#include "Cube.hpp"
 
 class Smasher
 {
-      static bool Smash(Cube c1,Rect r1);
+      bool Smash(Cube c1,Rect r1);
 };
 #endif

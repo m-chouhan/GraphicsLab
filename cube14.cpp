@@ -11,10 +11,9 @@
 #include <stdlib.h>
 
 #include "src/graphics.h"
+#include "src/Cube.hpp"
 
 using namespace std;
-
-
 
 int  main(int argc,char *argv[])
 { 

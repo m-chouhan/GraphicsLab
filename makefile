@@ -1,19 +1,23 @@
 
 CC = g++
 CFLAGS = -g -Wall
+GLUTF = -lglut -l GLU 
 
 SOURCE = src
 .PHONY : lib
 lib:
 	$(MAKE) -C $(SOURCE) lib
 cube14 :
-	${CC} ${CFLAGS} cube14.cpp src/graphics.o src/Shape.o src/Point3D.o -o exec/cube14
+	${CC} ${CFLAGS} cube14.cpp src/*.o -o exec/cube14
 rcube :
-	${CC} ${CFLAGS} randomCubes.cpp src/graphics.o src/Shape.o src/Point3D.o -o exec/rcube
+	${CC} ${CFLAGS} randomCubes.cpp src/*.o -o exec/rcube
 polygon:
-	${CC} ${CFLAGS} polygon.cpp src/graphics.o src/Shape.o src/Point3D.o src/Dcel.o src/Segments.o -o exec/polygon
+	${CC} ${CFLAGS} polygon.cpp src/*.o -o exec/polygon
 opagl:  pb1.cpp
-	${CC} ${CFLAGS} pb1.cpp -lglut -lGLU -o opagl
+	${CC} ${CFLAGS} pb1.cpp ${GLUTF} -o opagl
+glplay: glplay.cpp
+	${CC} ${CFLAGS} glplay.cpp ${GLUTF} -o glplay
+
 clean:
 	rm src/*.o
 	rm exec/*

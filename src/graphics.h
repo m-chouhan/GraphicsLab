@@ -17,6 +17,7 @@
 #define HEIGHT 1200
 
 #include "Shape.h"
+#include "Cube.hpp"
 
 Point3D getGaussianDistri(float sigX,float sigY,Point2D mean);
 //conflicts contain objects in world colliding with C 
