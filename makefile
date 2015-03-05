@@ -17,7 +17,10 @@ opagl:  pb1.cpp
 	${CC} ${CFLAGS} pb1.cpp ${GLUTF} -o opagl
 glplay: glplay.cpp
 	${CC} ${CFLAGS} glplay.cpp ${GLUTF} -o glplay
-
+snowman: snowman.cpp
+	${CC} ${CFLAGS} snowman.cpp ${GLUTF} -o snowman
+spheres: spheres.cpp	
+	${CC} ${CFLAGS} spheres.cpp ${GLUTF} -o spheres
 clean:
 	rm src/*.o
 	rm exec/*
