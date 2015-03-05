@@ -118,22 +118,6 @@ struct Point3D
     
 };
 
-//~ insure Z is always 0 ?? not required
-/*struct Point2D:Point3D
-{
-        Point2D(int X = 0,int Y=0)
-        {  x = X;y = Y; z = 0;}
-        Point2D(const Point3D &P)
-        { x = P.x;y = P.y;z = 0;}
-        
-        //Returns angle between two vectors    
-        /*float operator ^(Point2D &P)
-        {
-            Point2D p = *this;
-            return acosf( p*P/(p.mod() * P.mod()) ); 
-        }
-        
-};*/
 float interiorClockwise(Point2D p1,Point2D p2,Point2D p3);
 
 void writeLine(Point2D p1,Point2D p2,std::ofstream &out,const char *color = NULL);
