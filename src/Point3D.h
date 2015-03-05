@@ -18,6 +18,10 @@
 #define BLUE "rgb(0,0,255)"
 #define PI 3.14159
 
+#define ToRad(x) ((x) * PI / 180.0f)
+#define ToDegree(x) ((x) * 180.0f / PI)
+
+
 double Rad(float Deg); 
 float Deg(float Rad);
 
@@ -46,8 +50,8 @@ struct Point3D
 	}
       Point3D add(int X,int Y,int Z)
       {
-        x+=X,y+=Y,z+=Z;
-        return *this;
+            x+=X,y+=Y,z+=Z;
+            return *this;
       }
 
       //~ dot product

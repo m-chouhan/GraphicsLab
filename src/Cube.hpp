@@ -10,7 +10,7 @@
 
 #include "Point3D.h"
 #include "Shape.h"
-#include "Smasher.h"
+#include "Smasher.hpp"
 
 class Cube: public Shape
 {

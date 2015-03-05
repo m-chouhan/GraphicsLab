@@ -92,7 +92,11 @@ void renderScene(void) {
       glutSolidSphere(2,20,20);
       glPopMatrix();
 
+	glRotatef(45, 0.0f, 0.0f, 1.0f);
       draw2DFrame();
+      glRotatef(90, 1.0f, 0.0f, 0.0f);
+      draw2DFrame();
+
       /*      
       glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
       glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );*/
