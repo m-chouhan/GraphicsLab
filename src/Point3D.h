@@ -58,6 +58,11 @@ struct Point3D
       float operator *(const Point3D P2) {
             return x*P2.x + y*P2.y + z*P2.z;
       }      
+      Point3D operator*( int i[4][4])
+      {
+            return *this;
+      }
+      
       Point3D operator -(const Point3D P)
       {
             return Point3D(x-P.x,y-P.y,z-P.z);

@@ -9,20 +9,24 @@
 class Sphere : public Shape
 {            
       float radius;
+      float mass;
       Shape::origin;
       public:
       
-      Sphere(Point3D orig,float rad) { origin = orig;radius = rad; }
-      Sphere(std::ifstream &in) { in>>origin;in>>radius;}
+      Sphere(Point3D orig,float rad,float m) : radius(rad),mass(m)
+      { 
+            origin = orig;
+      }
+      
+      Sphere(std::ifstream &in) { in>>origin;in>>radius; in>>mass;}
       
       //don't need complicated stuff here :P 
       void getAbsolutes(Shape &s)  { s = *this; };
       void Rotate(int xdeg,int ydeg,int zdeg) { };
        
       virtual void Scale(float S) {  radius *= S; };
-      bool Collision(Shape &S);
-      bool CollisionSelf(Sphere &S);
-      //every shape should provide atleast one write method 
+      bool CollisionSelf( Sphere &s) ;
+	bool Collision(Shape &S);
       void Write(std::ofstream &out) ;
 
       friend class Smasher;

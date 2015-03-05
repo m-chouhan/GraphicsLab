@@ -3,7 +3,7 @@
 #include "Cube.hpp"
 #include "Smasher.hpp"
 
-Cube::Cube(Point3D orig,int length,int breadth,int depth)
+Cube::Cube(Point3D orig,int length,int breadth,int depth):length(length),breadth(breadth),depth(depth)
 {	
       Point3D temp;
       Point3D Points[8];
@@ -56,7 +56,8 @@ void Cube::getAbsolutes(Shape &S)
 
 void Cube::Scale(float S)
 {
-      float MatS[4][4] = { S, 0, 0,  0,
+      float MatS[4][4] = 
+                        { S, 0, 0,  0,
                          0, S, 0,  0,
                          0, 0, S,  0,
                          0, 0, 0,  1 };

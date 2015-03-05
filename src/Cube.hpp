@@ -10,13 +10,16 @@
 
 #include "Point3D.h"
 #include "Shape.h"
+#include "Sphere.hpp"
 #include "Smasher.hpp"
 
 class Cube: public Shape
 {
-	//@Point3D origin;
 	Rect Faces[6];
 	Shape::origin;
+      float mass;
+      int length,breadth,depth;
+      
 	public:
 
 	friend class Smasher;
@@ -30,11 +33,10 @@ class Cube: public Shape
 	{
 		std::ifstream in(objfile);
 		int x=0,y=0,z=0;
-		int l=0,b=0,h=0;
-		in>>l>>b>>h>>x>>y>>z;
-		std::cout<<"\nCube{"<<l<<b<<h<<x<<y<<z<<"}\n";
-
-		*this = Cube(Point3D(x,y,z),l,b,h);
+		in>>length>>breadth>>depth>>x>>y>>z;
+		std::cout<<"\nCube{"<<length<<breadth<<depth<<x<<y<<z<<"}\n";
+		*this = Cube(Point3D(x,y,z),length,breadth,depth);
+            
 		in.close();	
 	}
 	Cube(int l)
@@ -51,21 +53,16 @@ class Cube: public Shape
 	//@Inline so that can be executed faster
 	void getAbsolutes(Shape &S);      
 	//~ A relative movement
-	void Translate(Point3D &P)
-	{
-		origin = origin + P;
-	}
-	//~ Absolute movement of cube to that point
-	void Move(Point3D &P)
-	{
-		origin = P;    
-	}
-
+      bool CollisionSelf( Cube &c) { return false;}
+      
 	bool Collision(Shape &S)
       {
-                  return false;
+            if( Cube *c = dynamic_cast<Cube *>(&S))
+                  return CollisionSelf(*c);
+            if(Sphere *s = dynamic_cast<Sphere*>(&S) )
+                  return Smasher::Smash(*s,*this);
+            return false;
       }
-      bool CollisionSelf();
 	//@doesnot projects hidden space
 	//@standard write function inherited from shape class
 	void Write(std::ofstream &out);

@@ -8,7 +8,9 @@ class Sphere;
 
 class Smasher
 {
-      bool Smash(Cube &c1,Rect &r1);
-      bool Smash(Sphere &s,Cube &c);
+      public:
+      static bool Smash(Cube &c1,Rect &r1);
+      static bool Smash(Sphere &s,Cube &c);
 };
+
 #endif
