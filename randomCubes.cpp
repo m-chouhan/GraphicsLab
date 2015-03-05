@@ -19,10 +19,10 @@
 using namespace std;
 
 struct Specs{
-        int length;
-        int m;
-        float sigX;
-        float sigY;
+            int length;
+            int m;
+            float sigX;
+            float sigY;
     };
 /*extracts cube specification from input stream*/     
 Specs getSpecs(ifstream &in)
@@ -36,8 +36,6 @@ Specs getSpecs(ifstream &in)
 int main()
 {
       srand(time(NULL));
-      
-      
       vector<Cube> World;//Cubes are added to world after placment :P
       vector<Cube> Cubes;
       vector<Cube> conflicts;//stores the current conflicts i.e collisions

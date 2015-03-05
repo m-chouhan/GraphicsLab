@@ -63,9 +63,9 @@ class Cube: public Shape
 
 	bool Collision(Shape &S)
       {
-            if(
                   return false;
       }
+      bool CollisionSelf();
 	//@doesnot projects hidden space
 	//@standard write function inherited from shape class
 	void Write(std::ofstream &out);

@@ -56,9 +56,9 @@ class Rect:private Shape
       Rect() {}
       Rect(Point3D origin,Point3D p0,Point3D p1,Point3D p2,Point3D p3)
       {
-        this->origin = origin;
+            this->origin = origin;
             Points[0] = p0;Points[1] = p1;
-        Points[2] = p2;Points[3] = p3;
+            Points[2] = p2;Points[3] = p3;
       }
       Point3D getOrigin() { return origin;}
       void setOrigin(Point3D P) { origin = P; }
@@ -71,25 +71,24 @@ class Rect:private Shape
       void Write(std::ofstream &out);    
       bool isAbove(Rect &R2)
       {
-        return (R2.origin.z < origin.z);
+            return (R2.origin.z < origin.z);
       }
       //Not implemented
       void Rotate(int Degx,int Degy,int Degz) {}
       void Scale(float S){}
-      void Move(Point3D &P){}
       
       bool Collision(Shape &S)
       {
             //@if( dynamic_case<Cube
             return false;
       }
-      bool CollisionSelf(Rect &R2);    
+      bool CollisionSelf(Rect &R2) ;  
+
       void Translate(Point3D P)
       {
-        for(int i = 0;i<4;++i) Points[i] = Points[i] + P;
-        origin = origin + P;
+            for(int i = 0;i<4;++i) Points[i] = Points[i] + P;
+            origin = origin + P;
       }
-
       bool check_inside(Point3D q);
 };
 
