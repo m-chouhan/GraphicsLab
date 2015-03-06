@@ -33,9 +33,9 @@ class Shape
       virtual void Scale(float)= 0;
       
       //~ Absolute To World Space
-      virtual void Move(Point3D & P) { origin = P;}
+      virtual void Move(Point3D P) { origin = P;}
      //~ Relative To Current coordinates in world space
-      virtual void Translate(Point3D &P) { origin = origin + P; }
+      virtual void Translate(Point3D P) { origin = origin + P; }
       virtual bool Collision(Shape &)= 0;
       //every shape should provide atleast one write method 
       virtual void Write(std::ofstream &out) = 0;

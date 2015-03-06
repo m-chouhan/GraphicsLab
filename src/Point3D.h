@@ -2,6 +2,7 @@
 #ifndef __POINT3D__
 #define __POINT3D__
 
+//~ TODO: CleanUP Rotation mEthod
 /*
  *  Contains Point3d class and wrappers for writing points to file(.svg)
  *  Author: Mahendra Chouhan(14CS60R12)
@@ -37,40 +38,42 @@ typedef std::vector<Point2D> PointList2D;
 
 struct Point3D
 {
-	float x;
-	float y;
-	float z;
+	float x, y, z;
 	Point3D() { x = y = z = 0; }
-	Point3D(int X,int Y,int Z = 0) { x = X;y = Y;z = Z;}
+	Point3D(float  X,float Y,float Z  = 0) { x = X;y = Y;z = Z;}
 	Point3D * Multiply(float Matrix[][4]);
 	Point3D  X(Point3D p1);
-	Point3D operator +(const Point3D p1)
-	{
-		return Point3D(p1.x+x,p1.y+y,p1.z+z);
-	}
-      Point3D add(int X,int Y,int Z)
+      
+      Point3D add(float X,float Y,float Z)
       {
             x+=X,y+=Y,z+=Z;
             return *this;
       }
-
+      
       //~ dot product
       float operator *(const Point3D P2) {
             return x*P2.x + y*P2.y + z*P2.z;
       }      
-      Point3D operator*( int i[4][4])
+      Point3D operator*( float i[4][4])
       {
             return *this;
+      }
+      
+      Point3D operator +(const Point3D P)
+      {
+            return Point3D(x+P.x,y+P.y,z+P.z);
       }
       
       Point3D operator -(const Point3D P)
       {
             return Point3D(x-P.x,y-P.y,z-P.z);
       }
+      
       Point3D operator *(const float mul)
       {     
             return Point3D(x*mul,y*mul,z*mul);
       }
+      
       float operator ^(Point3D P)
       {
             Point3D p = *this;
@@ -112,6 +115,9 @@ struct Point3D
             return out;
       }
       
+      Point3D &RotateXYZ(float Degx,float Degy,float Degz);
+      
+      //~ Dont use these :(
       float angleX()
       {
             return atan2f(y,x);
@@ -124,7 +130,6 @@ struct Point3D
 };
 
 float interiorClockwise(Point2D p1,Point2D p2,Point2D p3);
-
 void writeLine(Point2D p1,Point2D p2,std::ofstream &out,const char *color = NULL);
 void writeLines(PointList2D &P,std::ofstream &out,const char *color = NULL);
 void writePoint(Point2D P,std::ofstream &out,const char *color = NULL);

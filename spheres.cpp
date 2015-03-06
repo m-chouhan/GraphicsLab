@@ -46,21 +46,6 @@ void changeSize(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void draw2DFrame(void)
-{
-      glBegin(GL_LINES);
-      glColor3f(0,1,0);
-      for(int i = 0;i<20;i++)
-      {
-            glVertex3f(-10.0f+i, 10.0f, 0);
-		glVertex3f(-10.0f+i, -10.0f,0);
-		
-            glVertex3f( -10.0f, -10.0f+i,0);
-		glVertex3f( 10.0f, -10.0f+i, 0);
-
-      }
-      glEnd();
-}
 
 void renderScene(void) {
       
@@ -120,14 +105,15 @@ void processSpecialKeys(int key, int xx, int yy) {
 	}
 }
 */
+
 int main(int argc, char **argv) {
-      
-      
+            
       SimulatorInit(argc,argv,500,500);
-      Sphere S( Point3D(),1,10 ) ,S2( Point3D(1,1) , 0.2,10);
+      Sphere S( Point3D(0.0,0.0,0),4.5,10 ) ,S2( Point3D(-10,1) , 5.2,10);
+      //S.origin = Point3D(0.9,0.9,0);
       World.push_back( &S);
       World.push_back( &S2);
-      
+      cout<<S.getOrigin()<<S.getRad();
       //Simulator::StartSimulation();
       
       /*

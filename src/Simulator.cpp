@@ -2,14 +2,13 @@
 #include <iostream>
 #include "Simulator.hpp"
 
-//~ int Simulator::Width = 200;
-//~ int Simulator::Height = 200;
-//~ ShapeList Simulator::World;
+int Width = 400;
+int Height = 400;
+ShapeList World;
+Point3D CamVector(0,0,30);
 
 void Reshape(int w,int h)
 {
-      // Prevent a divide by zero, when window is too short
-      // (you cant make a window of zero width).
       if (h == 0)
             h = 1;
       float ratio =  w * 1.0 / h;
@@ -30,11 +29,14 @@ void RenderScene()
 {
       //PhysicsEngine.Update(World);
       //Painter.Paint(World);
-      //some delay also
-      
+      //some delay also      
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Reset transformations
 	glLoadIdentity();
+      
+      gluLookAt(	CamVector.x, CamVector.y, CamVector.z,
+                              0, 0,  0,
+                              0.0f, 1.0 ,0.0f);
 
       for(int i = 0;i<World.size();++i)
       {
@@ -44,9 +46,12 @@ void RenderScene()
                   drawSphere(*s);
       }/* */
       
+      draw2DFrame();
+      glRotatef(90, 1.0f, 0.0f, 0.0f);
+      draw2DFrame();
+
       glEnable(GL_DEPTH_TEST);
 	glutSwapBuffers();
-      sleep(20);
 }
 
 void drawCube(Cube &c)
@@ -62,26 +67,56 @@ void drawSphere(Sphere &s)
       glPushMatrix();
       glColor3f(1,1,0.5);
       glTranslatef(loc.x,loc.y,loc.z);
-      glutWireSphere(0.6,20,20);
+      glutWireSphere(s.getRad(),30,30);
       glPopMatrix();
-      //std::cout<<"printing"<<loc;
+      //s.Translate(Point3D(0.1,0.1,0));
+      //std::cout<<"\npos"<<loc;
+}
+void draw2DFrame()
+{
+      glBegin(GL_LINES);
+      glColor3f(0,1,0);
+      for(int i = 0;i<20;i++)
+      {
+            glVertex3f(-10.0f+i, 10.0f, 0);
+		glVertex3f(-10.0f+i, -10.0f,0);
+		
+            glVertex3f( -10.0f, -10.0f+i,0);
+		glVertex3f( 10.0f, -10.0f+i, 0);
+
+      }
+      glEnd();
 }
 
 void NormalKeyEvent(unsigned char key, int x, int y) {
       
 	if (key == 27) exit(0);
+      //std::cout<<"["<<key<<"]";
+      switch(key)
+      {
+                  case ' ' :   CamVector = CamVector*1.02f;
+                                    std::cout<<"space";
+                                    break;
+                  case 'w': case 's':case'a': case 'd':
+                                    std::cout<<"["<<key<<"]";
+                                    break;
+      }
 }
 
 void SpecialKeyEvent(int key, int x, int y) {
 
 	switch (key) {
 		case GLUT_KEY_LEFT :
+                  CamVector.RotateXYZ(0,2,0);
 			break;
 		case GLUT_KEY_RIGHT :
+                  CamVector.RotateXYZ(0,-2,0);
 			break;
 		case GLUT_KEY_UP :
+                  CamVector.RotateXYZ(2,0,0);
 			break;
 		case GLUT_KEY_DOWN :
+                  CamVector.RotateXYZ(-2,0,0);                  
 			break;
 	}
 }
@@ -97,23 +132,24 @@ void MouseEvent(int button, int state, int x, int y)
       }*/
       std::cout<<"["<<x<<","<<y<<"]\n";
 }
-      void SimulatorInit(int argc, char *argv[],int W,int H)
-            {
-                  //::Width = W;::Height = H;
-                  // init GLUT and create window
-                  glutInit(&argc, argv);
-                  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-                  glutInitWindowPosition(100,100);
-                  glutInitWindowSize(Width,Height);
-                  glutCreateWindow("So-lLimunation");
 
-                  // register callbacks
-                  glutDisplayFunc(RenderScene);
-                  glutReshapeFunc(Reshape);
-                  glutIdleFunc(RenderScene);
+void SimulatorInit(int argc, char *argv[],int W,int H)
+      {
+            Width = W;Height = H;
+            // init GLUT and create window
+            glutInit(&argc, argv);
+            glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+            glutInitWindowPosition(100,100);
+            glutInitWindowSize(Width,Height);
+            glutCreateWindow("So-lLimunation");
 
-                  // here are the new entries
-                  //glutKeyboardFunc(Simulator::NormalKeyEvent);
-                  glutSpecialFunc(SpecialKeyEvent);
-                  glutMouseFunc(MouseEvent);
-            }
+            // register callbacks
+            glutDisplayFunc(RenderScene);
+            glutReshapeFunc(Reshape);
+            glutIdleFunc(RenderScene);
+
+            // here are the new entries
+            glutKeyboardFunc(NormalKeyEvent);
+            glutSpecialFunc(SpecialKeyEvent);
+            glutMouseFunc(MouseEvent);
+      }

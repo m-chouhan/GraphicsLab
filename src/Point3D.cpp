@@ -43,6 +43,21 @@ Point3D * Point3D::Multiply(float  Matrix[][4])
     return this;
 }
 
+Point3D & Point3D::RotateXYZ(float Degx,float Degy,float Degz)
+{
+      float   alp = Rad(Degx),
+                  bet = Rad(Degy),
+                  gam = Rad(Degz);
+
+      float MatALL[4][4] = {
+            cos(bet)*cos(gam),     cos(gam)*sin(alp)*sin(bet)-cos(alp)*sin(gam),    cos(alp)*cos(gam)*sin(bet)+sin(alp)*sin(gam),   0,
+            cos(bet)*sin(gam),      cos(alp)*cos(gam)+sin(alp)*sin(bet)*sin(gam),   -cos(gam)*sin(alp)+cos(alp)*sin(bet)*sin(gam),  0,
+            -sin(bet),                      cos(bet)*sin(alp) ,                                                  cos(alp)*cos(bet),                                                0,
+                  0       ,                                 0      ,                                                                      0,                                                                 1 };
+      
+      Multiply(MatALL);
+      return *this;
+}
 float interiorClockwise(Point2D p1,Point2D p2,Point2D p3)
 {
       Vector v1 = p2 - p1,v2 = p3 - p2;
