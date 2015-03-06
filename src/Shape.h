@@ -19,6 +19,7 @@
  * Note: All movement must be relative to origin
  * if absolute values are needed than compute using getAbs()
  * */
+typedef std::vector<class Shape*> ShapeList;
 class Shape
 {
       public:

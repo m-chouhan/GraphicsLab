@@ -19,8 +19,8 @@ glplay: glplay.cpp
 	${CC} ${CFLAGS} glplay.cpp ${GLUTF} -o glplay
 snowman: snowman.cpp
 	${CC} ${CFLAGS} snowman.cpp ${GLUTF} -o snowman
-spheres: spheres.cpp	
-	${CC} ${CFLAGS} spheres.cpp ${GLUTF} -o spheres
+spheres: spheres.cpp src/*.cpp	
+	${CC} ${CFLAGS} spheres.cpp ${GLUTF} src/*.o -o spheres
 clean:
 	rm src/*.o
 	rm exec/*

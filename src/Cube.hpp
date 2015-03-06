@@ -18,10 +18,9 @@ class Cube: public Shape
 	Rect Faces[6];
 	Shape::origin;
       float mass;
-      int length,breadth,depth;
       
 	public:
-
+      int length,breadth,depth;
 	friend class Smasher;
 	friend bool CheckCollision(std::vector<Cube>&, Cube, std::vector<Cube> &);
 	friend Point2D HandleCollision(std::vector<Cube> &,Cube ,std::vector<Cube> &);

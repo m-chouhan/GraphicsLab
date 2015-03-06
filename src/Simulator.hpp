@@ -1,40 +1,26 @@
 #ifndef __SIMULATION__
 #define __SIMULATION__
 
-class Simulator{
-            
-            int Width,Height;
+#include <stdlib.h>
+#include <GL/glut.h>
+
+#include "Shape.h"
+#include "Sphere.hpp"
+#include "Cube.hpp"
+
+
+            int Width = 100,Height = 100;
+            ShapeList World;
+
             void Reshape(int w, int h) ;
-            void RenderScene();
-            void NormalKeyEvent(unsigned char key, int x, int y) 
-            void SpecialKeyEvent(unsigned char key, int x, int y) ;
+            void RenderScene(void);
+            void NormalKeyEvent(unsigned char key, int x, int y) ;
+            void SpecialKeyEvent(int key, int x, int y) ;
             void MouseEvent(int button, int state, int x, int y);
-            
-            public:
-            Simulator(int argc, char *argv[],int Width,int Height):Width(Width),Height(Height)
-            {
-                  // init GLUT and create window
-                  glutInit(&argc, argv);
-                  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-                  glutInitWindowPosition(100,100);
-                  glutInitWindowSize(Width,Height);
-                  glutCreateWindow("SolaIumation");
+            void drawSphere(Sphere &s);
+            void drawCube(Cube &c);
 
-                  // register callbacks
-                  glutDisplayFunc(Simulator::RenderScene);
-                  glutReshapeFunc(Simulator::Reshape);
-                  glutIdleFunc(Simulator::RenderScene);
-
-                  // here are the new entries
-                  glutKeyboardFunc(Simulator::NormalKeyEvent);
-                  glutSpecialFunc(Simulator::SpecialKeyEvent);
-                  glutMouseFunc(Simulator::MouseEvent);
-            }
+            void SimulatorInit(int argc, char *argv[],int W,int H);
             
-            void StartSimulation()
-            {                  
-                  glutMainLoop();
-            }
-};
 
 #endif

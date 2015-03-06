@@ -2,15 +2,13 @@
 #include <iostream>
 #include <math.h>
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
 #include <GL/glut.h>
-#endif
+#include "src/Sphere.hpp"
+#include "src/Simulator.hpp"
 
 using namespace std;
-
-int Width=400,Height=400;
+/*
+//int Width=400,Height=400;
 // all variables initialized to 1.0, meaning
 // the triangle will initially be white
 float red=1.0f, blue=1.0f, green=1.0f;
@@ -31,7 +29,7 @@ void changeSize(int w, int h) {
 		h = 1;
 	float ratio =  w * 1.0 / h;
       
-      Width = w,Height = h;
+      //Width = w,Height = h;
         // Use the Projection Matrix
 	glMatrixMode(GL_PROJECTION);
 
@@ -89,19 +87,13 @@ void renderScene(void) {
       glPushMatrix();
       glColor3f(1,0.5,0.5);
       glTranslatef(0,0,0);
-      glutSolidSphere(2,20,20);
+      glutSolidSphere(0.5,20,20);
       glPopMatrix();
-
+      
 	glRotatef(45, 0.0f, 0.0f, 1.0f);
       draw2DFrame();
       glRotatef(90, 1.0f, 0.0f, 0.0f);
       draw2DFrame();
-
-      /*      
-      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-      glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );*/
-            /*Draw Background First*/
-
       glEnable(GL_DEPTH_TEST);
 	glutSwapBuffers();
 }
@@ -113,9 +105,7 @@ void processNormalKeys(unsigned char key, int x, int y) {
 }
 
 void processSpecialKeys(int key, int xx, int yy) {
-
-	float fraction = 0.1f;
-
+      
 	switch (key) {
 		case GLUT_KEY_LEFT :
 			break;
@@ -129,9 +119,18 @@ void processSpecialKeys(int key, int xx, int yy) {
 			break;
 	}
 }
-
+*/
 int main(int argc, char **argv) {
-
+      
+      
+      SimulatorInit(argc,argv,500,500);
+      Sphere S( Point3D(),1,10 ) ,S2( Point3D(1,1) , 0.2,10);
+      World.push_back( &S);
+      World.push_back( &S2);
+      
+      //Simulator::StartSimulation();
+      
+      /*
 	// init GLUT and create window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
@@ -147,7 +146,7 @@ int main(int argc, char **argv) {
 	// here are the new entries
 	glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(processSpecialKeys);
-      
+      */
       glutMainLoop();
 	// enter GLUT event processing cycle
 	return 1;
