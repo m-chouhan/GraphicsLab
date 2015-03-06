@@ -20,10 +20,16 @@
  * if absolute values are needed than compute using getAbs()
  * */
 typedef std::vector<class Shape*> ShapeList;
+
 class Shape
 {
       public:
       Point3D origin;
+      
+      //~ Adding some Dynamics :-D
+      float mass;
+      Vector acc,velocity;
+      
       //stores the rotation around each axis (not required for now)
       int degX,degY,degZ;
       
@@ -40,7 +46,7 @@ class Shape
       //every shape should provide atleast one write method 
       virtual void Write(std::ofstream &out) = 0;
       Point3D getOrigin() { return origin; }
-      
+
       //Smasher class handles collision between different 'shapes' so it needs to access the origin
       friend class Smasher;
 };

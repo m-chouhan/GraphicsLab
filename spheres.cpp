@@ -10,10 +10,10 @@ using namespace std;
 
 int main(int argc, char **argv) {
             
-      SimulatorInit(argc,argv,500,500);
+      Simulator::SimulatorInit(argc,argv,500,500);
       Sphere S( Point3D(0.0,0.0,0),4.5,10 ) ,S2( Point3D(-10,1,20) , 5.2,10);
-      World.push_back( &S);
-      World.push_back( &S2);
+      Simulator::World.push_back( &S);
+      Simulator::World.push_back( &S2);
       //cout<<S.getOrigin()<<S.getRad();
       //Simulator::StartSimulation();      
       glutMainLoop();

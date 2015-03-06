@@ -17,8 +17,6 @@ class Cube: public Shape
 {
 	Rect Faces[6];
 	Shape::origin;
-      float mass;
-      
 	public:
       int length,breadth,depth;
 	friend class Smasher;

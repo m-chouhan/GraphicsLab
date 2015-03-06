@@ -9,12 +9,13 @@
 class Sphere : public Shape
 {            
       float radius;
-      float mass;
       Shape::origin;
       public:
       
-      Sphere(Point3D orig,float rad,float m) : radius(rad),mass(m)
-      { 
+      Sphere(Point3D orig,float rad,float m)       
+      {
+            radius = rad;
+            mass = m;
             origin = orig;
       }
       

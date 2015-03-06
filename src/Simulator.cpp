@@ -139,22 +139,22 @@ void Simulator::MouseEvent(int button, int state, int x, int y)
 }
 
 void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
-      {
-            Width = W;Height = H;
-            // init GLUT and create window
-            glutInit(&argc, argv);
-            glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-            glutInitWindowPosition(100,100);
-            glutInitWindowSize(Width,Height);
-            glutCreateWindow("So-lLimunation");
+{
+      Width = W;Height = H;
+      // init GLUT and create window
+      glutInit(&argc, argv);
+      glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+      glutInitWindowPosition(100,100);
+      glutInitWindowSize(Width,Height);
+      glutCreateWindow("So-lLimunation");
 
-            // register callbacks
-            glutDisplayFunc(Simulator::RenderScene);
-            glutReshapeFunc(Simulator::Reshape);
-            glutIdleFunc(Simulator::RenderScene);
+      // register callbacks
+      glutDisplayFunc(Simulator::RenderScene);
+      glutReshapeFunc(Simulator::Reshape);
+      glutIdleFunc(Simulator::RenderScene);
 
-            // here are the new entries
-            glutKeyboardFunc(Simulator::NormalKeyEvent);
-            glutSpecialFunc(Simulator::SpecialKeyEvent);
-            glutMouseFunc(Simulator::MouseEvent);
-      }
+      // here are the new entries
+      glutKeyboardFunc(Simulator::NormalKeyEvent);
+      glutSpecialFunc(Simulator::SpecialKeyEvent);
+      glutMouseFunc(Simulator::MouseEvent);
+}

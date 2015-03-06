@@ -9,7 +9,7 @@
 #include "Cube.hpp"
 
 class Simulator {
-      
+            public:
             static int Width,Height;
             static ShapeList World;
             static Point3D CamVector;
