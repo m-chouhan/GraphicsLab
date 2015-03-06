@@ -8,21 +8,21 @@
 #include "Sphere.hpp"
 #include "Cube.hpp"
 
-//class Simulator {
+class Simulator {
       
-            extern int Width,Height;
-            extern ShapeList World;
-            extern Point3D CamVector;
+            static int Width,Height;
+            static ShapeList World;
+            static Point3D CamVector;
 
-            void Reshape(int w, int h) ;
-            void RenderScene(void);
-            void NormalKeyEvent(unsigned char key, int x, int y) ;
-            void SpecialKeyEvent(int key, int x, int y) ;
-            void MouseEvent(int button, int state, int x, int y);
-            void drawSphere(Sphere &s);
-            void drawCube(Cube &c);
-            void draw2DFrame(void);
+            static void Reshape(int w, int h) ;
+            static void RenderScene(void);
+            static void NormalKeyEvent(unsigned char key, int x, int y) ;
+            static void SpecialKeyEvent(int key, int x, int y) ;
+            static void MouseEvent(int button, int state, int x, int y);
+            static void drawSphere(Sphere &s);
+            static void drawCube(Cube &c);
+            static void draw2DFrame(void);
 
-            void SimulatorInit(int argc, char *argv[],int W,int H);
-//};            
+            static void SimulatorInit(int argc, char *argv[],int W,int H);
+};            
 #endif

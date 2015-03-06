@@ -2,12 +2,12 @@
 #include <iostream>
 #include "Simulator.hpp"
 
-int Width = 400;
-int Height = 400;
-ShapeList World;
-Point3D CamVector(0,0,30);
+int Simulator::Width = 400;
+int Simulator::Height = 400;
+ShapeList Simulator::World;
+Point3D Simulator::CamVector(0,0,30);
 
-void Reshape(int w,int h)
+void Simulator::Reshape(int w,int h)
 {
       if (h == 0)
             h = 1;
@@ -25,7 +25,7 @@ void Reshape(int w,int h)
       glMatrixMode(GL_MODELVIEW);
 }
 
-void RenderScene()
+void Simulator::RenderScene()
 {
       //PhysicsEngine.Update(World);
       //Painter.Paint(World);
@@ -54,14 +54,14 @@ void RenderScene()
 	glutSwapBuffers();
 }
 
-void drawCube(Cube &c)
+void Simulator::drawCube(Cube &c)
 {
       glPushMatrix();
       glutWireCube(c.length);
       glPopMatrix();
 }
 
-void drawSphere(Sphere &s)
+void Simulator::drawSphere(Sphere &s)
 {
       Point3D loc =  s.getOrigin();
       glPushMatrix();
@@ -72,7 +72,7 @@ void drawSphere(Sphere &s)
       //s.Translate(Point3D(0.1,0.1,0));
       //std::cout<<"\npos"<<loc;
 }
-void draw2DFrame()
+void Simulator::draw2DFrame()
 {
       glBegin(GL_LINES);
       glColor3f(0,1,0);
@@ -87,7 +87,7 @@ void draw2DFrame()
       glEnd();
 }
 
-void NormalKeyEvent(unsigned char key, int x, int y) {
+void Simulator::NormalKeyEvent(unsigned char key, int x, int y) {
       
 	if (key == 27) exit(0);
       //std::cout<<"["<<key<<"]";
@@ -108,7 +108,7 @@ void NormalKeyEvent(unsigned char key, int x, int y) {
       }
 }
 
-void SpecialKeyEvent(int key, int x, int y) {
+void Simulator::SpecialKeyEvent(int key, int x, int y) {
 
 	switch (key) {
 		case GLUT_KEY_LEFT :
@@ -126,7 +126,7 @@ void SpecialKeyEvent(int key, int x, int y) {
 	}
 }
 /* Callback handler for mouse event */
-void MouseEvent(int button, int state, int x, int y)
+void Simulator::MouseEvent(int button, int state, int x, int y)
  {
       /*
       if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) { 
@@ -138,7 +138,7 @@ void MouseEvent(int button, int state, int x, int y)
       std::cout<<"["<<x<<","<<y<<"]\n";
 }
 
-void SimulatorInit(int argc, char *argv[],int W,int H)
+void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       {
             Width = W;Height = H;
             // init GLUT and create window
@@ -149,12 +149,12 @@ void SimulatorInit(int argc, char *argv[],int W,int H)
             glutCreateWindow("So-lLimunation");
 
             // register callbacks
-            glutDisplayFunc(RenderScene);
-            glutReshapeFunc(Reshape);
-            glutIdleFunc(RenderScene);
+            glutDisplayFunc(Simulator::RenderScene);
+            glutReshapeFunc(Simulator::Reshape);
+            glutIdleFunc(Simulator::RenderScene);
 
             // here are the new entries
-            glutKeyboardFunc(NormalKeyEvent);
-            glutSpecialFunc(SpecialKeyEvent);
-            glutMouseFunc(MouseEvent);
+            glutKeyboardFunc(Simulator::NormalKeyEvent);
+            glutSpecialFunc(Simulator::SpecialKeyEvent);
+            glutMouseFunc(Simulator::MouseEvent);
       }
