@@ -89,14 +89,17 @@ struct Point3D
       {
             return Point3D(x/div,y/div,z/div);
       }
+      
       bool operator <(const Point3D P) const
       {
-            return ( x < P.x);
+            return ( x < P.x) && (y < P.y);
       }
+      
       bool operator ==(const Point3D P) const
       {
             return ( x == P.x && y == P.y );
       }
+      
       friend std::ofstream & operator <<(std::ofstream &out,const Point3D P)
       {
             out<<P.x<<" "<<P.y<<" "<<P.z;

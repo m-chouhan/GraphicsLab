@@ -76,14 +76,13 @@ void draw2DFrame()
 {
       glBegin(GL_LINES);
       glColor3f(0,1,0);
-      for(int i = 0;i<20;i++)
+      for(int i = 0;i<40;i++)
       {
-            glVertex3f(-10.0f+i, 10.0f, 0);
-		glVertex3f(-10.0f+i, -10.0f,0);
+            glVertex3f(-20.0f+i, 20.0f, 0);
+		glVertex3f(-20.0f+i, -20.0f,0);
 		
-            glVertex3f( -10.0f, -10.0f+i,0);
-		glVertex3f( 10.0f, -10.0f+i, 0);
-
+            glVertex3f( -20.0f, -20.0f+i,0);
+		glVertex3f( 20.0f, -20.0f+i, 0);
       }
       glEnd();
 }
@@ -94,10 +93,16 @@ void NormalKeyEvent(unsigned char key, int x, int y) {
       //std::cout<<"["<<key<<"]";
       switch(key)
       {
-                  case ' ' :   CamVector = CamVector*1.02f;
+                  case ' ' :   //CamVector = CamVector*1.02f;
                                     std::cout<<"space";
                                     break;
-                  case 'w': case 's':case'a': case 'd':
+                  case 'w': 
+                                    CamVector = CamVector*0.98f;
+                                    break;
+                  case 's':
+                                    CamVector = CamVector*1.02f;
+                                    break;                              
+                  case'a': case 'd':
                                     std::cout<<"["<<key<<"]";
                                     break;
       }
