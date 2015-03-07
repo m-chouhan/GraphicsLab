@@ -7,13 +7,16 @@
 #include "Shape.h"
 #include "Sphere.hpp"
 #include "Cube.hpp"
+#include "Physics.hpp"
 
 class Simulator {
+      
             public:
             static int Width,Height;
             static ShapeList World;
             static Point3D CamVector;
-
+            static Physics PhysicsEngine;
+            
             static void Reshape(int w, int h) ;
             static void RenderScene(void);
             static void NormalKeyEvent(unsigned char key, int x, int y) ;
@@ -22,7 +25,12 @@ class Simulator {
             static void drawSphere(Sphere &s);
             static void drawCube(Cube &c);
             static void draw2DFrame(void);
-
+            static void StartSimulation(void) 
+            {     
+                  PhysicsEngine.Update(World);
+                  //~ Init Dynamics Values
+                  glutMainLoop(); 
+            }
             static void SimulatorInit(int argc, char *argv[],int W,int H);
 };            
 #endif

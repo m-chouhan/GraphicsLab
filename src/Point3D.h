@@ -13,6 +13,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <vector>
+#include <queue>
 
 #define RED "rgb(255,0,0)"
 #define GREEN "rgb(0,255,0)"

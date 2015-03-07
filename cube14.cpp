@@ -19,7 +19,7 @@ int  main(int argc,char *argv[])
 { 
       Point3D p(10,10,10);
       int arr[10][10];
-      cout<<(p*(arr));
+      //cout<<(p*(arr));
       Cube c("cube.txt");
 	if(argc < 6)
       { 

@@ -4,6 +4,12 @@
  * */
 #include "graphics.h"
 
+std::ifstream & operator >>(std::ifstream &in,Color &C)
+{
+      in>>C.a>>C.r>>C.g>>C.b;
+      return in;
+}
+
 Point3D getGaussianDistri(float sigX,float sigY,Point2D mean)
 {
         Point3D P;

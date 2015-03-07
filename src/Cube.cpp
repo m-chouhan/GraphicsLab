@@ -1,7 +1,9 @@
 
 #include "graphics.h" 
+#include "Sphere.hpp"
 #include "Cube.hpp"
 #include "Smasher.hpp"
+#include "Simulator.hpp"
 
 Cube::Cube(Point3D orig,int length,int breadth,int depth):length(length),breadth(breadth),depth(depth)
 {	
@@ -53,6 +55,21 @@ void Cube::getAbsolutes(Shape &S)
                   c.Faces[i].origin = Faces[i].origin+origin;
             }      
 }
+
+void Cube::Draw() 
+ { 
+       Simulator::drawCube(*this); 
+}
+
+bool Cube::Collision(Shape &S)
+{
+      if( Cube *c = dynamic_cast<Cube *>(&S))
+            return CollisionSelf(*c);
+      if(Sphere *s = dynamic_cast<Sphere*>(&S) )
+            return Smasher::Smash(*s,*this);
+      return false;
+}
+
 
 void Cube::Scale(float S)
 {

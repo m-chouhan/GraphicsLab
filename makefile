@@ -8,7 +8,7 @@ SOURCE = src
 lib:
 	$(MAKE) -C $(SOURCE) lib
 cube14 :
-	${CC} ${CFLAGS} cube14.cpp src/*.o -o exec/cube14
+	${CC} ${CFLAGS} cube14.cpp src/*.o ${GLUTF} -o exec/cube14
 rcube :
 	${CC} ${CFLAGS} randomCubes.cpp src/*.o -o exec/rcube
 polygon:

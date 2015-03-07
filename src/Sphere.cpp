@@ -2,19 +2,24 @@
 #include "Sphere.hpp"
 #include "Smasher.hpp"
 #include "Cube.hpp"
+#include "Simulator.hpp"
+
+void Sphere::Draw()
+{  Simulator::drawSphere(*this); }
 
 bool Sphere::Collision(Shape &S)
 {
       if( Cube *c = dynamic_cast<Cube *>(&S))
             return Smasher::Smash(*this,*c);
       if(Sphere *s = dynamic_cast<Sphere*>(&S) )
-            return CollisionSelf(*this);
+            return CollisionSelf(*s);
       return false;
 }
 
 bool Sphere::CollisionSelf(Sphere &S)
 {
       Point3D dist = S.origin - origin;
+      std::cout<<"S:"<<S.origin<<"\tthis:"<<origin<<std::endl;
       return dist.mod() < (S.radius + radius);
 }
 

@@ -5,7 +5,8 @@
 int Simulator::Width = 400;
 int Simulator::Height = 400;
 ShapeList Simulator::World;
-Point3D Simulator::CamVector(0,0,30);
+Point3D Simulator::CamVector(0,10,40);
+Physics Simulator::PhysicsEngine(20);
 
 void Simulator::Reshape(int w,int h)
 {
@@ -27,7 +28,7 @@ void Simulator::Reshape(int w,int h)
 
 void Simulator::RenderScene()
 {
-      //PhysicsEngine.Update(World);
+      PhysicsEngine.Update(World);
       //Painter.Paint(World);
       //some delay also      
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -39,12 +40,7 @@ void Simulator::RenderScene()
                               0.0f, 1.0 ,0.0f);
 
       for(int i = 0;i<World.size();++i)
-      {
-            if( Cube *c = dynamic_cast<Cube *>( World[i] ) ) 
-                  drawCube(*c);
-            if( Sphere *s = dynamic_cast<Sphere *>( World[i]) )
-                  drawSphere(*s);
-      }/* */
+            World[i]->Draw();
       
       draw2DFrame();
       glRotatef(90, 1.0f, 0.0f, 0.0f);
@@ -67,10 +63,8 @@ void Simulator::drawSphere(Sphere &s)
       glPushMatrix();
       glColor3f(1,1,0.5);
       glTranslatef(loc.x,loc.y,loc.z);
-      glutWireSphere(s.getRad(),30,30);
+      glutSolidSphere(s.getRad(),30,30);
       glPopMatrix();
-      //s.Translate(Point3D(0.1,0.1,0));
-      //std::cout<<"\npos"<<loc;
 }
 void Simulator::draw2DFrame()
 {

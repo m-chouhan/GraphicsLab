@@ -10,8 +10,6 @@
 
 #include "Point3D.h"
 #include "Shape.h"
-#include "Sphere.hpp"
-#include "Smasher.hpp"
 
 class Cube: public Shape
 {
@@ -32,8 +30,7 @@ class Cube: public Shape
 		int x=0,y=0,z=0;
 		in>>length>>breadth>>depth>>x>>y>>z;
 		std::cout<<"\nCube{"<<length<<breadth<<depth<<x<<y<<z<<"}\n";
-		*this = Cube(Point3D(x,y,z),length,breadth,depth);
-            
+		*this = Cube(Point3D(x,y,z),length,breadth,depth);            
 		in.close();	
 	}
 	Cube(int l)
@@ -46,20 +43,13 @@ class Cube: public Shape
 	}
 	void Scale(float S);
 	void Rotate(int Degx,int Degy,int Degz);
-      
+      void Draw();
 	//@Inline so that can be executed faster
 	void getAbsolutes(Shape &S);      
 	//~ A relative movement
       bool CollisionSelf( Cube &c) { return false;}
       
-	bool Collision(Shape &S)
-      {
-            if( Cube *c = dynamic_cast<Cube *>(&S))
-                  return CollisionSelf(*c);
-            if(Sphere *s = dynamic_cast<Sphere*>(&S) )
-                  return Smasher::Smash(*s,*this);
-            return false;
-      }
+	bool Collision(Shape &S);
 	//@doesnot projects hidden space
 	//@standard write function inherited from shape class
 	void Write(std::ofstream &out);

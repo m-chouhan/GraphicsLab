@@ -37,7 +37,7 @@ class Shape
       virtual void getAbsolutes(Shape &) = 0;
       virtual void Rotate(int,int,int)= 0;
       virtual void Scale(float)= 0;
-      
+      virtual void Draw() = 0;
       //~ Absolute To World Space
       virtual void Move(Point3D P) { origin = P;}
      //~ Relative To Current coordinates in world space
@@ -83,6 +83,7 @@ class Rect:private Shape
       //Not implemented
       void Rotate(int Degx,int Degy,int Degz) {}
       void Scale(float S){}
+      void Draw() {}
       
       bool Collision(Shape &S)
       {

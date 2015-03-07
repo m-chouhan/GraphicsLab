@@ -1,62 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1200" width="1500">
 
-	<line x1 = "552" y1 = "648" x2 = "648" y2 = "648" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "551.02" y1 = "648.979" x2 = "648.98" y2 = "648.979" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "648" y1 = "648" x2 = "649" y2 = "551" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "648.98" y1 = "648.979" x2 = "648.98" y2 = "551.02" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "649" y1 = "551" x2 = "551" y2 = "551" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "648.98" y1 = "551.02" x2 = "551.02" y2 = "551.02" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "552" y1 = "648" x2 = "551" y2 = "551" style="stroke:rgb(255,0,0);stroke-width:2" />
-
-	<circle cx = "600" cy = "600" r = "2" stroke = "black" stroke-width = "3" />
-
-	<line x1 = "-1800" y1 = "-1800" x2 = "-1685" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
-
-	<line x1 = "-1685" y1 = "2885" x2 = "2885" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
-
-	<line x1 = "2885" y1 = "2885" x2 = "3000" y2 = "-1800" style="stroke:rgb(255,0,0);stroke-width:2" />
-
-	<line x1 = "-1800" y1 = "-1800" x2 = "3000" y2 = "-1800" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "551.02" y1 = "648.979" x2 = "551.02" y2 = "551.02" style="stroke:rgb(255,0,0);stroke-width:2" />
 
 	<circle cx = "600" cy = "600" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "649" y1 = "551" x2 = "551" y2 = "551" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "-1800.15" y1 = "-1800.14" x2 = "-1799.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "551" y1 = "551" x2 = "-1800" y2 = "-1800" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "-1799.85" y1 = "2999.86" x2 = "2999.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "-1800" y1 = "-1800" x2 = "3000" y2 = "-1800" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "2999.85" y1 = "2999.86" x2 = "3000.15" y2 = "-1800.14" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "649" y1 = "551" x2 = "3000" y2 = "-1800" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "-1800.15" y1 = "-1800.14" x2 = "3000.15" y2 = "-1800.14" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<circle cx = "600" cy = "600.006" r = "2" stroke = "black" stroke-width = "3" />
+
+	<line x1 = "648.98" y1 = "551.02" x2 = "551.02" y2 = "551.02" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "551.02" y1 = "551.02" x2 = "-1800.15" y2 = "-1800.14" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "-1800.15" y1 = "-1800.14" x2 = "3000.15" y2 = "-1800.14" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "648.98" y1 = "551.02" x2 = "3000.15" y2 = "-1800.14" style="stroke:rgb(255,0,0);stroke-width:2" />
 
 	<circle cx = "600" cy = "504" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "552" y1 = "648" x2 = "648" y2 = "648" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "551.02" y1 = "648.979" x2 = "648.98" y2 = "648.979" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "648" y1 = "648" x2 = "2885" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "648.98" y1 = "648.979" x2 = "2999.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "2885" y1 = "2885" x2 = "-1685" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "2999.85" y1 = "2999.86" x2 = "-1799.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "552" y1 = "648" x2 = "-1685" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "551.02" y1 = "648.979" x2 = "-1799.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
 	<circle cx = "600" cy = "696" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "648" y1 = "648" x2 = "649" y2 = "551" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "648.98" y1 = "648.979" x2 = "648.98" y2 = "551.02" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "649" y1 = "551" x2 = "3000" y2 = "-1800" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "648.98" y1 = "551.02" x2 = "3000.15" y2 = "-1800.14" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "3000" y1 = "-1800" x2 = "2885" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "3000.15" y1 = "-1800.14" x2 = "2999.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "648" y1 = "648" x2 = "2885" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "648.98" y1 = "648.979" x2 = "2999.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
 	<circle cx = "696" cy = "600" r = "2" stroke = "black" stroke-width = "3" />
 
-	<line x1 = "552" y1 = "648" x2 = "551" y2 = "551" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "551.02" y1 = "648.979" x2 = "551.02" y2 = "551.02" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "551" y1 = "551" x2 = "-1800" y2 = "-1800" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "551.02" y1 = "551.02" x2 = "-1800.15" y2 = "-1800.14" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "-1800" y1 = "-1800" x2 = "-1685" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "-1800.15" y1 = "-1800.14" x2 = "-1799.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
-	<line x1 = "552" y1 = "648" x2 = "-1685" y2 = "2885" style="stroke:rgb(255,0,0);stroke-width:2" />
+	<line x1 = "551.02" y1 = "648.979" x2 = "-1799.85" y2 = "2999.86" style="stroke:rgb(255,0,0);stroke-width:2" />
 
 	<circle cx = "504" cy = "600" r = "2" stroke = "black" stroke-width = "3" />
 </svg>
