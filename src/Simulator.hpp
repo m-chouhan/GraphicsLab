@@ -3,17 +3,22 @@
 
 #include <stdlib.h>
 #include <GL/glut.h>
+#include <utility>
+#include <vector>
 
 #include "Shape.h"
+#include "graphics.h"
 #include "Sphere.hpp"
 #include "Cube.hpp"
 #include "Physics.hpp"
+
 
 class Simulator {
       
             public:
             static int Width,Height;
-            static ShapeList World;
+            //static ShapeList World;
+            static ShapeList2 World;
             static Point3D CamVector;
             static Physics PhysicsEngine;
             
@@ -30,6 +35,10 @@ class Simulator {
                   PhysicsEngine.Update(World);
                   //~ Init Dynamics Values
                   glutMainLoop(); 
+            }
+            static void AddObject(Shape *s)
+            {
+                  World.push_back(std::make_pair(s,FifoQ(10)));
             }
             static void SimulatorInit(int argc, char *argv[],int W,int H);
 };            

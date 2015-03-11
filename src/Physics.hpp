@@ -3,6 +3,7 @@
 
 #include "Point3D.h"
 #include "Shape.h"
+#include "graphics.h"
 //#include "Smasher.hpp"
 
 class Physics{
@@ -27,10 +28,10 @@ class Physics{
             return delta;
       }
       
-      void GravityManager(ShapeList &list);
-      void CollisionManager(ShapeList &list);
+      void GravityManager(ShapeList2 &list);
+      void CollisionManager(ShapeList2 &list);
       
-      void Update(ShapeList &list)
+      void Update(ShapeList2 &list)
       {
             GravityManager(list);
             CollisionManager(list);

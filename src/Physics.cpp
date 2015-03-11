@@ -2,16 +2,16 @@
 #include "Physics.hpp"
 #include <vector>
 
-void Physics::GravityManager(ShapeList &list)
+void Physics::GravityManager(ShapeList2 &list)
 {
       //reset acc
-      for(int i = 0;i<list.size();++i) list[i]->acc = Point3D(0,0,0);
+      for(int i = 0;i<list.size();++i) list[i].first->acc = Point3D(0,0,0);
       //~ Acceleration for current time step
       for(int i = 0;i<list.size();++i)
       {
             for(int j = i+1;j<list.size();++j)
             {
-                  Shape *s1 = list[i],*s2 = list[j];
+                  Shape *s1 = list[i].first,*s2 = list[j].first;
                   Vector force = GVector(s1,s2);
                   s1->acc = s1->acc + force/s1->mass;
                   s2->acc = s2->acc + (force/s2->mass)*-1;
@@ -22,8 +22,8 @@ void Physics::GravityManager(ShapeList &list)
       //~ So apply Approximation
       for(int i = 0;i<list.size();++i)   
       {
-            Vector delta  = EulersApproximation(list[i]->velocity,list[i]->acc,0.02);
-            list[i]->Translate(delta);
+            Vector delta  = EulersApproximation(list[i].first->velocity,list[i].first->acc,0.02);
+            list[i].first->Translate(delta);
             //~ RungeKutta();
       }
 }
@@ -34,13 +34,13 @@ void Physics::Separate(Shape *s1,Shape *s2)
       s2->Translate(s2->velocity*0.02f);
 }
 
-void Physics::CollisionManager(ShapeList &list)
+void Physics::CollisionManager(ShapeList2 &list)
 {
       for(int i = 0;i<list.size();++i)
       {
             for(int j = i+1;j<list.size();++j)
             {
-                  Shape *s1 = list[i],*s2 = list[j];
+                  Shape *s1 = list[i].first,*s2 = list[j].first;
                   if( s1->Collision(*s2))
                   {
                         //~ reset pos and velocites ( note that acc will be same )

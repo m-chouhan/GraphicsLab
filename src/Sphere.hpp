@@ -2,28 +2,32 @@
 #ifndef __SPHERE__
 #define __SPHERE__
 
+#include <fstream>
+#include <stdlib.h>
+
 #include "Point3D.h"
 #include "Shape.h"
 #include "graphics.h"
-#include <fstream>
+
 
 
 class Sphere : public Shape
 {            
       float radius;
       Shape::origin;
-      Color col;
       public:
-      
-      Sphere() :radius(0) { mass = 0; };
-      
+      Color col;      
+      Sphere() :radius(0) { mass = 0; }
       Sphere(Point3D orig,float rad,float m)       
       {
             radius = rad;
             mass = m;
             origin = orig;
+            col.a;
+            col.r =  ((float)(rand()%100))/100;
+            col.g =  ((float)(rand()%100))/100; 
+            col.b = ((float)(rand()%100))/100;
       }
-      
       //Sphere(std::ifstream &in) { in>>origin;in>>radius; in>>mass;}
       
       friend std::ifstream & operator >>(std::ifstream &in,Sphere &S)

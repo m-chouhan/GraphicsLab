@@ -4,7 +4,9 @@
 
 int Simulator::Width = 400;
 int Simulator::Height = 400;
-ShapeList Simulator::World;
+//~ ShapeList Simulator::World;
+ShapeList2 Simulator::World;
+
 Point3D Simulator::CamVector(0,10,40);
 Physics Simulator::PhysicsEngine(20);
 
@@ -40,7 +42,7 @@ void Simulator::RenderScene()
                               0.0f, 1.0 ,0.0f);
 
       for(int i = 0;i<World.size();++i)
-            World[i]->Draw();
+            World[i].first->Draw();
       
       draw2DFrame();
       glRotatef(90, 1.0f, 0.0f, 0.0f);
@@ -61,7 +63,7 @@ void Simulator::drawSphere(Sphere &s)
 {
       Point3D loc =  s.getOrigin();
       glPushMatrix();
-      glColor3f(1,1,0.5);
+      glColor3f(s.col.r,s.col.g,s.col.b);
       glTranslatef(loc.x,loc.y,loc.z);
       glutSolidSphere(s.getRad(),30,30);
       glPopMatrix();
@@ -69,7 +71,7 @@ void Simulator::drawSphere(Sphere &s)
 void Simulator::draw2DFrame()
 {
       glBegin(GL_LINES);
-      glColor3f(0,1,0);
+      glColor3f(0,0.5,0);
       for(int i = 0;i<40;i++)
       {
             glVertex3f(-20.0f+i, 20.0f, 0);

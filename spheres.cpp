@@ -11,21 +11,24 @@ using namespace std;
 int main(int argc, char **argv) {
             
       Simulator::SimulatorInit(argc,argv,500,500);
-      Sphere S( Point3D(0.0,0.0,0),3.2,40 ) ,S2( Point3D(-10,20,20) , 1.2,20);
-      Sphere S3( Point3D(10,10,10), 2,30);
+      Sphere S( Point3D(0.0,0.0,0),3.2,40 ) ,S2( Point3D(-10,0,10) , 1.2,20);
+      Sphere S3( Point3D(10,0,10), 2,30);
 
-      Simulator::World.push_back( &S);
-      Simulator::World.push_back( &S2);
-      Simulator::World.push_back( &S3);
-      
+      Simulator::AddObject( &S);
+      Simulator::AddObject( &S2);
+      Simulator::AddObject( &S3);
+      S.velocity = Point3D(2,0,-4);
       ifstream in("planets.txt");
       
       Sphere *s = new Sphere();
       while( in>>(*s) )
       {
-            Simulator::World.push_back( s );
+            Point3D origin = s->getOrigin();
+            //origin.y = 0;
+            s->Move(origin);
+            Simulator::AddObject( s );
             s = new Sphere();
-      }
+      }/**/
       in.close();
       //cout<<S.getOrigin()<<S.getRad();
       Simulator::StartSimulation();      
