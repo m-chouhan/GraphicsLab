@@ -9,8 +9,6 @@
 #include "Shape.h"
 #include "graphics.h"
 
-
-
 class Sphere : public Shape
 {            
       float radius;
@@ -23,12 +21,11 @@ class Sphere : public Shape
             radius = rad;
             mass = m;
             origin = orig;
-            col.a;
+            col.a =  ((float)(rand()%100))/100;
             col.r =  ((float)(rand()%100))/100;
             col.g =  ((float)(rand()%100))/100; 
-            col.b = ((float)(rand()%100))/100;
+            col.b =  ((float)(rand()%100))/100;
       }
-      //Sphere(std::ifstream &in) { in>>origin;in>>radius; in>>mass;}
       
       friend std::ifstream & operator >>(std::ifstream &in,Sphere &S)
       {

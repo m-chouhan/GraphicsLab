@@ -35,6 +35,8 @@ class Physics{
       {
             GravityManager(list);
             CollisionManager(list);
+            for(unsigned int i = 0;i<list.size();++i)
+                  list[i].second.Push(list[i].first->getOrigin());            
       }
 };
 

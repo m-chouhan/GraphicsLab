@@ -42,7 +42,11 @@ void Simulator::RenderScene()
                               0.0f, 1.0 ,0.0f);
 
       for(int i = 0;i<World.size();++i)
+      {
             World[i].first->Draw();
+            for(int j = 0;j<World[i].second.Q.size();j+=3)
+                  drawSphere(World[i].second.Q[j]);
+      }
       
       draw2DFrame();
       glRotatef(90, 1.0f, 0.0f, 0.0f);
@@ -68,6 +72,16 @@ void Simulator::drawSphere(Sphere &s)
       glutSolidSphere(s.getRad(),30,30);
       glPopMatrix();
 }
+
+void Simulator::drawSphere(Point3D P)
+{
+      glPushMatrix();
+      glColor3f(0.7,0.7,0.7);
+      glTranslatef(P.x,P.y,P.z);
+      glutSolidSphere(0.2,20,20);
+      glPopMatrix();
+}
+
 void Simulator::draw2DFrame()
 {
       glBegin(GL_LINES);
@@ -140,6 +154,12 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       // init GLUT and create window
       glutInit(&argc, argv);
       glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+      
+      glEnable(GL_COLOR_MATERIAL);
+      glEnable(GL_SMOOTH);
+      glEnable(GL_LIGHTING);
+      glColorMaterial(GL_FRONT,GL_DIFFUSE);
+      
       glutInitWindowPosition(100,100);
       glutInitWindowSize(Width,Height);
       glutCreateWindow("So-lLimunation");

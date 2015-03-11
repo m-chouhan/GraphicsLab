@@ -30,7 +30,7 @@ class FifoQ{
       
       public:
       std::deque<Point3D> Q;
-      int SIZE ;
+      unsigned int SIZE ;
       int size;
       FifoQ(int size):SIZE(size),size(0) {}
       void Push(Point3D P)

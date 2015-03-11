@@ -28,6 +28,7 @@ class Simulator {
             static void SpecialKeyEvent(int key, int x, int y) ;
             static void MouseEvent(int button, int state, int x, int y);
             static void drawSphere(Sphere &s);
+            static void drawSphere(Point3D P);
             static void drawCube(Cube &c);
             static void draw2DFrame(void);
             static void StartSimulation(void) 
@@ -38,7 +39,7 @@ class Simulator {
             }
             static void AddObject(Shape *s)
             {
-                  World.push_back(std::make_pair(s,FifoQ(10)));
+                  World.push_back(std::make_pair(s,FifoQ(20)));
             }
             static void SimulatorInit(int argc, char *argv[],int W,int H);
 };            
