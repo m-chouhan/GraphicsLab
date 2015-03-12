@@ -2,6 +2,7 @@
 #include <iostream>
 #include <GL/glut.h>
 #include <vector>
+#include <assert.h>
 
 #include "src/Point3D.h"
 #include "src/Segments.hpp"
@@ -33,13 +34,20 @@ struct HalfPlane
             float m = -a/b;
             C = c/b;
             
-            if( C > 0)  Segment.UP = Point2D(0,C);
-            else Segment.UP = Point2D(-C/m,0);
+            Point2D points[2];
+            int i = 0;
+            Point2D p1= Point2D(0,C);
+            Point2D p2 = Point2D((MY-C)/m,MY);
+            Point2D p3 = Point2D(MX,m*MX+C);
+            Point2D p4 = Point2D(-C/m,0);
             
-            float y = m*MX+C,x = (MY-C)/m;
+            if( p1.y > 0 && p1.y < MY ) points[i++] = p1;
+            if( p2.x > 0 && p2.x < MX) points[i++] = p2;
+            if( p3.y > 0 && p3.y < MY) points[i++] = p3;
+            if( p4.x > 0 && p4.x < MX) points[i++] = p4;
+            assert(i == 2);
+            Segment.UP = points[0];Segment.Down = points[1];
             
-            if(y < MY) Segment.Down = Point2D(MX,y);
-            else Segment.Down = Point2D(x,MY);
       } 
       bool contains(Point2D p)
       {
@@ -50,6 +58,16 @@ struct HalfPlane
 
 Point2D FindOptimalPoint( HalfPlane &plane,HPlanes &Array,int size,Equation e)
 {
+      if( size == 0 )
+      {
+            if( e.type && e*plane.Segment.UP < e*plane.Segment.Down)
+                  return plane.Segment.Down;
+            else if( e.type) return plane.Segment.UP;
+            else if( e*plane.Segment.UP < e*plane.Segment.Down )
+                  return plane.Segment.UP;
+            return  plane.Segment.Down;    
+      }
+      
       Point2D optimal(-1,-1);
       
       for(int i = 0;i<size;++i)
@@ -65,12 +83,16 @@ Point2D FindOptimalPoint( HalfPlane &plane,HPlanes &Array,int size,Equation e)
                         optimal = P;
             }
       }
+      
+      if( optimal == Point2D(-1,-1) ) return FindOptimalPoint(plane,Array,0,e);
+      
       return optimal;
 }
 
 using namespace std;
 
 HPlanes Array;
+Point2D optimal;
 
 void renderScene()
 {
@@ -101,7 +123,10 @@ void renderScene()
 		glVertex3f( d.x,d.y, d.z);
       }
 	glEnd();
-      
+      //~ glPushMatrix();
+      glTranslatef(optimal.x/norm,optimal.y/norm,0);
+      glutSolidSphere(0.01,20,20);
+      //~ glPopMatrix();
 	glutSwapBuffers();
 }
 void processNormalKeys(unsigned char key, int x, int y) {
@@ -115,15 +140,22 @@ int main(int argc,char *argv[])
 	glutInitWindowPosition(100,100);
 	glutInitWindowSize(600,600);
 	glutCreateWindow("Lighthouse3D- GLUT Tutorial");
-	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutKeyboardFunc(processNormalKeys);
       //~ glutReshapeFunc(changeSize);
+
       Equation e(5,6,MAXIMIZE);
       
-      //Array.push_back(HalfPlane(10,10,10,true));
-      Array.push_back(HalfPlane(-2,1,10,true));
-      //cout<<H1.contains(Point2D(0,30));
+      Array.push_back(HalfPlane(-2,1,10,true));      
+      Array.push_back(HalfPlane(2,1,20,true));
+      
+      optimal=FindOptimalPoint(Array[0],Array,0,e);
+      for( int i = 1;i<Array.size();i++)
+      {
+            if( Array[i].contains(optimal) ) continue;
+            optimal = FindOptimalPoint(Array[i],Array,i,e);
+      }
+      cout<<optimal<<endl;
       
       glutMainLoop();
 
