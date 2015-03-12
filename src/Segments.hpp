@@ -8,6 +8,8 @@ struct Line
 {     
       Point2D UP;
       Point2D Down;
+      
+      Line() {}
       Line(Point2D u,Point2D d)
       {
             UP = u;Down = d;
