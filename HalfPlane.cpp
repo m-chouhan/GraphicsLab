@@ -123,10 +123,10 @@ void renderScene()
 		glVertex3f( d.x,d.y, d.z);
       }
 	glEnd();
-      //~ glPushMatrix();
+      glPushMatrix();
       glTranslatef(optimal.x/norm,optimal.y/norm,0);
       glutSolidSphere(0.01,20,20);
-      //~ glPopMatrix();
+      glPopMatrix();
 	glutSwapBuffers();
 }
 void processNormalKeys(unsigned char key, int x, int y) {
@@ -147,7 +147,9 @@ int main(int argc,char *argv[])
       Equation e(5,6,MAXIMIZE);
       
       Array.push_back(HalfPlane(-2,1,10,true));      
-      Array.push_back(HalfPlane(2,1,20,true));
+      Array.push_back(HalfPlane(1,1,60,true));
+      Array.push_back(HalfPlane(-4,1,60,true));
+      Array.push_back(HalfPlane(-0.5,1,20,false));
       
       optimal=FindOptimalPoint(Array[0],Array,0,e);
       for( int i = 1;i<Array.size();i++)
