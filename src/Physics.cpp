@@ -49,10 +49,22 @@ void Physics::CollisionManager(ShapeList2 &list)
                         float k2 = ( 2* s2->mass)/ (s1->mass + s2->mass);
                         float k3 = ( 2* s1->mass)/ (s1->mass + s2->mass);
                         
-                        Vector v1 = (s1->velocity*k1 + s2->velocity*k2);
-                        Vector v2 = (s1->velocity*k3 - s2->velocity*k1);
-                        s1->velocity = v1*0.95;
-                        s2->velocity = v2*0.95;
+                        Vector dist = s2->origin - s1->origin;
+                        dist = dist/dist.mod();//distance unit vector
+                        
+                        Vector velox1 = dist*(s1->velocity*dist);
+                        Vector velox2 = dist*(s2->velocity*dist);
+                        Vector veloy1 = dist.X(s1->velocity.X(dist));
+                        Vector veloy2 = dist.X(s2->velocity.X(dist));
+                        
+                        veloy1 = veloy1/veloy1.mod();veloy2 = veloy2/veloy2.mod(); //normalize
+                        veloy1 = veloy1*(s1->velocity*veloy1),veloy2 = veloy2*(s2->velocity*veloy2);
+                        
+                        Vector vx1 = (velox1*k1 + velox2*k2);
+                        Vector vx2 = (velox1*k3 - velox2*k1);
+                        
+                        s1->velocity = (vx1+veloy1)*0.95;
+                        s2->velocity = (vx2+veloy2)*0.95;
                         Separate(s1,s2);//seperates shape from  each other ( collision means they are inside each other )
                   }
             }
