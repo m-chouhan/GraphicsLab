@@ -28,6 +28,26 @@ void Physics::GravityManager(ShapeList2 &list)
       }
 }
 
+void Physics::GravityManagerRunge(ShapeList2 &list)
+{
+      for(unsigned int i = 0;i<list.size();++i)
+            RungeApproximation(i,list,0.02);
+}
+
+void Physics::RungeApproximation(int pos,ShapeList2 &list,float tstep)
+{
+      Vector delta;
+      Shape *s = list[pos].first;Vector vi = s->velocity,ri = s->origin;
+      
+      /**/
+      Vector  k1r = vi;                                                 Vector k1v = Acc(pos,list,delta);
+      Vector  k2r = vi.Multiply(k1v*(tstep/2));       Vector k2v = Acc(pos,list,k1r*(tstep/2));
+      Vector  k3r = vi.Multiply(k2v*(tstep/2));       Vector k3v = Acc(pos,list,k2r*(tstep/2));
+      Vector  k4r = vi.Multiply(k1v*tstep);              Vector k4v = Acc(pos,list,k3r*tstep);
+      /**/
+      
+}
+
 void Physics::Separate(Shape *s1,Shape *s2)
 {
       s1->Translate(s1->velocity*0.02f);

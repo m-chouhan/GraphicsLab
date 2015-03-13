@@ -45,10 +45,9 @@ struct Point3D
 	Point3D * Multiply(float Matrix[][4]);
 	Point3D  X(Point3D p1);
       
-      Point3D add(float X,float Y,float Z)
+      Point3D Multiply(const Point3D P)
       {
-            x+=X,y+=Y,z+=Z;
-            return *this;
+            return Point3D(x*P.x,y*P.y,z*P.z);
       }
       
       //~ dot product

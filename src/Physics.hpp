@@ -12,11 +12,26 @@ class Physics{
       public:
       Physics(double g):G(g)  {  }
       
-      Point3D GVector(Shape *s1,Shape *s2)
+      Vector GVector(Shape *s1,Shape *s2)
       {
             Vector r = s2->origin - s1->origin;
             float force = G*s1->mass*s2->mass/(r.mod()*r.mod());
             return (r*force)/r.mod();
+      }
+      
+      Vector Acc(int pos,ShapeList2 &list,Vector delta)
+      {
+            Vector acc;
+            Shape *s1 = list[pos].first;
+            s1->Translate(delta);
+            for(unsigned int i = 0;i<list.size();++i)
+            {
+                  if(i==pos) continue;
+                  Shape *s2 = list[i].first;
+                  acc = acc + GVector(s1,s2)/s1->mass;      
+            }
+            s1->Translate(delta*-1);
+            return acc;
       }
       
       void Separate(Shape *s1,Shape *s2);
@@ -29,8 +44,10 @@ class Physics{
       }
       
       void GravityManager(ShapeList2 &list);
-      void CollisionManager(ShapeList2 &list);
+      void GravityManagerRunge(ShapeList2 &list);
       
+      void CollisionManager(ShapeList2 &list);
+      void RungeApproximation(int pos,ShapeList2 &list,float tstep);
       void Update(ShapeList2 &list)
       {
             GravityManager(list);
