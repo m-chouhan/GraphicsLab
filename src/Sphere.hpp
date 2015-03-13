@@ -15,9 +15,12 @@ class Sphere : public Shape
       Shape::origin;
       public:
       Color col;
+      //~ bool light;
+      
       Sphere() :radius(0) { mass = 0; }
       Sphere(Point3D orig,float rad,float m)       
       {
+            //~ light = l;
             size = radius = rad;
             mass = m;
             origin = orig;
