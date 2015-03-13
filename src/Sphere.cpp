@@ -5,7 +5,7 @@
 #include "Simulator.hpp"
 
 void Sphere::Draw()
-{  Simulator::drawSphere(*this); }
+{  Simulator::drawSphere(origin,radius,col); }
 
 bool Sphere::Collision(Shape &S)
 {

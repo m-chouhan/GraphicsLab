@@ -14,11 +14,11 @@ class Sphere : public Shape
       float radius;
       Shape::origin;
       public:
-      Color col;      
+      Color col;
       Sphere() :radius(0) { mass = 0; }
       Sphere(Point3D orig,float rad,float m)       
       {
-            radius = rad;
+            size = radius = rad;
             mass = m;
             origin = orig;
             col.a =  ((float)(rand()%100))/100;

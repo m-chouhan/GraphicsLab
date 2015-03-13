@@ -25,7 +25,10 @@ class Shape
 {
       public:
       Point3D origin;
-      
+      //~ Color col;      
+       //~ Defines the bounding box for the shape
+       float size; 
+            
       //~ Adding some Dynamics :-D
       float mass;
       Vector acc,velocity;

@@ -21,10 +21,10 @@ int main(int argc, char **argv) {
       ifstream in("planets.txt");
       
       Sphere *s = new Sphere();
-      /*while( in>>(*s) )
+      while( in>>(*s) )
       {
             Point3D origin = s->getOrigin();
-            origin.y = 0;
+            //~ origin.y = 0;
             s->Move(origin);
             Simulator::AddObject( s );
             s = new Sphere();

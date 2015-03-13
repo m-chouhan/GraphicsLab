@@ -27,8 +27,8 @@ class Simulator {
             static void NormalKeyEvent(unsigned char key, int x, int y) ;
             static void SpecialKeyEvent(int key, int x, int y) ;
             static void MouseEvent(int button, int state, int x, int y);
-            static void drawSphere(Sphere &s);
-            static void drawSphere(Point3D P);
+            //~ static void drawSphere(Sphere &s);
+            static void drawSphere(Point3D P,float rad,Color col);
             static void drawCube(Cube &c);
             static void draw2DFrame(void);
             static void StartSimulation(void) 

@@ -44,8 +44,25 @@ void Simulator::RenderScene()
       for(int i = 0;i<World.size();++i)
       {
             World[i].first->Draw();
-            for(int j = 0;j<World[i].second.Q.size();j+=3)
-                  drawSphere(World[i].second.Q[j]);
+            if(  Sphere *s = dynamic_cast<Sphere *>(World[i].first) )
+            {
+                  int size = World[i].second.Q.size();
+                  float radius = s->getRad()*0.7;
+                  Color color = s->col;
+                  color.r = color.r *0.5;
+                  color.g = color.g *0.5;
+                  color.b = color.b*0.5;
+                  
+                  color.r = 0.2;
+                  color.g = 0.2;
+                  color.b = 0.2;
+                  
+                  for(int j = 0;j<size;j+=3)
+                  {
+                        drawSphere(World[i].second.Q[j], j*radius/size,color );
+                        color.r = color.g = color.b = color.r*1.3;
+                  }
+            }
       }
       
       draw2DFrame();
@@ -63,22 +80,22 @@ void Simulator::drawCube(Cube &c)
       glPopMatrix();
 }
 
-void Simulator::drawSphere(Sphere &s)
-{
-      Point3D loc =  s.getOrigin();
-      glPushMatrix();
-      glColor3f(s.col.r,s.col.g,s.col.b);
-      glTranslatef(loc.x,loc.y,loc.z);
-      glutSolidSphere(s.getRad(),30,30);
-      glPopMatrix();
-}
+//~ void Simulator::drawSphere(Sphere &s)
+//~ {
+      //~ Point3D loc =  s.getOrigin();
+      //~ glPushMatrix();
+      //~ glColor3f(s.col.r,s.col.g,s.col.b);
+      //~ glTranslatef(loc.x,loc.y,loc.z);
+      //~ glutSolidSphere(s.getRad(),30,30);
+      //~ glPopMatrix();
+//~ }
 
-void Simulator::drawSphere(Point3D P)
+void Simulator::drawSphere(Point3D P,float rad,Color col)
 {
       glPushMatrix();
-      glColor3f(0.7,0.7,0.7);
+      glColor3f(col.r,col.g,col.b);
       glTranslatef(P.x,P.y,P.z);
-      glutSolidSphere(0.2,20,20);
+      glutSolidSphere(rad,20,20);
       glPopMatrix();
 }
 
