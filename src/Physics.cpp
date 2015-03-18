@@ -1,5 +1,6 @@
 
 #include "Physics.hpp"
+#include <assert.h>
 #include <vector>
 
 void Physics::GravityManager(ShapeList2 &list)
@@ -52,6 +53,22 @@ void Physics::Separate(Shape *s1,Shape *s2)
 {
       s1->Translate(s1->velocity*0.02f);
       s2->Translate(s2->velocity*0.02f);
+      
+      //~ Point3D dist = s2->origin - s1->origin;
+      //~ float size = (s1->size + s2->size);
+      //~ std::cout<<"Separating:\ts1:"<<s1->origin<<"("<<s1->size<<'+'<<s2->size<<")\tFrom s2:"<<s2->origin<<std::endl;
+      //~ 
+      //~ assert (dist.mod() < size );
+       //~ 
+       //~ float mul =  (size )/dist.mod();    
+       //~ assert( mul > 1 );
+       //~ while ( dist.mod() < size )
+            //~ dist = dist*mul;
+      //~ s2->Move(dist+s1->origin);
+      //~ 
+      //~ dist = s2->origin - s1->origin;
+      //~ assert (dist.mod() > size);
+      //float mul
 }
 
 void Physics::CollisionManager(ShapeList2 &list)

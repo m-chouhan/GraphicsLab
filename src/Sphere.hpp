@@ -21,7 +21,7 @@ class Sphere : public Shape
       Sphere(Point3D orig,float rad,float m)       
       {
             //~ light = l;
-            size = radius = rad;
+            Shape::size = radius = rad;
             mass = m;
             origin = orig;
             col.a =  ((float)(rand()%100))/100;
@@ -33,6 +33,7 @@ class Sphere : public Shape
       friend std::ifstream & operator >>(std::ifstream &in,Sphere &S)
       {
             in>>S.origin>>S.radius>>S.mass;
+            S.size = S.radius; 
             in>>S.col;
             return in;
       }
