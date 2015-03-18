@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1200" width="1500">
+
+	<line x1 = "530" y1 = "494" x2 = "660" y2 = "494" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "660" y1 = "494" x2 = "717" y2 = "590" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "717" y1 = "590" x2 = "587" y2 = "590" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "530" y1 = "494" x2 = "587" y2 = "590" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<circle cx = "624" cy = "542" r = "2" stroke = "black" stroke-width = "3" />
+
+	<line x1 = "717" y1 = "590" x2 = "587" y2 = "590" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "587" y1 = "590" x2 = "539" y2 = "705" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "539" y1 = "705" x2 = "669" y2 = "705" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "717" y1 = "590" x2 = "669" y2 = "705" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<circle cx = "628" cy = "648" r = "2" stroke = "black" stroke-width = "3" />
+
+	<line x1 = "530" y1 = "494" x2 = "587" y2 = "590" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "587" y1 = "590" x2 = "539" y2 = "705" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "539" y1 = "705" x2 = "482" y2 = "609" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<line x1 = "530" y1 = "494" x2 = "482" y2 = "609" style="stroke:rgb(255,0,0);stroke-width:2" />
+
+	<circle cx = "535" cy = "600" r = "2" stroke = "black" stroke-width = "3" />
+</svg>
