@@ -7,6 +7,7 @@
 
 Cube::Cube(Point3D orig,int length,int breadth,int depth):length(length),breadth(breadth),depth(depth)
 {	
+      size = std::max(std::max(length,breadth),depth);
       Point3D temp;
       Point3D Points[8];
 
@@ -42,7 +43,6 @@ Cube::Cube(Point3D orig,int length,int breadth,int depth):length(length),breadth
                   Points[0],Points[3],Points[4],Points[5]);		
 }
 
- 
 void Cube::getAbsolutes(Shape &S)
 {
       Cube &c = dynamic_cast<Cube&>(S);
