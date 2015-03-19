@@ -51,24 +51,25 @@ void Physics::RungeApproximation(int pos,ShapeList2 &list,float tstep)
 
 void Physics::Separate(Shape *s1,Shape *s2)
 {
-      s1->Translate(s1->velocity*0.02f);
-      s2->Translate(s2->velocity*0.02f);
+      //~ 
+      Point3D dist = s2->origin - s1->origin;
+      float size = (s1->size + s2->size);
+      std::cout<<"Separating:\ts1:"<<s1->origin<<"("<<s1->size<<'+'<<s2->size<<")\tFrom s2:"<<s2->origin<<std::endl;
       
-      //~ Point3D dist = s2->origin - s1->origin;
-      //~ float size = (s1->size + s2->size);
-      //~ std::cout<<"Separating:\ts1:"<<s1->origin<<"("<<s1->size<<'+'<<s2->size<<")\tFrom s2:"<<s2->origin<<std::endl;
-      //~ 
-      //~ assert (dist.mod() < size );
-       //~ 
-       //~ float mul =  (size )/dist.mod();    
-       //~ assert( mul > 1 );
-       //~ while ( dist.mod() < size )
-            //~ dist = dist*mul;
-      //~ s2->Move(dist+s1->origin);
-      //~ 
-      //~ dist = s2->origin - s1->origin;
-      //~ assert (dist.mod() > size);
-      //float mul
+      assert (dist.mod() < size );
+       
+       float mul =  (size )/dist.mod();    
+       assert( mul > 1 );
+       while ( dist.mod() < size )
+       {
+            dist = dist*mul;
+            s2->Move(dist+s1->origin);
+            dist = s2->origin - s1->origin;
+      }
+      //assert (dist.mod() >= size);
+      //~ s1->Translate(s1->velocity*0.02f);
+      //~ s2->Translate(s2->velocity*0.02f);
+      //~ //float mul
 }
 
 void Physics::CollisionManager(ShapeList2 &list)
@@ -100,8 +101,8 @@ void Physics::CollisionManager(ShapeList2 &list)
                         Vector vx1 = (velox1*k1 + velox2*k2);
                         Vector vx2 = (velox1*k3 - velox2*k1);
                         
-                        s1->velocity = (vx1+veloy1)*0.95;
-                        s2->velocity = (vx2+veloy2)*0.95;
+                        s1->velocity = (vx1+veloy1)*elasticity;
+                        s2->velocity = (vx2+veloy2)*elasticity;
                         Separate(s1,s2);//seperates shape from  each other ( collision means they are inside each other )
                   }
             }

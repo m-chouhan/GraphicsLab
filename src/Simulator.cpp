@@ -8,7 +8,7 @@ int Simulator::Height = 400;
 ShapeList2 Simulator::World;
 
 Point3D Simulator::CamVector(0,10,40);
-Physics Simulator::PhysicsEngine(20);
+Physics Simulator::PhysicsEngine(20,1.1,0.99);
 
 void Simulator::Reshape(int w,int h)
 {

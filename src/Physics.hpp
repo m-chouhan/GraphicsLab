@@ -8,9 +8,10 @@
 
 class Physics{
       
-      double G;
+      //~ G is gravity constant
+      double G,elasticity,drag;
       public:
-      Physics(double g):G(g)  {  }
+      Physics(double g,double e,double d):G(g),elasticity(e),drag(d)  {  }
       
       Vector GVector(Shape *s1,Shape *s2)
       {
@@ -39,7 +40,7 @@ class Physics{
       Vector EulersApproximation(Vector &velo,Vector acc,float Tstep)
       {
             Vector delta = velo*Tstep + acc*Tstep*(Tstep/2);
-            velo = velo + acc*Tstep;
+            velo = (velo + acc*Tstep)*drag;
             return delta;
       }
       
