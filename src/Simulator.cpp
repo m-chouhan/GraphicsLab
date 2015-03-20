@@ -4,6 +4,7 @@
 
 int Simulator::Width = 400;
 int Simulator::Height = 400;
+bool Simulator::Pause = false;
 //~ ShapeList Simulator::World;
 ShapeList2 Simulator::World;
 
@@ -30,7 +31,7 @@ void Simulator::Reshape(int w,int h)
 
 void Simulator::RenderScene()
 {
-      PhysicsEngine.Update(World);
+      if(!Pause) PhysicsEngine.Update(World);
       //Painter.Paint(World);
       //some delay also      
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -121,6 +122,7 @@ void Simulator::NormalKeyEvent(unsigned char key, int x, int y) {
       switch(key)
       {
                   case ' ' :   //CamVector = CamVector*1.02f;
+                                    Pause = !Pause; 
                                     std::cout<<"space";
                                     break;
                   case 'w': 

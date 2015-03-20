@@ -17,6 +17,7 @@ class Simulator {
       
             public:
             static int Width,Height;
+            static bool Pause;
             //static ShapeList World;
             static ShapeList2 World;
             static Point3D CamVector;

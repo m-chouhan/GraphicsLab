@@ -24,8 +24,8 @@ int  main(int argc,char *argv[])
 	if(argc < 6)
       { 
             //c.Rotate(210,30,30);
-            c.Scale(3.2);
-            c = c.Project(Point3D(600,600,100));
+            c.Scale(1.2);
+            c = c.Project(Point3D(600,600,400));
             c.writeHidden("projectHidden.svg");	
       }
       

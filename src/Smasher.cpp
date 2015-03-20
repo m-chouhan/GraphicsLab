@@ -1,5 +1,7 @@
 
 #include "Smasher.hpp"
+#include "Cube.hpp"
+#include "Sphere.hpp"
 
 bool Smasher::Smash(Cube &c1,Rect &r1)
 {
