@@ -32,6 +32,7 @@ class Simulator {
             static void drawSphere(Point3D P,float rad,Color col);
             static void drawCube(Cube &c);
             static void draw2DFrame(void);
+            static void move_light(GLfloat l_position[]);
             static void StartSimulation(void) 
             {     
                   PhysicsEngine.Update(World);

@@ -144,12 +144,12 @@ int main(int argc,char *argv[])
 	glutKeyboardFunc(processNormalKeys);
       //~ glutReshapeFunc(changeSize);
 
-      Equation e(5,6,MAXIMIZE);
+      Equation e(5,6,!MAXIMIZE);
       
       Array.push_back(HalfPlane(-2,1,10,true));      
       Array.push_back(HalfPlane(1,1,60,true));
       Array.push_back(HalfPlane(-4,1,60,true));
-      Array.push_back(HalfPlane(-0.5,1,20,false));
+      Array.push_back(HalfPlane(-0.5,1,20,true));
       
       optimal=FindOptimalPoint(Array[0],Array,0,e);
       for( int i = 1;i<Array.size();i++)

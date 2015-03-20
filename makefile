@@ -1,7 +1,7 @@
 
 CC = g++
 CFLAGS = -g -Wall
-GLUTF = -lglut -l GLU 
+GLUTF = -lglut -lGL -l GLU 
 
 SOURCE = src
 .PHONY : lib

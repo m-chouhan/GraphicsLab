@@ -11,6 +11,15 @@ ShapeList2 Simulator::World;
 Point3D Simulator::CamVector(0,10,40);
 Physics Simulator::PhysicsEngine(20,1.1,0.99);
 
+void Simulator::move_light(GLfloat l_position[])
+{
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLightfv(GL_LIGHT0, GL_POSITION, l_position);
+    glDisable(GL_LIGHTING);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+}
+
 void Simulator::Reshape(int w,int h)
 {
       if (h == 0)
@@ -36,6 +45,8 @@ void Simulator::RenderScene()
       //some delay also      
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Reset transformations
+	float array[4] = { World[3].first->origin.x/10,World[3].first->origin.y/10,-0.5,0.0f};
+    move_light(array);
 	glLoadIdentity();
       
       gluLookAt(	CamVector.x, CamVector.y, CamVector.z,
@@ -174,15 +185,30 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glutInit(&argc, argv);
       glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
       
-      glEnable(GL_COLOR_MATERIAL);
-      glEnable(GL_SMOOTH);
-      glEnable(GL_LIGHTING);
-      glColorMaterial(GL_FRONT,GL_DIFFUSE);
+      
+     // glEnable(GL_SMOOTH);
+      //glEnable(GL_LIGHTING);
+      glColorMaterial(GL_FRONT,GL_AMBIENT);
       
       glutInitWindowPosition(100,100);
       glutInitWindowSize(Width,Height);
       glutCreateWindow("So-lLimunation");
-
+	  GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+	  GLfloat white_light[] = { 0.5, 1.0, 0.3, 1.0 };
+	  GLfloat lmodel_ambient[] = { 0.5, 0.0, 0.0, 1.0 };
+	  glClearColor(0.0, 0.0, 0.0, 0.0);
+	  glEnable(GL_SMOOTH);
+	  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+      glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0);
+      glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5);
+      glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.3);
+      glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
+      glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
+      glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+      glEnable(GL_COLOR_MATERIAL);
+      glEnable(GL_LIGHTING);
+      glEnable(GL_LIGHT0);
+      
       // register callbacks
       glutDisplayFunc(Simulator::RenderScene);
       glutReshapeFunc(Simulator::Reshape);
