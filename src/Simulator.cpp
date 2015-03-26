@@ -8,6 +8,7 @@ int Simulator::Height = 400;
 bool Simulator::Pause = false;
 //~ ShapeList Simulator::World;
 ShapeList2 Simulator::World;
+std::vector<Sphere *> Simulator::Stars;
 
 Point3D Simulator::CamVector(0,10,40);
 Point3D Simulator::LightPos(0,0,05);
@@ -16,11 +17,11 @@ Physics Simulator::PhysicsEngine(20,1.1,0.99);
 void Simulator::move_light(Point3D pos)
 {
       // Create light components 
-      GLfloat ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f }; 
+      GLfloat ambientLight[] = { 0.1f, 0.1f, 0.1f, 1.0f }; 
       GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f }; 
       GLfloat specularLight[] = { 1.5f, 1.5f, 1.5f, 1.0f }; 
       GLfloat position[] = { pos.x, pos.y, pos.z, 1.0f }; 
-      
+      assert(0);
       // Assign created components to GL_LIGHT0 
       glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight); 
       glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight); 
@@ -57,7 +58,9 @@ void Simulator::RenderScene()
       gluLookAt(	CamVector.x, CamVector.y, CamVector.z,
                               0, 0,  0,
                               0.0f, 1.0 ,0.0f);
-
+      
+      ApplyLights();
+      
       for(int i = 0;i<World.size();++i)
       {
             World[i].first->Draw();
@@ -97,36 +100,12 @@ void Simulator::drawCube(Cube &c)
       glPopMatrix();
 }
 
-//~ void Simulator::drawSphere(Sphere &s)
-//~ {
-      //~ Point3D loc =  s.getOrigin();
-      //~ glPushMatrix();
-      //~ glColor3f(s.col.r,s.col.g,s.col.b);
-      //~ glTranslatef(loc.x,loc.y,loc.z);
-      //~ glutSolidSphere(s.getRad(),30,30);
-      //~ glPopMatrix();
-//~ }
-
 void Simulator::drawSphere(Point3D P,float rad,Color col,bool light)
 {
       glPushMatrix();
-
       glColor3f(col.r,col.g,col.b);
       glTranslatef(P.x,P.y,P.z);
-
-      
-      if(light)
-      {
-            //~ Material properties
-            GLfloat emissiveLight[] = { 1.2f, 1.2f, 1.2f}; 
-            move_light(Point3D());
-            glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveLight);
-            glutSolidSphere(rad,20,20);
-            emissiveLight[0] = emissiveLight[1] = emissiveLight[2]  = 0;
-            glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveLight);
-      }
-
-      else glutSolidSphere(rad,20,20);
+      glutSolidSphere(rad,20,20);
       glPopMatrix();
 }
 
@@ -165,10 +144,10 @@ void Simulator::NormalKeyEvent(unsigned char key, int x, int y) {
                                     break;                 
                   case 'w': 
                                     LightPos.z -= 0.1;
-                                    //~ CamVector = CamVector*0.98f;
+                                    CamVector = CamVector*0.98f;
                                     break;
                   case 's':   LightPos.z+=0.1;
-                                    //~ CamVector = CamVector*1.02f;
+                                    CamVector = CamVector*1.02f;
                                     break;                              
                   case'a': case 'd':
                                     std::cout<<"["<<key<<"]";
@@ -216,21 +195,18 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glutInitWindowPosition(100,100);
       glutInitWindowSize(Width,Height);
       glutCreateWindow("So-lLimunation");
-      //~ GLfloat light_position[] = { LightPos.x,LightPos.y, LightPos.z, 1 };
-      //~ GLfloat white_light[] = { 1.5, 1.0, 1.3, 1.0 };
-      //~ GLfloat lmodel_ambient[] = { 0.5, 0.0, 0.0, 1.0 };
-      //~ glClearColor(0.0, 0.0, 0.0, 0.0);
-      //~ glEnable(GL_SMOOTH);
-      //~ glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-      //~ glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0);
-      //~ glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5);
-      //~ glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.3);
-      //~ glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
-      //~ glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
-      //~ glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+
       glEnable(GL_LIGHTING);
+      /*Enable All 8 lights*/
       glEnable(GL_LIGHT0);      
       glEnable(GL_LIGHT1);      
+      glEnable(GL_LIGHT2);      
+      glEnable(GL_LIGHT3);      
+      glEnable(GL_LIGHT4);      
+      glEnable(GL_LIGHT5);      
+      glEnable(GL_LIGHT6);      
+      glEnable(GL_LIGHT7);
+            
       glEnable(GL_NORMALIZE);
       glEnable(GL_SMOOTH);
       glEnable(GL_COLOR_MATERIAL);
@@ -244,8 +220,6 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glMateriali(GL_FRONT, GL_SHININESS, 52);
       //~ GLfloat ambientColor[] = {1.2f, 1.2f, 1.2f, 1.0f}; //Color(0.2, 0.2, 0.2)
       //~ glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-      //~ float mcolor[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-      //~ glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mcolor);
       
       // register callbacks
       glutDisplayFunc(Simulator::RenderScene);
