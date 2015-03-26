@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <assert.h>
 #include "Simulator.hpp"
 
 int Simulator::Width = 400;
@@ -9,15 +10,22 @@ bool Simulator::Pause = false;
 ShapeList2 Simulator::World;
 
 Point3D Simulator::CamVector(0,10,40);
+Point3D Simulator::LightPos(0,0,05);
 Physics Simulator::PhysicsEngine(20,1.1,0.99);
 
-void Simulator::move_light(GLfloat l_position[])
+void Simulator::move_light(Point3D pos)
 {
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLightfv(GL_LIGHT0, GL_POSITION, l_position);
-    glDisable(GL_LIGHTING);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+      // Create light components 
+      GLfloat ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f }; 
+      GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f }; 
+      GLfloat specularLight[] = { 1.5f, 1.5f, 1.5f, 1.0f }; 
+      GLfloat position[] = { pos.x, pos.y, pos.z, 1.0f }; 
+      
+      // Assign created components to GL_LIGHT0 
+      glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight); 
+      glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight); 
+      glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight); 
+      glLightfv(GL_LIGHT0, GL_POSITION, position);
 }
 
 void Simulator::Reshape(int w,int h)
@@ -41,12 +49,9 @@ void Simulator::Reshape(int w,int h)
 void Simulator::RenderScene()
 {
       if(!Pause) PhysicsEngine.Update(World);
-      //Painter.Paint(World);
-      //some delay also      
+      
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Reset transformations
-	float array[4] = { World[3].first->origin.x/10,World[3].first->origin.y/10,-0.5,0.0f};
-    move_light(array);
 	glLoadIdentity();
       
       gluLookAt(	CamVector.x, CamVector.y, CamVector.z,
@@ -69,7 +74,7 @@ void Simulator::RenderScene()
                   color.g = 0.2;
                   color.b = 0.2;
                   
-                  for(int j = 0;j<size;j+=3)
+                  for(int j = 0;j<size;j+=1)
                   {
                         drawSphere(World[i].second.Q[j], j*radius/size,color );
                         color.r = color.g = color.b = color.r*1.3;
@@ -102,11 +107,19 @@ void Simulator::drawCube(Cube &c)
       //~ glPopMatrix();
 //~ }
 
-void Simulator::drawSphere(Point3D P,float rad,Color col)
+void Simulator::drawSphere(Point3D P,float rad,Color col,bool light)
 {
       glPushMatrix();
+
       glColor3f(col.r,col.g,col.b);
       glTranslatef(P.x,P.y,P.z);
+      
+      if(light)
+      {
+            //~ Material properties
+            move_light(Point3D());
+      }
+
       glutSolidSphere(rad,20,20);
       glPopMatrix();
 }
@@ -136,11 +149,20 @@ void Simulator::NormalKeyEvent(unsigned char key, int x, int y) {
                                     Pause = !Pause; 
                                     std::cout<<"space";
                                     break;
-                  case 'w': 
-                                    CamVector = CamVector*0.98f;
+                  case  'i':   LightPos.x+=0.1;
                                     break;
-                  case 's':
-                                    CamVector = CamVector*1.02f;
+                  case 'j':   LightPos.y+=0.1;
+                                    break;
+                  case 'k':   LightPos.x-=0.1;
+                                    break;
+                  case 'l':     LightPos.y-=0.1;
+                                    break;                 
+                  case 'w': 
+                                    LightPos.z -= 0.1;
+                                    //~ CamVector = CamVector*0.98f;
+                                    break;
+                  case 's':   LightPos.z+=0.1;
+                                    //~ CamVector = CamVector*1.02f;
                                     break;                              
                   case'a': case 'd':
                                     std::cout<<"["<<key<<"]";
@@ -185,36 +207,45 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glutInit(&argc, argv);
       glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
       
-      
-     // glEnable(GL_SMOOTH);
-      //glEnable(GL_LIGHTING);
-      glColorMaterial(GL_FRONT,GL_AMBIENT);
-      
       glutInitWindowPosition(100,100);
       glutInitWindowSize(Width,Height);
       glutCreateWindow("So-lLimunation");
-	  GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
-	  GLfloat white_light[] = { 0.5, 1.0, 0.3, 1.0 };
-	  GLfloat lmodel_ambient[] = { 0.5, 0.0, 0.0, 1.0 };
-	  glClearColor(0.0, 0.0, 0.0, 0.0);
-	  glEnable(GL_SMOOTH);
-	  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-      glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0);
-      glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5);
-      glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.3);
-      glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
-      glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
-      glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
-      glEnable(GL_COLOR_MATERIAL);
+      //~ GLfloat light_position[] = { LightPos.x,LightPos.y, LightPos.z, 1 };
+      //~ GLfloat white_light[] = { 1.5, 1.0, 1.3, 1.0 };
+      //~ GLfloat lmodel_ambient[] = { 0.5, 0.0, 0.0, 1.0 };
+      //~ glClearColor(0.0, 0.0, 0.0, 0.0);
+      //~ glEnable(GL_SMOOTH);
+      //~ glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+      //~ glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0);
+      //~ glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5);
+      //~ glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.3);
+      //~ glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
+      //~ glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
+      //~ glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
       glEnable(GL_LIGHTING);
-      glEnable(GL_LIGHT0);
+      glEnable(GL_LIGHT0);      
+      glEnable(GL_LIGHT1);      
+      glEnable(GL_NORMALIZE);
+      glEnable(GL_SMOOTH);
+      glEnable(GL_COLOR_MATERIAL);
+      //glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+      float spec[4] = { 0.75, 0.75, 0.75, 1 };
+      float diff[4] = { 0.75, 0.75, 0, 1 };
+      glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
+      glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, diff);
+
+      glMateriali(GL_FRONT, GL_SHININESS, 92);
+      //~ GLfloat ambientColor[] = {1.2f, 1.2f, 1.2f, 1.0f}; //Color(0.2, 0.2, 0.2)
+      //~ glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+      //~ float mcolor[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+      //~ glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mcolor);
       
       // register callbacks
       glutDisplayFunc(Simulator::RenderScene);
       glutReshapeFunc(Simulator::Reshape);
       glutIdleFunc(Simulator::RenderScene);
 
-      // here are the new entries
       glutKeyboardFunc(Simulator::NormalKeyEvent);
       glutSpecialFunc(Simulator::SpecialKeyEvent);
       glutMouseFunc(Simulator::MouseEvent);

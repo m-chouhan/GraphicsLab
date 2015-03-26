@@ -11,13 +11,14 @@ using namespace std;
 int main(int argc, char **argv) {
             
       Simulator::SimulatorInit(argc,argv,600,600);
-      Sphere S( Point3D(0.0,0.0,0),3.2,60 ) ,S2( Point3D(-10,0,10) , 1.2,20);
-      Sphere S3( Point3D(10,0,10), 2,30);
+      Sphere S( Point3D(0.0,0.0,0),3.2,60) ,S2( Point3D(-10,0,10) , 1.2,20);
+      Sphere S3( Point3D(0,0,10), 2,30,true);
 
       Simulator::AddObject( &S);
       Simulator::AddObject( &S2);
-      //~ Simulator::AddObject( &S3);
+      Simulator::AddObject( &S3);
       S2.velocity = Point3D(-1.1,0,5);
+      S3.velocity = Point3D( 1,1,1 );
       ifstream in("planets.txt");
       
       Sphere *s = new Sphere();

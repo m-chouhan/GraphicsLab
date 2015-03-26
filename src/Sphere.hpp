@@ -15,12 +15,12 @@ class Sphere : public Shape
       Shape::origin;
       public:
       Color col;
-      //~ bool light;
+      bool light;
       
       Sphere() :radius(0) { mass = 0; }
-      Sphere(Point3D orig,float rad,float m)       
+      Sphere(Point3D orig,float rad,float m,bool l = false)       
       {
-            //~ light = l;
+            light = l;
             Shape::size = radius = rad;
             mass = m;
             origin = orig;
@@ -32,6 +32,7 @@ class Sphere : public Shape
       
       friend std::ifstream & operator >>(std::ifstream &in,Sphere &S)
       {
+            S.light = false;
             in>>S.origin>>S.radius>>S.mass;
             S.size = S.radius; 
             in>>S.col;

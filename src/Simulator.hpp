@@ -21,6 +21,7 @@ class Simulator {
             //static ShapeList World;
             static ShapeList2 World;
             static Point3D CamVector;
+            static Point3D LightPos;
             static Physics PhysicsEngine;
             
             static void Reshape(int w, int h) ;
@@ -29,10 +30,10 @@ class Simulator {
             static void SpecialKeyEvent(int key, int x, int y) ;
             static void MouseEvent(int button, int state, int x, int y);
             //~ static void drawSphere(Sphere &s);
-            static void drawSphere(Point3D P,float rad,Color col);
+            static void drawSphere(Point3D P,float rad,Color col,bool light=false);
             static void drawCube(Cube &c);
             static void draw2DFrame(void);
-            static void move_light(GLfloat l_position[]);
+            static void move_light(Point3D pos);
             static void StartSimulation(void) 
             {     
                   PhysicsEngine.Update(World);
@@ -41,7 +42,7 @@ class Simulator {
             }
             static void AddObject(Shape *s)
             {
-                  World.push_back(std::make_pair(s,FifoQ(20)));
+                  World.push_back(std::make_pair(s,FifoQ(15)));
             }
             static void SimulatorInit(int argc, char *argv[],int W,int H);
 };            
