@@ -113,14 +113,20 @@ void Simulator::drawSphere(Point3D P,float rad,Color col,bool light)
 
       glColor3f(col.r,col.g,col.b);
       glTranslatef(P.x,P.y,P.z);
+
       
       if(light)
       {
             //~ Material properties
+            GLfloat emissiveLight[] = { 1.2f, 1.2f, 1.2f}; 
             move_light(Point3D());
+            glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveLight);
+            glutSolidSphere(rad,20,20);
+            emissiveLight[0] = emissiveLight[1] = emissiveLight[2]  = 0;
+            glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveLight);
       }
 
-      glutSolidSphere(rad,20,20);
+      else glutSolidSphere(rad,20,20);
       glPopMatrix();
 }
 
@@ -235,7 +241,7 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
       glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, diff);
 
-      glMateriali(GL_FRONT, GL_SHININESS, 92);
+      glMateriali(GL_FRONT, GL_SHININESS, 52);
       //~ GLfloat ambientColor[] = {1.2f, 1.2f, 1.2f, 1.0f}; //Color(0.2, 0.2, 0.2)
       //~ glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
       //~ float mcolor[] = { 1.0f, 0.0f, 0.0f, 1.0f };
