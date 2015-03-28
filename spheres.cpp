@@ -11,13 +11,13 @@ using namespace std;
 int main(int argc, char **argv) {
             
       Simulator::SimulatorInit(argc,argv,600,600);
-      Sphere S( Point3D(0.0,0.0,0),10.2,60) ,S2( Point3D(-10,40,20) , 1.2,20,false);
-      Sphere S3( Point3D(30,0,50), 2,30,false);
-      Sphere S4( Point3D(0,-35,-1), 2.5,40,false);
-      Sphere S5( Point3D(-55,-35,-1), 12.5,40,false);
-      Sphere S6( Point3D(55,-35,-100), 8.5,40,false);
+      Sphere S( Point3D(0.0,0.0,0),10.2) ,S2( Point3D(-10,40,20) , 1.2);
+      Sphere S3( Point3D(30,0,50), 5);
+      Sphere S4( Point3D(0,-35,-1), 2.5);
+      Sphere S5( Point3D(-55,-35,-1), 12.5);
+      Sphere S6( Point3D(55,-35,-100), 8.5);
       
-      //S.velocity = Point3D( -7,5,1 );
+      S.velocity = Point3D( -7,5,1 );
 
       Simulator::AddObject( &S);
       Simulator::AddObject( &S5);
@@ -40,9 +40,6 @@ int main(int argc, char **argv) {
       Sphere *s = new Sphere();
       while( in>>(*s) )
       {
-            Point3D origin = s->getOrigin();
-            origin.y = 0;
-            s->Move(origin);
             Simulator::AddObject( s ,Moon);
             //~ Simulator::AddLighSource( s );      
             s = new Sphere();

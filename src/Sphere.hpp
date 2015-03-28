@@ -28,26 +28,28 @@ class Sphere : public Shape
             Quad = 0;
             xdeg = ydeg = zdeg = mass = 0; 
       }
-      Sphere(Point3D orig,float rad,float m,bool l = false)       
+      Sphere(Point3D orig,float rad,float m = 0,bool l = false)       
       {
             light = l;
             Quad = 0;TextureID = 0;
             Shape::size = radius = rad;
-            mass = m;
+            if(m  == 0)             
+                  mass = 10*radius*radius*radius;
+            else mass = m;
+            
             origin = orig;
             col.a =  ((float)(rand()%100))/100;
             col.r =  ((float)(rand()%100))/100;
             col.g =  ((float)(rand()%100))/100; 
             col.b =  ((float)(rand()%100))/100;
-            mass = 10*radius*radius;
       }
       
       friend std::ifstream & operator >>(std::ifstream &in,Sphere &S)
       {
-            in>>S.origin>>S.radius>>S.mass;
+            in>>S.origin>>S.radius;
             S.size = S.radius; 
             in>>S.col;
-            S.mass = 10*S.radius*S.radius;
+            S.mass = 10*S.radius*S.radius*S.radius;
             return in;
       }
       //don't need complicated stuff here :P 

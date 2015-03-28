@@ -78,10 +78,15 @@ void Physics::CollisionManager(ShapeList2 &list)
       {
             Shape *s1 = list[i].first;
             Point3D dist = s1->getOrigin();
-            if(dist.mod() > WorldSize )
+            if( dist.mod()+s1->size > WorldSize )
             {
-                  s1->velocity = s1->velocity*-elasticity;
-                  s1->Move( dist*((WorldSize-1)/dist.mod() ) );
+                  //s1->velocity = s1->velocity*-elasticity;
+                  s1->Move( dist*((WorldSize-1)/(dist.mod() + s1->size) ) );
+                  dist = dist/dist.mod();//distance unit vector
+                  Vector velox1 = dist*(s1->velocity*dist);
+                  Vector veloy1 = dist.X(s1->velocity.X(dist));
+                  veloy1 = veloy1/veloy1.mod();
+                  s1->velocity = (veloy1 - velox1)*0.8;                        
             }
             for(int j = i+1;j<list.size();++j)
             {

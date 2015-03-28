@@ -19,7 +19,7 @@ glplay: glplay.cpp
 	${CC} ${CFLAGS} glplay.cpp ${GLUTF} -o glplay
 snowman: snowman.cpp
 	${CC} ${CFLAGS} snowman.cpp ${GLUTF} -o snowman
-spheres:spheres.cpp src/*.cpp	
+spheres:spheres.cpp src/*.cpp src/*.hpp src/*.h	
 	${CC} ${CFLAGS} spheres.cpp src/*.o ${GLUTF} -o spheres
 clean:
 	rm src/*.o
