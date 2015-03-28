@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <stdlib.h>
+#include <GL/glut.h>
 
 #include "Point3D.h"
 #include "Shape.h"
@@ -14,13 +15,23 @@ class Sphere : public Shape
       float radius;
       Shape::origin;
       public:
+      
       Color col;
       bool light;
+      int TextureID; //Texture Id for this sphere
+      GLUquadric *Quad;
+
+      int xdeg,ydeg,zdeg; //rotation along 3 axis
       
-      Sphere() :radius(0) { mass = 0; }
+      Sphere() :radius(0),TextureID(0),light(false) 
+      { 
+            Quad = 0;
+            xdeg = ydeg = zdeg = mass = 0; 
+      }
       Sphere(Point3D orig,float rad,float m,bool l = false)       
       {
             light = l;
+            Quad = 0;TextureID = 0;
             Shape::size = radius = rad;
             mass = m;
             origin = orig;
@@ -32,7 +43,6 @@ class Sphere : public Shape
       
       friend std::ifstream & operator >>(std::ifstream &in,Sphere &S)
       {
-            S.light = false;
             in>>S.origin>>S.radius>>S.mass;
             S.size = S.radius; 
             in>>S.col;

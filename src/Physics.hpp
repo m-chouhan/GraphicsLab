@@ -10,8 +10,9 @@ class Physics{
       
       //~ G is gravity constant
       double G,elasticity,drag;
+      int WorldSize;
       public:
-      Physics(double g,double e,double d):G(g),elasticity(e),drag(d)  {  }
+      Physics(double g,double e,double d,int size):G(g),elasticity(e),drag(d),WorldSize(size)  {  }
       
       Vector GVector(Shape *s1,Shape *s2)
       {

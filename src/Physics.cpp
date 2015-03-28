@@ -76,9 +76,16 @@ void Physics::CollisionManager(ShapeList2 &list)
 {
       for(int i = 0;i<list.size();++i)
       {
+            Shape *s1 = list[i].first;
+            Point3D dist = s1->getOrigin();
+            if(dist.mod() > WorldSize )
+            {
+                  s1->velocity = s1->velocity*-elasticity;
+                  s1->Move( dist*((WorldSize-1)/dist.mod() ) );
+            }
             for(int j = i+1;j<list.size();++j)
             {
-                  Shape *s1 = list[i].first,*s2 = list[j].first;
+                  Shape *s2 = list[j].first;
                   if( s1->Collision(*s2))
                   {
                         //~ reset pos and velocites ( note that acc will be same )

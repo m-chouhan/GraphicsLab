@@ -1,5 +1,4 @@
 
-#include <GL/glut.h>
 
 #include "Sphere.hpp"
 #include "Smasher.hpp"
@@ -8,25 +7,32 @@
 
 void Sphere::Draw()
 {  
-      //~ Simulator::drawSphere(origin,radius,col,light); 
+      //Simulator::drawSphere(origin,radius,col,light); 
       glPushMatrix();
 
       glColor3f(col.r,col.g,col.b);
       glTranslatef(origin.x,origin.y,origin.z);
       
+      glBindTexture(GL_TEXTURE_2D, TextureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      gluQuadricTexture(Quad,GLU_TRUE);
+
       if(light)
       {
             //~ Material properties
-            GLfloat emissiveLight[] = { 1.2f, 0.6f, 0.f}; 
-            //Simulator::move_light(Point3D());
+            GLfloat emissiveLight[] = { 2.4f, 1.2f, 0.f}; 
             glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveLight);
-            glutSolidSphere(radius,20,20);
+            //~ glutSolidSphere(radius,20,20);
+            gluSphere(Quad,radius,20,20);
+
             emissiveLight[0] = emissiveLight[1] = emissiveLight[2]  = 0;
             glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveLight);
       }
 
-      else glutSolidSphere(radius,20,20);
-      glPopMatrix();
+      else gluSphere(Quad,radius,20,20);
+      //~  glutSolidSphere(radius,20,20);
+      glPopMatrix(); /**/
 }
 
 bool Sphere::Collision(Shape &S)

@@ -5,14 +5,19 @@
 
 int Simulator::Width = 400;
 int Simulator::Height = 400;
-bool Simulator::Pause = false;
+int Simulator::WorldSize = 50;
+bool Simulator::Pause = true;
+GLuint Simulator::TextureIds[15]; //The id of the textur
+
+GLUquadric *Simulator:: quad;
+
 //~ ShapeList Simulator::World;
 ShapeList2 Simulator::World;
 std::vector<Sphere *> Simulator::Stars;
 
 Point3D Simulator::CamVector(0,10,40);
 Point3D Simulator::LightPos(0,0,05);
-Physics Simulator::PhysicsEngine(20,1.1,0.99);
+Physics Simulator::PhysicsEngine(20,1.1,0.99,Simulator::WorldSize);
 
 void Simulator::move_light(Point3D pos)
 {
@@ -42,7 +47,7 @@ void Simulator::Reshape(int w,int h)
       // Set the viewport to be the entire window
       glViewport(0, 0, w, h);
       // Set the correct perspective.
-      gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+      gluPerspective(45.0f, ratio, 0.1f, 600.0f);
       // Get Back to the Modelview
       glMatrixMode(GL_MODELVIEW);
 }
@@ -67,7 +72,7 @@ void Simulator::RenderScene()
             if(  Sphere *s = dynamic_cast<Sphere *>(World[i].first) )
             {
                   int size = World[i].second.Q.size();
-                  float radius = s->getRad()*0.7;
+                  float radius = s->getRad()*0.65;
                   Color color = s->col;
                   color.r = color.r *0.5;
                   color.g = color.g *0.5;
@@ -76,7 +81,7 @@ void Simulator::RenderScene()
                   color.r = 0.2;
                   color.g = 0.2;
                   color.b = 0.2;
-                  
+                  /**/
                   for(int j = 0;j<size;j+=1)
                   {
                         drawSphere(World[i].second.Q[j], j*radius/size,color );
@@ -85,12 +90,26 @@ void Simulator::RenderScene()
             }
       }
       
-      draw2DFrame();
-      glRotatef(90, 1.0f, 0.0f, 0.0f);
-      draw2DFrame();
+      glColor3f(0.7,0.7,0.7);      
+      glutWireSphere(WorldSize,30,30);
+      
+      glBindTexture(GL_TEXTURE_2D, TextureIds[Background]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+      gluQuadricTexture(quad,GLU_TRUE);
+
+      gluSphere(quad,WorldSize+350,20,20);
+
+      //~ draw2DFrame();
+      //~ glRotatef(90, 1.0f, 0.0f, 0.0f);
+      //~ draw2DFrame();
 
       glEnable(GL_DEPTH_TEST);
 	glutSwapBuffers();
+      /**/ 
 }
 
 void Simulator::drawCube(Cube &c)
@@ -105,7 +124,10 @@ void Simulator::drawSphere(Point3D P,float rad,Color col,bool light)
       glPushMatrix();
       glColor3f(col.r,col.g,col.b);
       glTranslatef(P.x,P.y,P.z);
-      glutSolidSphere(rad,20,20);
+      
+      //~ gluQuadricTexture(quad,GLU_TRUE);
+      //~ gluSphere(quad,rad,20,20);
+      glutSolidSphere(rad,5,5);
       glPopMatrix();
 }
 
@@ -127,7 +149,6 @@ void Simulator::draw2DFrame()
 void Simulator::NormalKeyEvent(unsigned char key, int x, int y) {
       
 	if (key == 27) exit(0);
-      //std::cout<<"["<<key<<"]";
       switch(key)
       {
                   case ' ' :   //CamVector = CamVector*1.02f;
@@ -195,8 +216,47 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glutInitWindowPosition(100,100);
       glutInitWindowSize(Width,Height);
       glutCreateWindow("So-lLimunation");
+      
+      glEnable(GL_DEPTH_TEST);
+	quad = gluNewQuadric();
+      gluQuadricTexture(quad,GLU_TRUE);
 
+	Image* image = loadBMP("sun1.bmp");
+	TextureIds[Sun] = loadTexture(image);
+      delete image;
+      image = loadBMP("earth.bmp");
+      TextureIds[Earth] = loadTexture(image);
+      delete image;
+      image = loadBMP("earth.bmp");
+      TextureIds[Earth] = loadTexture(image);
+      delete image;
+      //~ image = loadBMP("earth2.bmp");
+      //~ TextureIds[Earth2] = loadTexture(image);
+      //~ delete image;
+      image = loadBMP("earth3.bmp");
+      TextureIds[Earth3] = loadTexture(image);
+      delete image;
+      //~ image = loadBMP("earth4.bmp");
+      //~ TextureIds[Earth4] = loadTexture(image);
+      //~ delete image;
+      //~ image = loadBMP("mars1.bmp");
+      //~ TextureIds[Mars] = loadTexture(image);
+      //~ delete image;
+      image = loadBMP("saturn.bmp");
+      TextureIds[Moon] = loadTexture(image);
+      delete image;
+      image = loadBMP("neptune.bmp");
+      TextureIds[Neptune] = loadTexture(image);
+      delete image;
+      image = loadBMP("background.bmp");
+      TextureIds[Background] = loadTexture(image);
+      delete image;
+      
+	glEnable(GL_TEXTURE_2D);
+
+      
       glEnable(GL_LIGHTING);
+      
       /*Enable All 8 lights*/
       glEnable(GL_LIGHT0);      
       glEnable(GL_LIGHT1);      
@@ -217,7 +277,7 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
       glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, diff);
 
-      glMateriali(GL_FRONT, GL_SHININESS, 52);
+      glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, 28);
       //~ GLfloat ambientColor[] = {1.2f, 1.2f, 1.2f, 1.0f}; //Color(0.2, 0.2, 0.2)
       //~ glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
       
@@ -229,4 +289,21 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glutKeyboardFunc(Simulator::NormalKeyEvent);
       glutSpecialFunc(Simulator::SpecialKeyEvent);
       glutMouseFunc(Simulator::MouseEvent);
+}
+
+GLuint Simulator::loadTexture(Image* image) {
+	GLuint textureId;
+	glGenTextures(1, &textureId); //Make room for our texture
+	glBindTexture(GL_TEXTURE_2D, textureId); //Tell OpenGL which texture to edit
+	//Map the image to the texture
+	glTexImage2D(GL_TEXTURE_2D,                //Always GL_TEXTURE_2D
+				 0,                            //0 for now
+				 GL_RGB,                       //Format OpenGL uses for image
+				 image->width, image->height,  //Width and height
+				 0,                            //The border of the image
+				 GL_RGB, //GL_RGB, because pixels are stored in RGB format
+				 GL_UNSIGNED_BYTE, //GL_UNSIGNED_BYTE, because pixels are stored
+				                   //as unsigned numbers
+				 image->pixels);               //The actual pixel data
+	return textureId; //Returns the id of the texture
 }
