@@ -5,7 +5,7 @@
 
 int Simulator::Width = 400;
 int Simulator::Height = 400;
-int Simulator::WorldSize = 50;
+int Simulator::WorldSize = 200;
 bool Simulator::Pause = true;
 GLuint Simulator::TextureIds[15]; //The id of the textur
 
@@ -17,7 +17,7 @@ std::vector<Sphere *> Simulator::Stars;
 
 Point3D Simulator::CamVector(0,10,40);
 Point3D Simulator::LightPos(0,0,05);
-Physics Simulator::PhysicsEngine(20,1.1,0.99,Simulator::WorldSize);
+Physics Simulator::PhysicsEngine(20,1.1,0.995,Simulator::WorldSize);
 
 void Simulator::move_light(Point3D pos)
 {
@@ -47,7 +47,7 @@ void Simulator::Reshape(int w,int h)
       // Set the viewport to be the entire window
       glViewport(0, 0, w, h);
       // Set the correct perspective.
-      gluPerspective(45.0f, ratio, 0.1f, 600.0f);
+      gluPerspective(45.0f, ratio, 0.1f, 1200.0f);
       // Get Back to the Modelview
       glMatrixMode(GL_MODELVIEW);
 }

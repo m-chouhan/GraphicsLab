@@ -39,6 +39,7 @@ class Sphere : public Shape
             col.r =  ((float)(rand()%100))/100;
             col.g =  ((float)(rand()%100))/100; 
             col.b =  ((float)(rand()%100))/100;
+            mass = 10*radius*radius;
       }
       
       friend std::ifstream & operator >>(std::ifstream &in,Sphere &S)
@@ -46,6 +47,7 @@ class Sphere : public Shape
             in>>S.origin>>S.radius>>S.mass;
             S.size = S.radius; 
             in>>S.col;
+            S.mass = 10*S.radius*S.radius;
             return in;
       }
       //don't need complicated stuff here :P 
