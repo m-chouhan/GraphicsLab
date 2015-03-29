@@ -3,11 +3,24 @@
  * Author: Mahendra Chouhan (14CS60R12)
  * */
 #include "graphics.h"
+#include "Sphere.hpp"
 
 std::ifstream & operator >>(std::ifstream &in,Color &C)
 {
-      in>>C.a>>C.r>>C.g>>C.b;
+       in>>C.a>>C.r>>C.g>>C.b;
       return in;
+}
+Point3D uniformDistr(int Range)
+{
+      int r = 2*Range;
+      Point3D p(Range,Range,Range);
+      while( p.mod() > Range)
+      {
+            p.x = rand() % r - Range;
+            p.y = rand() % r - Range;
+            p.z = rand() % r - Range;
+      }
+      return p;
 }
 
 Point3D getGaussianDistri(float sigX,float sigY,Point2D mean)
@@ -48,6 +61,15 @@ bool CheckCollision(std::vector<Cube> &world,Cube C,std::vector<Cube> &conflicts
       }
       return flag;
 }
+bool CheckCollision(ShapeList2 &world,class Sphere *s)
+{
+      for(int i = 0;i<world.size();++i)
+      {
+                  if(world[i].first->Collision(*s)) return true;
+      }
+      return false;
+}
+
 //@conflicts contain absolute values
 Point2D HandleCollision(std::vector<Cube> &world,Cube C,std::vector<Cube> &conflicts)
 {

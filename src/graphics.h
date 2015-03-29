@@ -47,8 +47,10 @@ typedef std::vector<element> ShapeList2;
 std::ifstream & operator >>(std::ifstream &in,Color &C);
 
 Point3D getGaussianDistri(float sigX,float sigY,Point2D mean);
+Point3D uniformDistr(int range);
 //conflicts contain objects in world colliding with C 
 bool CheckCollision(std::vector<Cube> &world,Cube C,std::vector<Cube> &conflicts);
+bool CheckCollision(ShapeList2 &world,class Sphere *s);
 //@conflicts contain absolute values
 Point2D HandleCollision(std::vector<Cube> &world,Cube C,std::vector<Cube> &conflicts);
 

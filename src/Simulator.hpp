@@ -43,6 +43,8 @@ class Simulator {
             
             static void StartSimulation(void) 
             {     
+                  PhysicsEngine.CollisionManager(World);
+                  std::cout<<"\n\n\n";
                   PhysicsEngine.Update(World);
                   //~ Init Dynamics Values
                   glutMainLoop(); 
@@ -51,7 +53,8 @@ class Simulator {
             {
                   s->TextureID = TextureIds[id];
                   s->Quad = quad;
-                  World.push_back(std::make_pair(s,FifoQ(10)));
+                  World.push_back(std::make_pair(s,FifoQ(14)));
+                  //~ PhysicsEngine.CollisionManager(World);
             }
             static void AddLighSource(Sphere *s)
             {
@@ -68,7 +71,7 @@ class Simulator {
                   GLfloat diffuseLight[] = { diffuse, diffuse, diffuse, 1.0f }; 
                   GLfloat specularLight[] = { spec, spec, spec, 1.0f }; 
 
-                  for(int i = 0;i<Stars.size();++i)
+                  for(unsigned int i = 0;i<Stars.size();++i)
                   {
                         Point3D pos = Stars[i]->getOrigin();
                         GLfloat position[] = { pos.x, pos.y, pos.z, 1.0f }; 

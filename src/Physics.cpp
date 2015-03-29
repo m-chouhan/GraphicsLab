@@ -16,6 +16,7 @@ void Physics::GravityManager(ShapeList2 &list)
                   Vector force = GVector(s1,s2);
                   s1->acc = s1->acc + force/s1->mass;
                   s2->acc = s2->acc + (force/s2->mass)*-1;
+                  std::cout<<( s1->acc.x != s1->acc.x && s2->acc.x != s2->acc.x )<<"\n";
             }
       }
       
@@ -24,7 +25,9 @@ void Physics::GravityManager(ShapeList2 &list)
       for(int i = 0;i<list.size();++i)   
       {
             Vector delta  = EulersApproximation(list[i].first->velocity,list[i].first->acc,0.02);
+            std::cout<<"Prev  "<<i<<"="<<list[i].first->origin<<"\t"<<"delta:"<<delta<<":"<<list[i].first->velocity<<":"<<list[i].first->acc;
             list[i].first->Translate(delta);
+            std::cout<<"\tNew value ="<<list[i].first->origin<<"\n";
             //~ RungeKutta();
       }
 }
@@ -78,16 +81,17 @@ void Physics::CollisionManager(ShapeList2 &list)
       {
             Shape *s1 = list[i].first;
             Point3D dist = s1->getOrigin();
+            //~ Collision with Frame
             if( dist.mod()+s1->size > WorldSize )
             {
-                  //s1->velocity = s1->velocity*-elasticity;
                   s1->Move( dist*((WorldSize-1)/(dist.mod() + s1->size) ) );
                   dist = dist/dist.mod();//distance unit vector
                   Vector velox1 = dist*(s1->velocity*dist);
                   Vector veloy1 = dist.X(s1->velocity.X(dist));
                   veloy1 = veloy1/veloy1.mod();
-                  s1->velocity = (veloy1 - velox1)*0.8;                        
+                  s1->velocity = (veloy1 - velox1)*0.5;                        
             }
+            //~ Collision with objects
             for(int j = i+1;j<list.size();++j)
             {
                   Shape *s2 = list[j].first;
@@ -113,8 +117,10 @@ void Physics::CollisionManager(ShapeList2 &list)
                         Vector vx1 = (velox1*k1 + velox2*k2);
                         Vector vx2 = (velox1*k3 - velox2*k1);
                         
-                        s1->velocity = (vx1+veloy1)*elasticity;
-                        s2->velocity = (vx2+veloy2)*elasticity;
+                        veloy1 = veloy1*elasticity;veloy2 = veloy2*elasticity;
+                        
+                        s1->velocity = (vx1*0.9+veloy1);
+                        s2->velocity = (vx2*0.9+veloy2);
                         Separate(s1,s2);//seperates shape from  each other ( collision means they are inside each other )
                   }
             }

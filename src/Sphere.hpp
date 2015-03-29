@@ -27,6 +27,11 @@ class Sphere : public Shape
       { 
             Quad = 0;
             xdeg = ydeg = zdeg = mass = 0; 
+            
+            col.a =  ((float)(rand()%100))/100;
+            col.r =  ((float)(rand()%100))/100;
+            col.g =  ((float)(rand()%100))/100; 
+            col.b =  ((float)(rand()%100))/100;
       }
       Sphere(Point3D orig,float rad,float m = 0,bool l = false)       
       {
@@ -48,6 +53,7 @@ class Sphere : public Shape
       {
             in>>S.origin>>S.radius;
             S.size = S.radius; 
+            
             in>>S.col;
             S.mass = 10*S.radius*S.radius*S.radius;
             return in;

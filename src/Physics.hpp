@@ -21,7 +21,7 @@ class Physics{
             return (r*force)/r.mod();
       }
       
-      Vector Acc(int pos,ShapeList2 &list,Vector delta)
+      Vector Acc(unsigned int pos,ShapeList2 &list,Vector delta)
       {
             Vector acc;
             Shape *s1 = list[pos].first;

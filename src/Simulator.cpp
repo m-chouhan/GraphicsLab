@@ -15,9 +15,9 @@ GLUquadric *Simulator:: quad;
 ShapeList2 Simulator::World;
 std::vector<Sphere *> Simulator::Stars;
 
-Point3D Simulator::CamVector(0,10,40);
+Point3D Simulator::CamVector(0,10,140);
 Point3D Simulator::LightPos(0,0,05);
-Physics Simulator::PhysicsEngine(20,1.0,0.995,Simulator::WorldSize);
+Physics Simulator::PhysicsEngine(20,1.02,0.995,Simulator::WorldSize);
 
 void Simulator::move_light(Point3D pos)
 {
@@ -86,7 +86,7 @@ void Simulator::RenderScene()
                   {
                         drawSphere(World[i].second.Q[j], j*radius/size,color );
                         color.r = color.g = color.b = color.r*1.3;
-                  }
+                  } /**/
             }
       }
       
@@ -221,19 +221,19 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
 	quad = gluNewQuadric();
       gluQuadricTexture(quad,GLU_TRUE);
 
-	Image* image = loadBMP("sun1.bmp");
+	Image* image = loadBMP("Textures/sun1.bmp");
 	TextureIds[Sun] = loadTexture(image);
       delete image;
-      image = loadBMP("earth.bmp");
+      image = loadBMP("Textures/earth.bmp");
       TextureIds[Earth] = loadTexture(image);
       delete image;
-      image = loadBMP("earth.bmp");
-      TextureIds[Earth] = loadTexture(image);
-      delete image;
+      //~ image = loadBMP("earth.bmp");
+      //~ TextureIds[Earth] = loadTexture(image);
+      //~ delete image;
       //~ image = loadBMP("universe2.bmp");
       //~ TextureIds[Mars] = loadTexture(image);
       //~ delete image;
-      image = loadBMP("earth3.bmp");
+      image = loadBMP("Textures/earth3.bmp");
       TextureIds[Earth3] = loadTexture(image);
       delete image;
       //~ image = loadBMP("earth4.bmp");
@@ -242,13 +242,13 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       //~ image = loadBMP("mars1.bmp");
       //~ TextureIds[Mars] = loadTexture(image);
       //~ delete image;
-      image = loadBMP("saturn.bmp");
+      image = loadBMP("Textures/saturn.bmp");
       TextureIds[Moon] = loadTexture(image);
       delete image;
-      image = loadBMP("neptune.bmp");
+      image = loadBMP("Textures/neptune.bmp");
       TextureIds[Neptune] = loadTexture(image);
       delete image;
-      image = loadBMP("universe3.bmp");
+      image = loadBMP("Textures/universe3.bmp");
       TextureIds[Background] = loadTexture(image);
       delete image;
       
