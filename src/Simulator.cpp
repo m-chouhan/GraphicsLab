@@ -72,7 +72,7 @@ void Simulator::RenderScene()
             if(  Sphere *s = dynamic_cast<Sphere *>(World[i].first) )
             {
                   int size = World[i].second.Q.size();
-                  float radius = s->getRad()*0.65;
+                  float radius = s->getRad()*0.3;
                   Color color = s->col;
                   color.r = color.r *0.5;
                   color.g = color.g *0.5;

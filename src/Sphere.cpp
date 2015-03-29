@@ -47,7 +47,7 @@ bool Sphere::Collision(Shape &S)
 bool Sphere::CollisionSelf(Sphere &S)
 {
       Point3D dist = S.origin - origin;
-      std::cout<<"Collision Self:\tS:"<<S.origin<<"\tthis:"<<origin<<std::endl;
+      //std::cout<<"Collision Self:\tS:"<<S.origin<<"\tthis:"<<origin<<std::endl;
       return dist.mod() < (S.radius + radius);
 }
 

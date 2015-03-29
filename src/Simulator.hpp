@@ -53,7 +53,7 @@ class Simulator {
             {
                   s->TextureID = TextureIds[id];
                   s->Quad = quad;
-                  World.push_back(std::make_pair(s,FifoQ(14)));
+                  World.push_back(std::make_pair(s,FifoQ(34)));
                   //~ PhysicsEngine.CollisionManager(World);
             }
             static void AddLighSource(Sphere *s)
