@@ -2,6 +2,7 @@
 #include <iostream>
 #include <assert.h>
 #include "Simulator.hpp"
+//#include < GL/freeglut.h >
 
 int Simulator::Width = 400;
 int Simulator::Height = 400;
@@ -59,13 +60,15 @@ void Simulator::RenderScene()
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Reset transformations
 	glLoadIdentity();
-      
+            
       gluLookAt(	CamVector.x, CamVector.y, CamVector.z,
                               0, 0,  0,
                               0.0f, 1.0 ,0.0f);
       
       ApplyLights();
-      
+      //glutBitmapString(GLUT_BITMAP_8_BY_13,"max");      
+      glRasterPos2f(0,0);
+      glutBitmapCharacter(GLUT_BITMAP_8_BY_13,'1');
       for(int i = 0;i<World.size();++i)
       {
             World[i].first->Draw();
@@ -100,15 +103,28 @@ void Simulator::RenderScene()
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
       gluQuadricTexture(quad,GLU_TRUE);
-
       gluSphere(quad,WorldSize+450,20,20);
+      
+      std::string menu = "hell";
+      glMatrixMode( GL_PROJECTION );
+      glPushMatrix();
+      glLoadIdentity();
+      gluOrtho2D( 0, 600, 0, 600 );
 
-      //~ draw2DFrame();
-      //~ glRotatef(90, 1.0f, 0.0f, 0.0f);
-      //~ draw2DFrame();
+      glMatrixMode( GL_MODELVIEW );
+      glPushMatrix();
+      glLoadIdentity();
+      glRasterPos2i( 10, 100 );  // move in 10 pixels from the left and bottom edges
+      for ( int i = 0; i < 3; ++i ) {
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, 'A');
+      }
+      glPopMatrix();
 
-      glEnable(GL_DEPTH_TEST);
-	glutSwapBuffers();
+      glMatrixMode( GL_PROJECTION );
+      glPopMatrix();
+      glMatrixMode( GL_MODELVIEW );
+	
+      glutSwapBuffers();
       /**/ 
 }
 
@@ -170,9 +186,15 @@ void Simulator::NormalKeyEvent(unsigned char key, int x, int y) {
                   case 's':   LightPos.z+=0.1;
                                     CamVector = CamVector*1.02f;
                                     break;                              
-                  case'a': case 'd':
-                                    std::cout<<"["<<key<<"]";
+                  case 'd':
+                                    PhysicsEngine.G += 0.1;
+                                    //~ std::cout<<"["<<key<<"]";
                                     break;
+                  case'a': 
+                                    PhysicsEngine.G -= 0.1;
+                                    //~ std::cout<<"["<<key<<"]";
+                                    break;
+
       }
 }
 
@@ -211,7 +233,7 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       Width = W;Height = H;
       // init GLUT and create window
       glutInit(&argc, argv);
-      glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+      glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA);
       
       glutInitWindowPosition(100,100);
       glutInitWindowSize(Width,Height);
@@ -253,8 +275,6 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       delete image;
       
 	glEnable(GL_TEXTURE_2D);
-
-      
       glEnable(GL_LIGHTING);
       
       /*Enable All 8 lights*/
@@ -266,7 +286,10 @@ void Simulator::SimulatorInit(int argc, char *argv[],int W,int H)
       glEnable(GL_LIGHT5);      
       glEnable(GL_LIGHT6);      
       glEnable(GL_LIGHT7);
-            
+      
+      glEnable (GL_BLEND);
+      glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+      
       glEnable(GL_NORMALIZE);
       glEnable(GL_SMOOTH);
       glEnable(GL_COLOR_MATERIAL);

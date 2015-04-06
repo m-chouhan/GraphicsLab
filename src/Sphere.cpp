@@ -20,12 +20,16 @@ void Sphere::Draw()
 
       if(light)
       {
-            //~ Material properties
-            GLfloat emissiveLight[] = { 2.4f, 1.2f, 0.f}; 
+            
+            //~ glEnable (GL_BLEND);
+            //~ glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+            //~ glColor4f(0.1,0,0,0);
+            //Material properties
+            GLfloat emissiveLight[] = { 8.8f, 4.4f, 0.f}; 
             glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveLight);
             //~ glutSolidSphere(radius,20,20);
             gluSphere(Quad,radius,20,20);
-
+            
             emissiveLight[0] = emissiveLight[1] = emissiveLight[2]  = 0;
             glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveLight);
       }

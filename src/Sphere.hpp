@@ -33,6 +33,7 @@ class Sphere : public Shape
             col.g =  ((float)(rand()%100))/100; 
             col.b =  ((float)(rand()%100))/100;
       }
+      
       Sphere(Point3D orig,float rad,float m = 0,bool l = false)       
       {
             light = l;
@@ -43,19 +44,39 @@ class Sphere : public Shape
             else mass = m;
             
             origin = orig;
-            col.a =  ((float)(rand()%100))/100;
-            col.r =  ((float)(rand()%100))/100;
-            col.g =  ((float)(rand()%100))/100; 
-            col.b =  ((float)(rand()%100))/100;
+            col.a =  ((float)(rand()%100))/100 + 0.4;
+            col.r =  ((float)(rand()%100))/100 + 0.4;
+            col.g =  ((float)(rand()%100))/100 + 0.4; 
+            col.b =  ((float)(rand()%100))/100 + 0.4;
+            
       }
       
       friend std::ifstream & operator >>(std::ifstream &in,Sphere &S)
       {
             in>>S.origin>>S.radius;
             S.size = S.radius; 
+            S.mass = 10*S.radius*S.radius*(S.radius);
             
-            in>>S.col;
-            S.mass = 10*S.radius*S.radius*S.radius;
+            char ch;
+            in>>ch;
+            if( ch == 'P' ) S.light = false;
+            else S.light = true;
+
+            in>>ch;
+            if( ch == 'C' )
+                  in>>S.col;
+            else
+            {
+                  S.col.a =  ((float)(rand()%100))/100 + 0.4;
+                  S.col.r =  ((float)(rand()%100))/100 + 0.4;
+                  S.col.g =  ((float)(rand()%100))/100 + 0.4; 
+                  S.col.b =  ((float)(rand()%100))/100 + 0.4;
+            }                  
+            if( ch == 'C' ) in>>ch;
+            if( ch =='V' )
+                  in>>S.velocity;
+            if( ch >= '0' && ch <= '9' )
+                  in.putback(ch);
             return in;
       }
       //don't need complicated stuff here :P 

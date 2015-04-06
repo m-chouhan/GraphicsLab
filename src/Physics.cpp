@@ -117,10 +117,10 @@ void Physics::CollisionManager(ShapeList2 &list)
                         Vector vx1 = (velox1*k1 + velox2*k2);
                         Vector vx2 = (velox1*k3 - velox2*k1);
                         
-                        veloy1 = veloy1*elasticity;veloy2 = veloy2*elasticity;
+                        //~ veloy1 = veloy1*elasticity;veloy2 = veloy2*elasticity;
                         
-                        s1->velocity = (vx1+veloy1);
-                        s2->velocity = (vx2+veloy2);
+                        s1->velocity = (vx1+veloy1*1)*elasticity;
+                        s2->velocity = (vx2+veloy2*1)*elasticity;
                         Separate(s1,s2);//seperates shape from  each other ( collision means they are inside each other )
                   }
             }

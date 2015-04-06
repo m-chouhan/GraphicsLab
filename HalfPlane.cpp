@@ -3,6 +3,7 @@
 #include <GL/glut.h>
 #include <vector>
 #include <assert.h>
+#include <algorithm>
 
 #include "src/Point3D.h"
 #include "src/Segments.hpp"
@@ -60,12 +61,12 @@ Point2D FindOptimalPoint( HalfPlane &plane,HPlanes &Array,int size,Equation e)
 {
       if( size == 0 )
       {
-            if( e.type && e*plane.Segment.UP < e*plane.Segment.Down)
+            if( e.type && (e*plane.Segment.UP < e*plane.Segment.Down ) )
                   return plane.Segment.Down;
-            else if( e.type) return plane.Segment.UP;
-            else if( e*plane.Segment.UP < e*plane.Segment.Down )
+            //~ else if( e.type) return plane.Segment.UP;
+            //~ else if( e*plane.Segment.UP < e*plane.Segment.Down )
                   return plane.Segment.UP;
-            return  plane.Segment.Down;    
+            //~ return  plane.Segment.Down;    
       }
       
       Point2D optimal(-1,-1);
@@ -79,8 +80,8 @@ Point2D FindOptimalPoint( HalfPlane &plane,HPlanes &Array,int size,Equation e)
                         optimal = P; 
                   if( e*optimal < e*P  && e.type) 
                         optimal = P;
-                  if( e*optimal > e*P && !e.type )
-                        optimal = P;
+                  //~ if( e*optimal > e*P && !e.type )
+                        //~ optimal = P;
             }
       }
       
@@ -130,7 +131,14 @@ void renderScene()
 	glutSwapBuffers();
 }
 void processNormalKeys(unsigned char key, int x, int y) {
-		exit(0);
+            
+      for( int i = 1;i<Array.size();i++)
+      {
+            if( Array[i].contains(optimal) ) continue;
+            optimal = FindOptimalPoint(Array[i],Array,i,e);
+      }
+
+		//exit(0);
 }
 
 int main(int argc,char *argv[])
@@ -139,17 +147,18 @@ int main(int argc,char *argv[])
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100,100);
 	glutInitWindowSize(600,600);
-	glutCreateWindow("Lighthouse3D- GLUT Tutorial");
+	glutCreateWindow("HalfPlaneIntersection");
 	glutDisplayFunc(renderScene);
 	glutKeyboardFunc(processNormalKeys);
       //~ glutReshapeFunc(changeSize);
 
-      Equation e(5,6,!MAXIMIZE);
+      Equation e(5,6,MAXIMIZE);
       
       Array.push_back(HalfPlane(-2,1,10,true));      
       Array.push_back(HalfPlane(1,1,60,true));
       Array.push_back(HalfPlane(-4,1,60,true));
       Array.push_back(HalfPlane(-0.5,1,20,true));
+      //random_shuffle(Array.begin(),Array.end());
       
       optimal=FindOptimalPoint(Array[0],Array,0,e);
       for( int i = 1;i<Array.size();i++)

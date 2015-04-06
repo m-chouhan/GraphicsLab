@@ -7,6 +7,8 @@ SOURCE = src
 .PHONY : lib
 lib:
 	$(MAKE) -C $(SOURCE) lib
+half:HalfPlane.cpp src/*.cpp
+	${CC} ${CFLAGS} HalfPlane.cpp src/*.o ${GLUTF} -o exec/HP
 cube14 :
 	${CC} ${CFLAGS} cube14.cpp src/*.o ${GLUTF} -o exec/cube14
 rcube :

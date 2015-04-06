@@ -14,7 +14,7 @@
 #include "imageloader.h"
 
 enum Planets{
-            Sun,Moon,Earth,Earth2,Earth3,Earth4,Mars,Jupiter,Neptune,Background
+            Moon,Earth,Earth3,Neptune,Background,Sun
       };
 
 class Simulator {
@@ -53,7 +53,7 @@ class Simulator {
             {
                   s->TextureID = TextureIds[id];
                   s->Quad = quad;
-                  World.push_back(std::make_pair(s,FifoQ(34)));
+                  World.push_back(std::make_pair(s,FifoQ(14)));
                   //~ PhysicsEngine.CollisionManager(World);
             }
             static void AddLighSource(Sphere *s)
