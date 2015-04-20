@@ -94,6 +94,7 @@ using namespace std;
 
 HPlanes Array;
 Point2D optimal;
+      Equation e(5,6,MAXIMIZE);
 
 void renderScene()
 {
@@ -119,9 +120,9 @@ void renderScene()
 	glBegin(GL_LINES);
       for(int i = 0;i<Array.size();++i)
       {
-            Point2D u = Array[i].Segment.UP/norm,d = Array[i].Segment.Down/norm;
-		glVertex3f(u.x,u.y, u.z);
-		glVertex3f( d.x,d.y, d.z);
+			Point2D u = Array[i].Segment.UP/norm,d = Array[i].Segment.Down/norm;
+			glVertex3f(u.x,u.y, u.z);
+			glVertex3f( d.x,d.y, d.z);
       }
 	glEnd();
       glPushMatrix();
@@ -130,6 +131,7 @@ void renderScene()
       glPopMatrix();
 	glutSwapBuffers();
 }
+
 void processNormalKeys(unsigned char key, int x, int y) {
             
       for( int i = 1;i<Array.size();i++)
@@ -137,7 +139,6 @@ void processNormalKeys(unsigned char key, int x, int y) {
             if( Array[i].contains(optimal) ) continue;
             optimal = FindOptimalPoint(Array[i],Array,i,e);
       }
-
 		//exit(0);
 }
 
@@ -150,9 +151,10 @@ int main(int argc,char *argv[])
 	glutCreateWindow("HalfPlaneIntersection");
 	glutDisplayFunc(renderScene);
 	glutKeyboardFunc(processNormalKeys);
+	glutIdleFunc(renderScene);
+
       //~ glutReshapeFunc(changeSize);
 
-      Equation e(5,6,MAXIMIZE);
       
       Array.push_back(HalfPlane(-2,1,10,true));      
       Array.push_back(HalfPlane(1,1,60,true));
@@ -160,12 +162,12 @@ int main(int argc,char *argv[])
       Array.push_back(HalfPlane(-0.5,1,20,true));
       //random_shuffle(Array.begin(),Array.end());
       
-      optimal=FindOptimalPoint(Array[0],Array,0,e);
-      for( int i = 1;i<Array.size();i++)
-      {
-            if( Array[i].contains(optimal) ) continue;
-            optimal = FindOptimalPoint(Array[i],Array,i,e);
-      }
+      //~ optimal=FindOptimalPoint(Array[0],Array,0,e);
+      //~ for( int i = 1;i<Array.size();i++)
+      //~ {
+            //~ if( Array[i].contains(optimal) ) continue;
+            //~ optimal = FindOptimalPoint(Array[i],Array,i,e);
+      //~ }
       cout<<optimal<<endl;
       
       glutMainLoop();
